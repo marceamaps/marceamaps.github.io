@@ -8,7 +8,7 @@ Some information about you!
 
 ### More Information
 
-[!alt text](https://github.com/marceamaps/marceamaps.github.io/blob/master/images/Me.jpg "That's me!")
+[!That's me!](https://github.com/marceamaps/marceamaps.github.io/blob/master/images/Me.jpg)
 
 ### Contact me
 
