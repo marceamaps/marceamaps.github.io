@@ -8,7 +8,7 @@ Some information about you!
 
 ### More Information
 
-[!That's me!](https://github.com/marceamaps/marceamaps.github.io/blob/master/images/Me.jpg)
+![Image of Yaktocat](https://github.com/marceamaps/marceamaps.github.io/blob/master/images/Me.jpg)
 
 ### Contact me
 
