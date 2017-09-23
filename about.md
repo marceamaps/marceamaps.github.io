@@ -8,8 +8,8 @@ Some information about you!
 
 ### More Information
 
-A place to include any other types of information that you'd like to include about yourself.
+[!alt text](https://github.com/marceamaps/marceamaps.github.io/blob/master/images/Me.jpg "That's me!")
 
 ### Contact me
 
-[email@domain.com](mailto:email@domain.com)
+[marcea.irene@gmail.com
