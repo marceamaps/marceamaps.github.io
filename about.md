@@ -12,4 +12,4 @@ Some information about you!
 
 ### Contact me
 
-[marcea.irene@gmail.com
+marcea.irene@gmail.com
