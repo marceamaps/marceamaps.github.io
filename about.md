@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
+Hi there. My name is Marcea. I'm a cartographer, climber, backcountry skiier and avid traveler (31 countries and counting). 
 
 ### More Information
 
