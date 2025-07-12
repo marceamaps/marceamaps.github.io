@@ -1,32 +1,66 @@
----
-layout: default
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-800">
+  <header class="py-8 px-4 border-b border-gray-200">
+    <h1 class="text-3xl font-bold text-purple-600">Your Name</h1>
+    <p class="text-sm text-gray-500">Product Designer Portfolio</p>
+  </header>
 
-<div class="posts">
-  {% for post in site.posts %}
-    <article class="post">
+  <main class="px-4 py-10 max-w-3xl mx-auto">
+    <section>
+      <h2 class="text-xl font-semibold mb-4 text-purple-600">Timeline</h2>
+      <ul class="border-l border-gray-300 pl-6">
+        <li class="mb-10">
+          <div class="text-sm text-gray-500">2023–2025</div>
+          <h3 class="text-lg font-semibold">Company A</h3>
+          <ul class="mt-2 ml-4 list-disc text-gray-700">
+            <li><a href="#" class="text-purple-600 hover:underline">Project Alpha</a></li>
+            <li><a href="#" class="text-purple-600 hover:underline">Project Beta</a></li>
+          </ul>
+        </li>
+        <li class="mb-10">
+          <div class="text-sm text-gray-500">2021–2023</div>
+          <h3 class="text-lg font-semibold">Company B</h3>
+          <ul class="mt-2 ml-4 list-disc text-gray-700">
+            <li><a href="#" class="text-purple-600 hover:underline">Project Gamma</a></li>
+            <li><a href="#" class="text-purple-600 hover:underline">Project Delta</a></li>
+          </ul>
+        </li>
+      </ul>
+    </section>
 
-      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+    <section class="mt-16">
+      <h2 class="text-xl font-semibold mb-4 text-purple-600">Education</h2>
+      <p class="text-gray-700">B.A. in Design — University Name (2017–2021)</p>
+    </section>
 
-      <div class="entry">
-        {{ post.excerpt }}
-      </div>
+    <section class="mt-10">
+      <h2 class="text-xl font-semibold mb-4 text-purple-600">Certificates & Awards</h2>
+      <ul class="list-disc ml-6 text-gray-700">
+        <li>UX Design Certificate — Provider</li>
+        <li>Product Design Award — Organization</li>
+      </ul>
+    </section>
 
-      <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
-    </article>
-  {% endfor %}
-</div>
-<div class="portfolio">
-  {% for portfolio in site.portfolio %}
-    <article class="portfolio">
+    <section class="mt-16">
+      <a href="about.html" class="text-purple-600 hover:underline">About Me →</a>
+    </section>
+  </main>
 
-      <h1><a href="{{ site.baseurl }}{{ portfolio.url }}">{{ portfolio.title }}</a></h1>
-
-      <div class="entry">
-        {{ portfolio.excerpt }}
-      </div>
-
-      <a href="{{ site.baseurl }}{{ portfolio.url }}" class="read-more">Read More</a>
-    </article>
-  {% endfor %}
-</div>
+  <footer class="mt-16 px-4 py-8 border-t border-gray-200 text-center text-sm text-gray-500">
+    © 2025 Your Name. All rights reserved.
+  </footer>
+</body>
+</html>
