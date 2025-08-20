@@ -9,10 +9,26 @@
   <style>
     body {
       font-family: 'Outfit', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .hero-section {
+      position: relative;
+      height: 100vh;
+      background-color: #FCFAF4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 0;
+    }
+    .overlay-scroll-section {
+      position: relative;
+      background-color: #bfdbfe;
+      z-index: 10;
     }
   </style>
 </head>
-<body class="bg-white text-gray-800 overflow-x-hidden">
+<body class="text-gray-800 overflow-x-hidden">
   <!-- Landing Screen -->
   <div id="landing" class="min-h-screen flex flex-col items-center justify-center text-center px-4">
     <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">Hi, I'm Marcea. Who are you?</h1>
@@ -38,18 +54,16 @@
 
   <!-- Main Portfolio (Initially Hidden) -->
   <div id="main-content" class="hidden">
-    <!-- Sticky Hero Section -->
-    <div class="relative h-screen w-full bg-[#FCFAF4]">
-      <section class="sticky top-0 h-screen flex items-center justify-center text-center px-4 z-0">
-        <div class="z-10">
-          <h1 class="text-5xl md:text-7xl font-bold text-blue-700 leading-tight">Multidisciplinary<br>designer</h1>
-          <p class="mt-4 max-w-md mx-auto text-blue-700 text-sm md:text-base">Designing for the future of tech, lifestyle and experience. Currently building at Strava.</p>
-        </div>
-      </section>
-    </div>
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="text-center">
+        <h1 class="text-5xl md:text-7xl font-bold text-blue-700 leading-tight">designer</h1>
+        <p class="mt-4 max-w-md mx-auto text-blue-700 text-sm md:text-base">Designing for the future of tech, lifestyle and experience.<br>Currently building at Strava.</p>
+      </div>
+    </section>
 
-    <!-- Scroll Over Case Studies Section -->
-    <section class="w-full bg-blue-200 py-20 relative z-10">
+    <!-- Overlapping Scroll Section -->
+    <section class="overlay-scroll-section -mt-32 pt-32 pb-20">
       <div class="max-w-6xl mx-auto px-4">
         <h2 class="text-2xl font-semibold text-blue-900 mb-8">Selected Case Studies</h2>
         <!-- Horizontal Carousel -->
