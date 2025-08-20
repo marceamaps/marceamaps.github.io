@@ -12,19 +12,29 @@
       margin: 0;
       padding: 0;
     }
-    .hero-section {
+    .sticky-wrapper {
+      height: 200vh;
       position: relative;
+    }
+    .sticky-hero {
+      position: sticky;
+      top: 0;
       height: 100vh;
-      background-color: #FCFAF4;
       display: flex;
       align-items: center;
       justify-content: center;
+      background-color: #FCFAF4;
       z-index: 0;
     }
-    .overlay-scroll-section {
-      position: relative;
+    .scroll-overlay {
+      position: absolute;
+      top: 100vh;
+      left: 0;
+      width: 100%;
       background-color: #bfdbfe;
       z-index: 10;
+      padding-top: 4rem;
+      padding-bottom: 4rem;
     }
   </style>
 </head>
@@ -54,38 +64,40 @@
 
   <!-- Main Portfolio (Initially Hidden) -->
   <div id="main-content" class="hidden">
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="text-center">
-        <h1 class="text-5xl md:text-7xl font-bold text-blue-700 leading-tight">designer</h1>
-        <p class="mt-4 max-w-md mx-auto text-blue-700 text-sm md:text-base">Designing for the future of tech, lifestyle and experience.<br>Currently building at Strava.</p>
-      </div>
-    </section>
+    <div class="sticky-wrapper">
+      <!-- Sticky Hero Section -->
+      <section class="sticky-hero">
+        <div class="text-center">
+          <h1 class="text-5xl md:text-7xl font-bold text-blue-700 leading-tight">designer</h1>
+          <p class="mt-4 max-w-md mx-auto text-blue-700 text-sm md:text-base">Designing for the future of tech, lifestyle and experience.<br>Currently building at Strava.</p>
+        </div>
+      </section>
 
-    <!-- Overlapping Scroll Section -->
-    <section class="overlay-scroll-section -mt-32 pt-32 pb-20">
-      <div class="max-w-6xl mx-auto px-4">
-        <h2 class="text-2xl font-semibold text-blue-900 mb-8">Selected Case Studies</h2>
-        <!-- Horizontal Carousel -->
-        <div class="overflow-x-auto whitespace-nowrap space-x-6 flex pb-4">
-          <div class="inline-block w-72 bg-white shadow rounded-lg p-4">
-            <img src="images/project-alpha.jpg" class="w-full h-40 object-cover rounded mb-2" alt="Project Alpha">
-            <h3 class="font-semibold text-lg text-purple-700">Project Alpha</h3>
-            <p class="text-sm text-gray-600">Short summary or teaser text here.</p>
-          </div>
-          <div class="inline-block w-72 bg-white shadow rounded-lg p-4">
-            <img src="images/project-beta.jpg" class="w-full h-40 object-cover rounded mb-2" alt="Project Beta">
-            <h3 class="font-semibold text-lg text-purple-700">Project Beta</h3>
-            <p class="text-sm text-gray-600">Short summary or teaser text here.</p>
-          </div>
-          <div class="inline-block w-72 bg-white shadow rounded-lg p-4">
-            <img src="images/project-gamma.jpg" class="w-full h-40 object-cover rounded mb-2" alt="Project Gamma">
-            <h3 class="font-semibold text-lg text-purple-700">Project Gamma</h3>
-            <p class="text-sm text-gray-600">Short summary or teaser text here.</p>
+      <!-- Overlay Scroll Section -->
+      <section class="scroll-overlay">
+        <div class="max-w-6xl mx-auto px-4">
+          <h2 class="text-2xl font-semibold text-blue-900 mb-8">Selected Case Studies</h2>
+          <!-- Horizontal Carousel -->
+          <div class="overflow-x-auto whitespace-nowrap space-x-6 flex pb-4">
+            <div class="inline-block w-72 bg-white shadow rounded-lg p-4">
+              <img src="images/project-alpha.jpg" class="w-full h-40 object-cover rounded mb-2" alt="Project Alpha">
+              <h3 class="font-semibold text-lg text-purple-700">Project Alpha</h3>
+              <p class="text-sm text-gray-600">Short summary or teaser text here.</p>
+            </div>
+            <div class="inline-block w-72 bg-white shadow rounded-lg p-4">
+              <img src="images/project-beta.jpg" class="w-full h-40 object-cover rounded mb-2" alt="Project Beta">
+              <h3 class="font-semibold text-lg text-purple-700">Project Beta</h3>
+              <p class="text-sm text-gray-600">Short summary or teaser text here.</p>
+            </div>
+            <div class="inline-block w-72 bg-white shadow rounded-lg p-4">
+              <img src="images/project-gamma.jpg" class="w-full h-40 object-cover rounded mb-2" alt="Project Gamma">
+              <h3 class="font-semibold text-lg text-purple-700">Project Gamma</h3>
+              <p class="text-sm text-gray-600">Short summary or teaser text here.</p>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
 
   <!-- JavaScript to toggle views -->
