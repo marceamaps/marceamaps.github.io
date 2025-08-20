@@ -10,45 +10,40 @@
     body {
       font-family: 'Outfit', sans-serif;
     }
-    .glass {
-      background-color: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-    }
   </style>
 </head>
-<body class="bg-[#fefbf5] text-gray-800">
-  <!-- Hero Section (Sticky) -->
-  <section class="relative h-screen z-0">
-    <div class="sticky top-0 h-screen flex flex-col items-center justify-center text-center px-4">
-      <h1 class="text-6xl sm:text-7xl font-bold text-blue-700 leading-tight">designer</h1>
-      <p class="mt-6 text-lg sm:text-xl text-blue-600">Designing for the future of tech, lifestyle and experience.<br>Currently building at Strava.</p>
-    </div>
-  </section>
+<body class="bg-[#fffdf6] text-gray-800">
+  <!-- Sticky Hero Container -->
+  <div class="relative h-screen overflow-hidden">
+    <!-- Hero Section -->
+    <section class="sticky top-0 h-screen z-0 flex flex-col justify-center items-center">
+      <h1 class="text-6xl font-bold text-blue-700 mb-6">designer</h1>
+      <p class="text-blue-600 text-lg text-center">Designing for the future of tech, lifestyle and experience.<br>Currently building at Strava.</p>
+    </section>
 
-  <!-- Case Studies Section Overlapping -->
-  <section class="relative z-10 -mt-[100vh] pt-[100vh] glass">
-    <div class="max-w-6xl mx-auto px-4 py-20">
-      <h2 class="text-2xl font-semibold mb-10 text-blue-800">Selected Case Studies</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-xl shadow p-4">
-          <img src="images/project-alpha.jpg" alt="Project Alpha" class="w-full h-40 object-cover rounded mb-2">
-          <h3 class="text-purple-700 font-semibold text-lg">Project Alpha</h3>
-          <p class="text-gray-600 text-sm">Short summary or teaser text here.</p>
-        </div>
-        <div class="bg-white rounded-xl shadow p-4">
-          <img src="images/project-beta.jpg" alt="Project Beta" class="w-full h-40 object-cover rounded mb-2">
-          <h3 class="text-purple-700 font-semibold text-lg">Project Beta</h3>
-          <p class="text-gray-600 text-sm">Short summary or teaser text here.</p>
-        </div>
-        <div class="bg-white rounded-xl shadow p-4">
-          <img src="images/project-gamma.jpg" alt="Project Gamma" class="w-full h-40 object-cover rounded mb-2">
-          <h3 class="text-purple-700 font-semibold text-lg">Project Gamma</h3>
-          <p class="text-gray-600 text-sm">Short summary or teaser text here.</p>
+    <!-- Scrollable Case Study Section with Glass Effect -->
+    <section class="relative z-10 -mt-screen py-20 px-4 backdrop-blur-md bg-white/30 border-t border-white/40">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl font-bold mb-10 text-blue-900">Selected Case Studies</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div class="bg-white rounded-lg shadow p-4">
+            <img src="images/project-alpha.jpg" alt="Project Alpha" class="w-full h-40 object-cover rounded mb-2">
+            <h4 class="text-purple-700 font-semibold text-lg">Project Alpha</h4>
+            <p class="text-sm text-gray-600">Short summary or teaser text here.</p>
+          </div>
+          <div class="bg-white rounded-lg shadow p-4">
+            <img src="images/project-beta.jpg" alt="Project Beta" class="w-full h-40 object-cover rounded mb-2">
+            <h4 class="text-purple-700 font-semibold text-lg">Project Beta</h4>
+            <p class="text-sm text-gray-600">Short summary or teaser text here.</p>
+          </div>
+          <div class="bg-white rounded-lg shadow p-4">
+            <img src="images/project-gamma.jpg" alt="Project Gamma" class="w-full h-40 object-cover rounded mb-2">
+            <h4 class="text-purple-700 font-semibold text-lg">Project Gamma</h4>
+            <p class="text-sm text-gray-600">Short summary or teaser text here.</p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </body>
 </html>
