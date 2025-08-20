@@ -3,110 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Marcea Maps — Portfolio</title>
+  <title>Your Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
       font-family: 'Outfit', sans-serif;
-      margin: 0;
-      padding: 0;
     }
-    .sticky-wrapper {
-      height: 200vh;
-      position: relative;
-    }
-    .sticky-hero {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #FCFAF4;
-      z-index: 0;
-    }
-    .scroll-overlay {
-      position: absolute;
-      top: 100vh;
-      left: 0;
-      width: 100%;
-      background-color: #bfdbfe;
-      z-index: 10;
-      padding-top: 4rem;
-      padding-bottom: 4rem;
+    .glass {
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
   </style>
 </head>
-<body class="text-gray-800 overflow-x-hidden">
-  <!-- Landing Screen -->
-  <div id="landing" class="min-h-screen flex flex-col items-center justify-center text-center px-4">
-    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">Hi, I'm Marcea. Who are you?</h1>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-4">
-      <button class="bg-gray-800 hover:bg-purple-600 transition p-6 rounded-lg shadow-lg" onclick="enterSite('designer')">
-        <span class="block text-2xl">🎨</span>
-        <span class="mt-2 block font-semibold">Designer</span>
-      </button>
-      <button class="bg-gray-800 hover:bg-purple-600 transition p-6 rounded-lg shadow-lg" onclick="enterSite('manager')">
-        <span class="block text-2xl">📋</span>
-        <span class="mt-2 block font-semibold">Manager</span>
-      </button>
-      <button class="bg-gray-800 hover:bg-purple-600 transition p-6 rounded-lg shadow-lg" onclick="enterSite('recruiter')">
-        <span class="block text-2xl">🔍</span>
-        <span class="mt-2 block font-semibold">Recruiter</span>
-      </button>
-      <button class="bg-gray-800 hover:bg-purple-600 transition p-6 rounded-lg shadow-lg" onclick="enterSite('browser')">
-        <span class="block text-2xl">👀</span>
-        <span class="mt-2 block font-semibold">Just Browsing</span>
-      </button>
+<body class="bg-[#fefbf5] text-gray-800">
+  <!-- Hero Section (Sticky) -->
+  <section class="relative h-screen z-0">
+    <div class="sticky top-0 h-screen flex flex-col items-center justify-center text-center px-4">
+      <h1 class="text-6xl sm:text-7xl font-bold text-blue-700 leading-tight">designer</h1>
+      <p class="mt-6 text-lg sm:text-xl text-blue-600">Designing for the future of tech, lifestyle and experience.<br>Currently building at Strava.</p>
     </div>
-  </div>
+  </section>
 
-  <!-- Main Portfolio (Initially Hidden) -->
-  <div id="main-content" class="hidden">
-    <div class="sticky-wrapper">
-      <!-- Sticky Hero Section -->
-      <section class="sticky-hero">
-        <div class="text-center">
-          <h1 class="text-5xl md:text-7xl font-bold text-blue-700 leading-tight">designer</h1>
-          <p class="mt-4 max-w-md mx-auto text-blue-700 text-sm md:text-base">Designing for the future of tech, lifestyle and experience.<br>Currently building at Strava.</p>
+  <!-- Case Studies Section Overlapping -->
+  <section class="relative z-10 -mt-[100vh] pt-[100vh] glass">
+    <div class="max-w-6xl mx-auto px-4 py-20">
+      <h2 class="text-2xl font-semibold mb-10 text-blue-800">Selected Case Studies</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl shadow p-4">
+          <img src="images/project-alpha.jpg" alt="Project Alpha" class="w-full h-40 object-cover rounded mb-2">
+          <h3 class="text-purple-700 font-semibold text-lg">Project Alpha</h3>
+          <p class="text-gray-600 text-sm">Short summary or teaser text here.</p>
         </div>
-      </section>
-
-      <!-- Overlay Scroll Section -->
-      <section class="scroll-overlay">
-        <div class="max-w-6xl mx-auto px-4">
-          <h2 class="text-2xl font-semibold text-blue-900 mb-8">Selected Case Studies</h2>
-          <!-- Horizontal Carousel -->
-          <div class="overflow-x-auto whitespace-nowrap space-x-6 flex pb-4">
-            <div class="inline-block w-72 bg-white shadow rounded-lg p-4">
-              <img src="images/project-alpha.jpg" class="w-full h-40 object-cover rounded mb-2" alt="Project Alpha">
-              <h3 class="font-semibold text-lg text-purple-700">Project Alpha</h3>
-              <p class="text-sm text-gray-600">Short summary or teaser text here.</p>
-            </div>
-            <div class="inline-block w-72 bg-white shadow rounded-lg p-4">
-              <img src="images/project-beta.jpg" class="w-full h-40 object-cover rounded mb-2" alt="Project Beta">
-              <h3 class="font-semibold text-lg text-purple-700">Project Beta</h3>
-              <p class="text-sm text-gray-600">Short summary or teaser text here.</p>
-            </div>
-            <div class="inline-block w-72 bg-white shadow rounded-lg p-4">
-              <img src="images/project-gamma.jpg" class="w-full h-40 object-cover rounded mb-2" alt="Project Gamma">
-              <h3 class="font-semibold text-lg text-purple-700">Project Gamma</h3>
-              <p class="text-sm text-gray-600">Short summary or teaser text here.</p>
-            </div>
-          </div>
+        <div class="bg-white rounded-xl shadow p-4">
+          <img src="images/project-beta.jpg" alt="Project Beta" class="w-full h-40 object-cover rounded mb-2">
+          <h3 class="text-purple-700 font-semibold text-lg">Project Beta</h3>
+          <p class="text-gray-600 text-sm">Short summary or teaser text here.</p>
         </div>
-      </section>
+        <div class="bg-white rounded-xl shadow p-4">
+          <img src="images/project-gamma.jpg" alt="Project Gamma" class="w-full h-40 object-cover rounded mb-2">
+          <h3 class="text-purple-700 font-semibold text-lg">Project Gamma</h3>
+          <p class="text-gray-600 text-sm">Short summary or teaser text here.</p>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <!-- JavaScript to toggle views -->
-  <script>
-    function enterSite(viewerType) {
-      document.getElementById('landing').classList.add('hidden');
-      document.getElementById('main-content').classList.remove('hidden');
-      console.log("Entered as:", viewerType);
-    }
-  </script>
+  </section>
 </body>
 </html>
