@@ -41,29 +41,49 @@
 
 <!-- Sticky Case Study Section -->
 <section class="w-full h-[200vh] relative z-10">
-  <div class="sticky top-0 h-screen w-full bg-white/70 backdrop-blur-md px-6 py-20 overflow-y-auto">
+  <div class="sticky top-0 h-screen w-full bg-white/70 backdrop-blur-md px-6 py-20 overflow-hidden">
     <h2 class="text-3xl font-bold text-gray-800 mb-12 text-center">Selected Case Studies</h2>
-    <div class="grid md:grid-cols-3 gap-8">
-      <div class="bg-white rounded-lg shadow p-4">
-        <img src="images/project-alpha.jpg" alt="Project Alpha" class="w-full h-40 object-cover rounded mb-4">
-        <h3 class="text-purple-600 font-semibold text-lg">Project Alpha</h3>
-        <p class="text-gray-700 text-sm">Short summary or teaser text here.</p>
-      </div>
-      <div class="bg-white rounded-lg shadow p-4">
-        <img src="images/project-beta.jpg" alt="Project Beta" class="w-full h-40 object-cover rounded mb-4">
-        <h3 class="text-purple-600 font-semibold text-lg">Project Beta</h3>
-        <p class="text-gray-700 text-sm">Short summary or teaser text here.</p>
-      </div>
-      <div class="bg-white rounded-lg shadow p-4">
-        <img src="images/project-gamma.jpg" alt="Project Gamma" class="w-full h-40 object-cover rounded mb-4">
-        <h3 class="text-purple-600 font-semibold text-lg">Project Gamma</h3>
-        <p class="text-gray-700 text-sm">Short summary or teaser text here.</p>
-      </div>
+    <section class="sticky top-0 h-full overflow-hidden">
+      <div class="relative h-full w-full" id="cardTrack">
+
+<!-- Alpha -->
+<div class="absolute top-1/2 left-1/2 w-[33.3333vw] h-[70vh] transform -translate-x-1/2 -translate-y-1/2 z-10">
+  <div id="card-alpha" class="w-full h-full">
+    <div class="bg-white rounded-lg shadow p-4 w-full h-full">
+      <img src="images/project-alpha.jpg" alt="Project Alpha" class="w-full h-40 object-cover rounded mb-4">
+      <h3 class="text-purple-600 font-semibold text-lg">Project Alpha</h3>
+      <p class="text-gray-700 text-sm">Short summary or teaser text here.</p>
     </div>
+  </div>
+</div>
+
+<!-- Beta -->
+<div class="absolute top-1/2 left-1/2 w-[33.3333vw] h-[70vh] transform -translate-x-1/2 -translate-y-1/2 z-20">
+  <div id="card-beta" class="w-full h-full">
+    <div class="bg-white rounded-lg shadow p-4 w-full h-full">
+      <img src="images/project-beta.jpg" alt="Project Beta" class="w-full h-40 object-cover rounded mb-4">
+      <h3 class="text-purple-600 font-semibold text-lg">Project Beta</h3>
+      <p class="text-gray-700 text-sm">Short summary or teaser text here.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Gamma -->
+<div class="absolute top-1/2 left-1/2 w-[33.3333vw] h-[70vh] transform -translate-x-1/2 -translate-y-1/2 z-10">
+  <div id="card-gamma" class="w-full h-full">
+    <div class="bg-white rounded-lg shadow p-4 w-full h-full">
+      <img src="images/project-gamma.jpg" alt="Project Gamma" class="w-full h-40 object-cover rounded mb-4">
+      <h3 class="text-purple-600 font-semibold text-lg">Project Gamma</h3>
+      <p class="text-gray-700 text-sm">Short summary or teaser text here.</p>
+    </div>
+  </div>
+</div>
+      </div>
+    </section>
   </div>
 </section>
 
-<!-- motto text animates here-->
+<!-- Motto Text Animates Here-->
 
 <script>
   const mottos = [
@@ -89,6 +109,28 @@
   // Initial load
   mottoEl.textContent = mottos[0];
   setInterval(rotateMottos, 3500);
+</script>
+
+<!-- Animating Cards in Sticky Case Study Section-->
+
+<script>
+  window.addEventListener("scroll", () => {
+    const scrollY = window.scrollY;
+    const triggerOffset = window.innerHeight;
+
+    const alpha = document.getElementById("card-alpha");
+    const gamma = document.getElementById("card-gamma");
+
+    const distance = Math.min((scrollY - triggerOffset) * 0.5, 200);
+
+    if (scrollY > triggerOffset) {
+      alpha.style.transform = `translate(-${distance}px, -50%)`;
+      gamma.style.transform = `translate(${distance}px, -50%)`;
+    } else {
+      alpha.style.transform = `translate(0px, -50%)`;
+      gamma.style.transform = `translate(0px, -50%)`;
+    }
+  });
 </script>
 
 </body>
