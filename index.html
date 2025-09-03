@@ -41,13 +41,13 @@
 
 <!-- Sticky Case Study Section -->
 <section class="w-full h-[200vh] relative z-10">
-  <div class="sticky top-0 h-screen w-full bg-white/70 backdrop-blur-md px-6 py-20 overflow-hidden">
+  <div class="sticky top-0 h-screen w-full bg-white/70 backdrop-blur-md px-6 py-20">
     <h2 class="text-3xl font-bold text-gray-800 mb-12 text-center">Selected Case Studies</h2>
     <section class="sticky top-0 h-full overflow-hidden">
       <div class="relative h-full w-full" id="cardTrack">
 
 <!-- Alpha -->
-<div class="absolute top-1/2 left-1/2 w-[33.3333vw] h-[70vh] transform -translate-x-1/2 -translate-y-1/2 z-10">
+<div class="absolute top-1/2 w-[32%] h-[70vh] transform -translate-y-1/2 z-10" style="left: -40%;">
   <div id="card-alpha" class="w-full h-full">
     <div class="bg-white rounded-lg shadow p-4 w-full h-full">
       <img src="images/project-alpha.jpg" alt="Project Alpha" class="w-full h-40 object-cover rounded mb-4">
@@ -58,7 +58,7 @@
 </div>
 
 <!-- Beta -->
-<div class="absolute top-1/2 left-1/2 w-[33.3333vw] h-[70vh] transform -translate-x-1/2 -translate-y-1/2 z-20">
+<div class="absolute top-1/2 w-[32%] h-[70vh] transform -translate-y-1/2 z-20" style="left: 34%;">
   <div id="card-beta" class="w-full h-full">
     <div class="bg-white rounded-lg shadow p-4 w-full h-full">
       <img src="images/project-beta.jpg" alt="Project Beta" class="w-full h-40 object-cover rounded mb-4">
@@ -69,7 +69,7 @@
 </div>
 
 <!-- Gamma -->
-<div class="absolute top-1/2 left-1/2 w-[33.3333vw] h-[70vh] transform -translate-x-1/2 -translate-y-1/2 z-10">
+<div class="absolute top-1/2 w-[32%] h-[70vh] transform -translate-y-1/2 z-10" style="left: 107%;">
   <div id="card-gamma" class="w-full h-full">
     <div class="bg-white rounded-lg shadow p-4 w-full h-full">
       <img src="images/project-gamma.jpg" alt="Project Gamma" class="w-full h-40 object-cover rounded mb-4">
@@ -83,6 +83,13 @@
   </div>
 </section>
 
+<!-- Section Break -->
+<section class="w-full h-screen relative z-20 flex items-center justify-center">
+  <div class="w-full h-full">
+    <img src="images/section-break.png" alt="Section Break" class="w-full h-full object-cover">
+  </div>
+</section>
+
 <!-- Motto Text Animates Here-->
 
 <script>
@@ -91,7 +98,9 @@
     "have strong opinions. hold them loosely.",
     "follow the work. take every opportunity. be grateful.",
     "how you do anything is how you do everything.",
-    "pressure is a priviledge.",
+    "pressure is a privilege.",
+    "leave everything better than you found it.",
+    "assume the best in people, prepare for the worst."
   ];
 
   let index = 0;
@@ -117,18 +126,28 @@
   window.addEventListener("scroll", () => {
     const scrollY = window.scrollY;
     const triggerOffset = window.innerHeight;
+    
+    const alphaContainer = document.getElementById("card-alpha").parentElement;
+    const gammaContainer = document.getElementById("card-gamma").parentElement;
 
-    const alpha = document.getElementById("card-alpha");
-    const gamma = document.getElementById("card-gamma");
-
-    const distance = Math.min((scrollY - triggerOffset) * 0.5, 200);
+    // Calculate progress through the section (0 to 1)
+    const progress = Math.min((scrollY - triggerOffset) / window.innerHeight, 1);
 
     if (scrollY > triggerOffset) {
-      alpha.style.transform = `translate(-${distance}px, -50%)`;
-      gamma.style.transform = `translate(${distance}px, -50%)`;
-    } else {
-      alpha.style.transform = `translate(0px, -50%)`;
-      gamma.style.transform = `translate(0px, -50%)`;
+    // Alpha moves from -40% to stop just before Beta (with proper spacing)
+    const alphaFinalPosition = 0; // Position Alpha to the left of Beta
+    const alphaPosition = -40 + (progress * (alphaFinalPosition - (-40)));
+    alphaContainer.style.left = `${alphaPosition}%`;
+      
+      // Gamma moves from 107% to start just after Beta (with 24px spacing)  
+      // Target: 66.67% + 24px gap ≈ 67%
+      const gammaFinalPosition = 68;
+      const gammaPosition = 107 - (progress * (107 - gammaFinalPosition));
+      gammaContainer.style.left = `${gammaPosition}%`;
+      } else {
+      // Reset to initial positions
+      alphaContainer.style.left = '-40%';
+      gammaContainer.style.left = '107%';
     }
   });
 </script>
