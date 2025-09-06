@@ -14,6 +14,24 @@
 </head>
 <body class="bg-neutral-100 text-gray-800 overflow-x-hidden">
 
+      <!-- Fixed Header Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-md px-6 py-4">
+      <div class="flex justify-between items-center max-w-7xl mx-auto">
+        <!-- Logo/Name -->
+        <div class="text-lg font-semibold text-gray-800" style="font-family: 'Cousine', monospace;">
+          marcea
+        </div>
+        
+        <!-- Navigation Links -->
+        <div class="flex space-x-8" style="font-family: 'Cousine', monospace;">
+          <a href="#" class="text-gray-800 hover:text-violet-700 transition-colors duration-200 font-medium">work</a>
+          <a href="#" class="text-gray-600 hover:text-violet-700 transition-colors duration-200 font-medium">about</a>
+          <a href="#" class="text-gray-600 hover:text-violet-700 transition-colors duration-200 font-medium">play</a>
+          <a href="#" class="text-gray-600 hover:text-violet-700 transition-colors duration-200 font-medium">contact</a>
+        </div>
+      </div>
+    </nav>
+
   <!-- Landing Overlay -->
   <div id="landing" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center space-y-8 text-center">
     <h1 class="text-3xl sm:text-4xl font-bold text-violet-700">Hi, I'm Marcea. Who are you?</h1>
@@ -60,11 +78,11 @@
 <!-- Beta -->
 <div class="absolute top-1/2 w-[32%] h-[70vh] transform -translate-y-1/2 z-20" style="left: 34%;">
   <div id="card-beta" class="w-full h-full">
-    <div class="bg-white rounded-lg shadow p-4 w-full h-full">
+    <a href="beta.html" class="block bg-white rounded-lg shadow p-4 w-full h-full hover:shadow-lg transition-shadow duration-300">
       <img src="images/project-beta.jpg" alt="Project Beta" class="w-full h-40 object-cover rounded mb-4">
       <h3 class="text-purple-600 font-semibold text-lg">Project Beta</h3>
       <p class="text-gray-700 text-sm">Short summary or teaser text here.</p>
-    </div>
+      </a>
   </div>
 </div>
 
@@ -100,7 +118,7 @@
     "how you do anything is how you do everything.",
     "pressure is a privilege.",
     "leave everything better than you found it.",
-    "assume the best in people, prepare for the worst."
+    "I'm obsessed with the idea that there is always a better way."
   ];
 
   let index = 0;
