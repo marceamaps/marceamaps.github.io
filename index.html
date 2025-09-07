@@ -15,10 +15,37 @@
     }
 
     .hero-title {
-      font-size: clamp(4rem, 12vw, 12rem);
+      font-size: clamp(4rem, 8vw, 8rem);
       line-height: 0.9;
     }
+
+    /* Landing title animation */
+    .landing-title-animate {
+      opacity: 0;
+      filter: blur(8px);
+      transform: translateY(20px);
+      transition: opacity 1.2s ease-out, filter 1.2s ease-out, transform 1.2s ease-out;
+    }
+
+    .landing-title-animate.loaded {
+      opacity: 1;
+      filter: blur(0px);
+      transform: translateY(0px);
+    }
+
+    /* Individual button animations - no movement */
+    .landing-button-animate {
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .landing-button-animate.loaded {
+      opacity: 1;
+      transform: scale(1);
+    }
   </style>
+
 </head>
 
 <body class="bg-neutral-100 text-gray-800 overflow-x-hidden">
@@ -43,15 +70,17 @@
 
   <!-- Landing Overlay -->
   <div id="landing" class="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center space-y-8 text-center">
-    <h1 class="text-3xl sm:text-4xl font-bold text-violet-700">Hi, I'm Marcea. Who are you?</h1>
-    <div class="flex flex-wrap justify-center gap-4">
+    <h1 id="landing-title" class="font-medium text-gray-600 landing-title-animate"
+      style="font-family: 'Cousine', monospace;">Hi, I'm Marcea. Who are you?</h1>
+    <div id="landing-buttons" class="flex flex-wrap justify-center gap-4">
       <button onclick="enterSite()"
-        class="bg-lime-100 text-black px-6 py-3 rounded-lg text-lg hover:bg-violet-200">Designer</button>
+        class="bg-lime-100 text-black px-6 py-3 rounded-lg text-lg hover:bg-violet-200 landing-button-animate">Designer</button>
       <button onclick="enterSite()"
-        class="bg-lime-100 text-black px-6 py-3 rounded-lg text-lg hover:bg-violet-200">Manager</button>
+        class="bg-lime-100 text-black px-6 py-3 rounded-lg text-lg hover:bg-violet-200 landing-button-animate">Manager</button>
       <button onclick="enterSite()"
-        class="bg-lime-100 text-black px-6 py-3 rounded-lg text-lg hover:bg-violet-200">Recruiter</button>
-      <button onclick="enterSite()" class="bg-lime-100 text-black px-6 py-3 rounded-lg text-lg hover:bg-violet-200">Just
+        class="bg-lime-100 text-black px-6 py-3 rounded-lg text-lg hover:bg-violet-200 landing-button-animate">Recruiter</button>
+      <button onclick="enterSite()"
+        class="bg-lime-100 text-black px-6 py-3 rounded-lg text-lg hover:bg-violet-200 landing-button-animate">Just
         Browsing</button>
     </div>
   </div>
@@ -62,24 +91,52 @@
     }
   </script>
 
+
   <!-- Hero Section -->
+  <section class="h-screen sticky top-0 z-0 relative bg-cover bg-center"
+    style="background-image: url('images/hero-bg.png')">
+
+    <!-- Bottom Left Text Block -->
+    <div class="absolute bottom-8 left-8 max-w-sm">
+      <p class="text-lg text-black leading-relaxed">
+        I’m a designer who asks a lot of questions. My work focuses on large-scale, complex experiences that connect
+        business needs with user goals. I turn the early spark of ideas into shipped products that people actually use
+        to get active.
+      </p>
+    </div>
+
+    <!-- Bottom Right Text Block -->
+    <div class="absolute bottom-8 right-8 max-w-sm text-right">
+      <p class="text-xl text-black leading-relaxed">
+        Currently at <a href="https://strava.com" target="_blank" rel="noopener"
+          class="font-bold text-orange-600 underline hover:text-violet-900 transition-colors duration-200">Strava</a>
+      </p>
+    </div>
+
+    <!-- Top Right Title -->
+    <div class="absolute top-20 md:top-24 right-4 md:right-8 text-right">
+      <h1 id="hero-title" class="hero-title font-extrabold text-black transition-opacity duration-500 ease-in-out">
+        <!-- Text will cycle here -->
+      </h1>
+    </div>
+
+    <!-- Hero Section
   <section class="h-screen sticky top-0 z-0 flex flex-col items-center justify-center text-center bg-cover bg-center"
     style="background-image: url('images/hero-bg.png')">
     <h1 class="hero-title font-extrabold text-black mb-6">
-      <span class="block">product designer.</span>
-      <span class="block">human.</span>
+      <span class="block" style="font-weight: 100; font-style: italic;">product designer.</span>
+      <span class="block" style="font-weight: 100;">human.</span>
       <span class="block">marcea.</span>
-    </h1>
-    <p id="motto"
-      class="mt-4 text-xl sm:text-2xl text-gray-800 font-medium h-[2.75rem] flex items-center justify-center transition-opacity duration-500 ease-in-out">
-      <!-- Motto text will appear here -->
-    </p>
+    </h1> -->
+    <!-- <p id="motto" class="mt-4 text-xl sm:text-2xl text-gray-800 font-medium h-[2.75rem] flex items-center justify-center transition-opacity duration-500 ease-in-out">
+  Motto text will appear here
+  </p> -->
   </section>
 
   <!-- Sticky Case Study Section -->
   <section class="w-full h-[200vh] relative z-10">
     <div class="sticky top-0 h-screen w-full bg-white/70 backdrop-blur-md px-6 py-20">
-      <h2 class="text-3xl font-bold text-gray-800 mb-12 text-center">Selected Case Studies</h2>
+      <h2 class="text-3xl font-bold text-gray-800 mb-12 text-center">my work</h2>
       <section class="sticky top-0 h-full overflow-hidden">
         <div class="relative h-full w-full" id="cardTrack">
 
@@ -119,15 +176,67 @@
     </div>
   </section>
 
+
   <!-- Section Break -->
-  <section class="w-full h-screen relative z-20 flex items-center justify-center">
+  <!-- <section class="w-full h-screen relative z-20 flex items-center justify-center" style="margin-bottom: 0;">
     <div class="w-full h-full">
       <img src="images/section-break.png" alt="Section Break" class="w-full h-full object-cover">
+    </div>
+  </section> -->
+
+  <!-- Project Index -->
+  <section class="w-full py-16 relative z-30 bg-white">
+    <div class="max-w-6xl mx-auto px-8">
+      <h2 class="text-3xl font-bold text-gray-800 mb-12 text-center">All Projects</h2>
+
+      <div class="space-y-12">
+        <!-- 2025 -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-800 mb-6">2025</h3>
+          <ul class="space-y-3 mb-8" style="font-family: 'Cousine', monospace;">
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">Strava Mobile Optimization
+            </li>
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">Design System Overhaul</li>
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">User Research Platform</li>
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">Mobile Analytics Dashboard
+            </li>
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">Prototype Testing Framework
+            </li>
+          </ul>
+        </div>
+
+        <!-- 2024 -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-800 mb-6">2024</h3>
+          <ul class="space-y-3 mb-8" style="font-family: 'Cousine', monospace;">
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">E-commerce Redesign</li>
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">Brand Identity System</li>
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">Accessibility Audit</li>
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">Component Library</li>
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">User Onboarding Flow</li>
+          </ul>
+        </div>
+
+        <!-- 2023 -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-800 mb-6">2023</h3>
+          <ul class="space-y-3 mb-8" style="font-family: 'Cousine', monospace;">
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">Payment System Integration
+            </li>
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">Mobile App Prototype</li>
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">Design Token System</li>
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">User Journey Mapping</li>
+            <li class="text-gray-600 hover:text-gray-800 transition-colors cursor-pointer">Cross-platform Guidelines
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- Motto Text Animates Here-->
 
+  <!--
   <script>
     const mottos = [
       "make every idea your very best, even if it's your absolute worst.",
@@ -155,6 +264,7 @@
     mottoEl.textContent = mottos[0];
     setInterval(rotateMottos, 3500);
   </script>
+  -->
 
   <!-- Animating Cards in Sticky Case Study Section-->
 
@@ -186,6 +296,56 @@
         gammaContainer.style.left = '107%';
       }
     });
+  </script>
+
+  <script>
+    // Landing overlay sequential animation
+    window.addEventListener('load', () => {
+      const landingTitle = document.getElementById('landing-title');
+      const landingButtons = document.querySelectorAll('.landing-button-animate');
+
+      // Animate title first
+      setTimeout(() => {
+        landingTitle.classList.add('loaded');
+      }, 300);
+
+      // Animate each button with staggered delays
+      landingButtons.forEach((button, index) => {
+        setTimeout(() => {
+          button.classList.add('loaded');
+        }, 1500 + (index * 150)); // Start at 1.5s, then 150ms apart
+      });
+    });
+  </script>
+
+
+  <script>
+    // Hero title animation
+    const heroTitles = [
+      { text: "product designer.", style: "font-weight: 100; font-style: italic;" },
+      { text: "human.", style: "font-weight: 100;" },
+      { text: "marcea.", style: "font-weight: 800;" }
+    ];
+
+    let titleIndex = 0;
+    const heroTitleEl = document.getElementById("hero-title");
+
+    function rotateHeroTitles() {
+      heroTitleEl.style.opacity = 0;
+      setTimeout(() => {
+        const currentTitle = heroTitles[titleIndex];
+        heroTitleEl.textContent = currentTitle.text;
+        heroTitleEl.style.cssText += currentTitle.style;
+        heroTitleEl.style.opacity = 1;
+        titleIndex = (titleIndex + 1) % heroTitles.length;
+      }, 250);
+    }
+
+    // Initial load
+    const firstTitle = heroTitles[0];
+    heroTitleEl.textContent = firstTitle.text;
+    heroTitleEl.style.cssText += firstTitle.style;
+    setInterval(rotateHeroTitles, 2500);
   </script>
 
 </body>
