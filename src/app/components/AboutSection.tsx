@@ -1,4 +1,4 @@
-import profileImg from "figma:asset/24fedb2b3998753e946e7f10593e566b892c0733.png";
+import profileImg from "../assets/profile.png";
 
 export default function AboutSection() {
   return (
@@ -15,7 +15,7 @@ export default function AboutSection() {
             </p>
             
             <p>
-              My work sits at the intersection of strategy, craft, and execution. I think about the big picture and the tiny details, leaving no stone unturned. I care deeply about understanding the problem behind the problem—and I don't stop until I've found it. My goal is to ship work that feels obvious in hindsight and meaningfully impacts key business goals. I believe the best design supports people in moments that matter—the moments that happen in real life, off the screen.
+              My work sits at the intersection of strategy, craft, and execution. I think about the big picture and the tiny details, leaving no stone unturned. I care deeply about understanding the problem behind the problemâ€"and I don't stop until I've found it. My goal is to ship work that feels obvious in hindsight and meaningfully impacts key business goals. I believe the best design supports people in moments that matterâ€"the moments that happen in real life, off the screen.
             </p>
             
             <p>

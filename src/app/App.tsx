@@ -5,7 +5,7 @@ import FeaturedProjectCard from "./components/FeaturedProjectCard";
 import CaseStudyCard from "./components/CaseStudyCard";
 import ExperienceSection from "./components/ExperienceSection";
 import Footer from "./components/Footer";
-import appleWatchImage from "figma:asset/399c37248aa7adda05f461d1e8aebca34d9ab0a4.png";
+import appleWatchImage from "../assets/apple-watch-award.png";
 
 export default function App() {
   const featuredProject = {
@@ -28,21 +28,21 @@ export default function App() {
         "Next Level Recovery (Massage, Healthy Back)"
       ],
       tip: "A mobile record redesign drove meaningful increases in conversion, particularly among new and global users across Android and iOS, while establishing a scalable design system that unlocked future feature development.",
-      illustrationUrl: "figma:asset/a8f7ca66babcdc4cb3c6920491fafcf9dc2cfede.png",
+      illustrationUrl: appleWatchImage,
       link: "https://www.t3.com/active/stravas-latest-update-fixes-a-problem-you-didnt-know-you-had",
       external: true
     },
     {
       number: 2,
       title: "Activity Detail Page",
-      vibe: "The louder the beat, the faster your pulse – that's your flow. You live for the sweat, the strength, and the next goal on the horizon.",
+      vibe: "The louder the beat, the faster your pulse — that's your flow. You live for the sweat, the strength, and the next goal on the horizon.",
       trends: [
         "Healthy Performance & High-Fives (Hyrox, Functional Training)",
         "Urban Adventure & Nature-Reset (Outdoor Bootcamps, Bouldering)",
         "Fluidity Core (Dance)"
       ],
       tip: "Improvements to the activity detail page drove measurable increases in overall engagement, including higher page views and a significant lift in map interaction.",
-      illustrationUrl: "figma:asset/80be7e08d8ed4b7654d0269ba0fca63b3ec02896.png",
+      illustrationUrl: appleWatchImage,
       link: "https://press.strava.com/articles/strava-updates-features-to-help-users-easily-plan-and-share-their-activities",
       external: true
     },
@@ -55,8 +55,8 @@ export default function App() {
         "Next Level Recovery (Massage, Cryotherapy)",
         "Healthy Performance (Nutrition Coaching)"
       ],
-      tip: "Web routing trials grew over 100% year over year, with the strongest gains occurring during the April–September period when the majority of map improvements shipped.",
-      illustrationUrl: "figma:asset/949fa6c0990c6e982ee3fffeefd4efdf02d3358a.png",
+      tip: "Web routing trials grew over 100% year over year, with the strongest gains occurring during the April-September period when the majority of map improvements shipped.",
+      illustrationUrl: appleWatchImage,
       link: "https://strava.com/maps",
       external: true
     }
@@ -69,7 +69,7 @@ export default function App() {
       description:
         "A mobile record redesign drove meaningful increases in conversion, particularly among new and global users across Android and iOS, while establishing a scalable design system that unlocked future feature development and supported a growing range of recording use cases.",
       date: "2025",
-      imageUrl: "figma:asset/a8f7ca66babcdc4cb3c6920491fafcf9dc2cfede.png",
+      imageUrl: appleWatchImage,
       link: "https://www.t3.com/active/stravas-latest-update-fixes-a-problem-you-didnt-know-you-had",
       external: true,
       linkText: "Read more",
@@ -81,7 +81,7 @@ export default function App() {
       description:
         "Improvements to the activity detail page drove measurable increases in overall engagement, including higher page views and a significant lift in map interaction. Achievement-based polyline highlights became one of the most interacted-with elements on the page.",
       date: "2024",
-      imageUrl: "figma:asset/80be7e08d8ed4b7654d0269ba0fca63b3ec02896.png",
+      imageUrl: appleWatchImage,
       link: "https://press.strava.com/articles/strava-updates-features-to-help-users-easily-plan-and-share-their-activities",
       external: true,
       size: "small" as const,
@@ -90,9 +90,9 @@ export default function App() {
       category: "WEB",
       title: "Strava Web Map Heatmaps & Filtering",
       description:
-        "Web routing trials grew over 100% year over year, with the strongest gains occurring during the April–September period when the majority of map improvements shipped.",
+        "Web routing trials grew over 100% year over year, with the strongest gains occurring during the April-September period when the majority of map improvements shipped.",
       date: "2025",
-      imageUrl: "figma:asset/949fa6c0990c6e982ee3fffeefd4efdf02d3358a.png",
+      imageUrl: appleWatchImage,
       link: "https://strava.com/maps",
       external: true,
       linkText: "Try it",
