@@ -1,7 +1,7 @@
-import heroImg1 from "../assets/hero-strava-award.png";
-import heroImg2 from "../assets/hero-rock-climbing.png";
-import heroImg3 from "../assets/hero-trail-running.png";
-import heroImg4 from "../assets/strava-editors-choice.png";
+import heroImg1 from "../../assets/hero-strava-award.png";
+import heroImg2 from "../../assets/hero-rock-climbing.png";
+import heroImg3 from "../../assets/hero-trail-running.png";
+import heroImg4 from "../../assets/strava-editors-choice.png";
 import { Volume2 } from "lucide-react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
@@ -49,7 +49,7 @@ export default function Hero() {
                 <Volume2 className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
                 <p className="font-['Inter',sans-serif] text-sm md:text-lg text-gray-400 font-light" style={{ fontStyle: 'italic' }}>
                   Sounds like
-                  marâ€¢seeâ€¢uh
+                  mar • see • uh
                 </p>
               </div>
             </div>
