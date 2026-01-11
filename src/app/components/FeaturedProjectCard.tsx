@@ -27,13 +27,13 @@ export default function FeaturedProjectCard({
   });
 
   // Scale from 1 (full width) to 0.7 (70% width) - stops sooner, larger final size
-  const scale = useTransform(scrollYProgress, [0, 0.4], [1, 0.7]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.75]);
   const borderRadius = useTransform(scrollYProgress, [0, 0.4], [0, 24]);
 
   return (
     <div ref={containerRef} className="relative pt-16 md:pt-24 lg:pt-[100px]" style={{ minHeight: '300vh' }}>
       {/* Sticky container for the scaling image - overlays content initially */}
-      <div className="sticky top-0 h-screen flex items-center justify-center overflow-visible z-20">
+      <div ref={containerRef} className="relative pt-16 md:pt-24" style={{ minHeight: '250vh' }}>
         <motion.div 
           className="w-full"
           style={{ 
