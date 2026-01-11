@@ -63,7 +63,7 @@ export default function FeaturedProjectCard({
 
       {/* Content that gets revealed - sticky and fixed in position behind the image */}
       <div className="sticky top-0 h-screen flex items-center justify-center z-10 pointer-events-none">
-        <div className="bg-white relative pointer-events-auto w-full mt-[80vh] md:mt-[115vh] lg:mt-[125vh]">
+        <div className="bg-white relative pointer-events-auto w-full mt-[70vh] md:mt-[105vh] lg:mt-[115vh] pb-32">
           <div className="max-w-4xl mx-auto text-center px-8 py-12">
             <h3 className="font-['Playfair_Display',serif] font-bold text-2xl md:text-3xl mb-4">
               {title}
