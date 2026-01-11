@@ -10,7 +10,7 @@ export default function Hero() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "end start"]
+    offset: ["start end", "end start"],
   });
 
   // Parallax transforms
@@ -31,9 +31,9 @@ export default function Hero() {
       transition: {
         duration: 0.8,
         delay: index * 0.15,
-        ease: [0.25, 0.4, 0.25, 1]
-      }
-    })
+        ease: [0.25, 0.4, 0.25, 1],
+      },
+    }),
   };
 
   return (
@@ -47,89 +47,127 @@ export default function Hero() {
             <div className="flex flex-col gap-5">
               <div className="flex items-center gap-2">
                 <Volume2 className="w-4 h-4 md:w-5 md:h-5 text-gray-400" />
-                <p className="font-['Inter',sans-serif] text-sm md:text-lg text-gray-400 font-light" style={{ fontStyle: 'italic' }}>
-                  Sounds like
-                  mar • see • uh
+                <p
+                  className="font-['Inter',sans-serif] text-sm md:text-lg text-gray-400 font-light"
+                  style={{ fontStyle: "italic" }}
+                >
+                  Sounds like mar • see • uh
                 </p>
               </div>
             </div>
           </div>
           <p className="font-['Playfair_Display',serif] text-lg md:text-3xl text-black leading-relaxed">
-            I'm a product designer at <a href="https://strava.com" target="_blank" rel="noopener noreferrer" className="font-bold underline underline-offset-2 transition-all hover:italic" style={{ color: '#fc5200' }}>Strava</a>, where I design how athletes record, experience, and relive their activities across web, mobile, and wearables. My work on Strava's Apple Watch app won the <a href="https://www.apple.com/newsroom/2025/12/apple-unveils-the-winners-of-the-2025-app-store-awards/" target="_blank" rel="noopener noreferrer" className="font-bold underline underline-offset-2 transition-all hover:italic">2026 Apple Watch App of the Year</a>, and is used by millions of athletes worldwide.
+            I'm a product designer at{" "}
+            <a
+              href="https://strava.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold underline underline-offset-2 transition-all hover:italic"
+              style={{ color: "#fc5200" }}
+            >
+              Strava
+            </a>
+            , where I design how athletes record, experience, and relive their
+            activities across web, mobile, and wearables. My work on Strava's
+            Apple Watch app won the{" "}
+            <a
+              href="https://www.apple.com/newsroom/2025/12/apple-unveils-the-winners-of-the-2025-app-store-awards/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold underline underline-offset-2 transition-all hover:italic"
+            >
+              2026 Apple Watch App of the Year
+            </a>
+            , and is used by millions of athletes worldwide.
           </p>
           <p className="font-['Playfair_Display',serif] text-lg md:text-3xl text-black leading-relaxed">
-            With 8+ years across startups and established products, I've shipped everything from foundational systems to high-impact features at global scale. I approach design with a perspective of experimentation and risk assessment, balancing velocity with the details.
+            With 8+ years across startups and established products, I've shipped
+            everything from foundational systems to high-impact features at
+            global scale. I approach design with a perspective of
+            experimentation and risk assessment, balancing velocity with the
+            details.
           </p>
           <p className="font-['Playfair_Display',serif] text-lg md:text-3xl text-black leading-relaxed">
-            I live at the intersection of passion and craft in <a href="https://en.wikipedia.org/wiki/Chamonix" target="_blank" rel="noopener noreferrer" className="font-bold underline underline-offset-2 transition-all hover:italic">Chamonix</a>, designing in motion through trail runs and rock climbs in the mountains that shape the moments I design forâ€"real life, off the screen.
+            I live at the intersection of passion and craft in{" "}
+            <a
+              href="https://en.wikipedia.org/wiki/Chamonix"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold underline underline-offset-2 transition-all hover:italic"
+            >
+              Chamonix
+            </a>
+            , designing in motion through trail runs and rock climbs in the
+            mountains that shape the moments I design forâ€"real life, off the
+            screen.
           </p>
-          </div>
-        
-        <motion.div 
-          className="flex flex-col -space-y-20 items-end relative" 
+        </div>
+
+        <motion.div
+          className="flex flex-col -space-y-20 items-end relative"
           ref={ref}
-          style={{ position: 'relative' }}
+          style={{ position: "relative" }}
         >
-          <motion.img 
-            src={heroImg3} 
-            alt="Trail running in mountains" 
+          <motion.img
+            src={heroImg3}
+            alt="Trail running in mountains"
             className="w-64 h-auto object-cover rounded-lg shadow-lg"
             custom={0}
             initial="hidden"
             animate="visible"
             variants={imageVariants}
-            style={{ 
+            style={{
               rotate: 4,
               x: x1,
-              zIndex: 40
+              zIndex: 40,
             }}
             whileHover={{ rotate: 8, scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           />
-          <motion.img 
-            src={heroImg1} 
-            alt="Marcea at Strava" 
+          <motion.img
+            src={heroImg1}
+            alt="Marcea at Strava"
             className="w-64 h-auto object-cover rounded-lg shadow-lg"
             custom={1}
             initial="hidden"
             animate="visible"
             variants={imageVariants}
-            style={{ 
+            style={{
               rotate: -3,
               x: x2,
-              zIndex: 10
+              zIndex: 10,
             }}
             whileHover={{ rotate: -5, scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           />
-          <motion.img 
-            src={heroImg2} 
-            alt="Rock climbing" 
+          <motion.img
+            src={heroImg2}
+            alt="Rock climbing"
             className="w-64 h-auto object-cover rounded-lg shadow-lg"
             custom={2}
             initial="hidden"
             animate="visible"
             variants={imageVariants}
-            style={{ 
+            style={{
               rotate: 4,
               x: x3,
-              zIndex: 20
+              zIndex: 20,
             }}
             whileHover={{ rotate: 8, scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
           />
-          <motion.img 
-            src={heroImg4} 
-            alt="Strava Editors' Choice award" 
+          <motion.img
+            src={heroImg4}
+            alt="Strava Editors' Choice award"
             className="w-64 h-auto object-cover rounded-lg shadow-lg"
             custom={3}
             initial="hidden"
             animate="visible"
             variants={imageVariants}
-            style={{ 
+            style={{
               rotate: -2,
               x: x4,
-              zIndex: 30
+              zIndex: 30,
             }}
             whileHover={{ rotate: -6, scale: 1.02 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
