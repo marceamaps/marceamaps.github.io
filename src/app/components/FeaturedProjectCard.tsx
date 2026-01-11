@@ -11,19 +11,19 @@ type FeaturedProjectCardProps = {
   linkText?: string;
 };
 
-export default function FeaturedProjectCard({ 
-  title, 
-  description, 
+export default function FeaturedProjectCard({
+  title,
+  description,
   imageUrl,
   link = "#",
   external = false,
-  linkText = "Read More"
+  linkText = "Read More",
 }: FeaturedProjectCardProps) {
   const containerRef = useRef(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end start"],
   });
 
   // Scale from 1 (full width) to 0.7 (70% width) - stops sooner, larger final size
@@ -31,12 +31,20 @@ export default function FeaturedProjectCard({
   const borderRadius = useTransform(scrollYProgress, [0, 0.4], [0, 24]);
 
   return (
-    <div ref={containerRef} className="relative pt-16 md:pt-24 lg:pt-[100px]" style={{ minHeight: '300vh' }}>
+    <div
+      ref={containerRef}
+      className="relative pt-16 md:pt-24 lg:pt-[100px]"
+      style={{ minHeight: "300vh" }}
+    >
       {/* Sticky container for the scaling image - overlays content initially */}
-      <div ref={containerRef} className="relative pt-16 md:pt-24" style={{ minHeight: '250vh' }}>
-        <motion.div 
+      <div
+        ref={containerRef}
+        className="relative pt-16 md:pt-24"
+        style={{ minHeight: "250vh" }}
+      >
+        <motion.div
           className="w-full"
-          style={{ 
+          style={{
             scale,
           }}
         >
@@ -44,14 +52,14 @@ export default function FeaturedProjectCard({
             <h2 className="font-['Playfair_Display',serif] font-bold italic text-center mb-8 md:mb-12 text-6xl md:text-9xl lg:text-[10rem]">
               Featured Work
             </h2>
-            
+
             <motion.div
               className="relative w-full overflow-hidden bg-gray-900"
               style={{ borderRadius }}
             >
               <div className="aspect-[16/9] w-full">
-                <img 
-                  src={imageUrl} 
+                <img
+                  src={imageUrl}
                   alt={title}
                   className="w-full h-full object-cover"
                 />
@@ -68,22 +76,22 @@ export default function FeaturedProjectCard({
             <h3 className="font-['Playfair_Display',serif] font-bold text-2xl md:text-3xl mb-4">
               {title}
             </h3>
-            
+
             <p className="font-['Playfair_Display',serif] text-base md:text-lg leading-relaxed mb-6">
               {description}
             </p>
-            
+
             {link && (
-              <a 
+              <a
                 href={link}
                 target={external ? "_blank" : undefined}
                 rel={external ? "noopener noreferrer" : undefined}
                 className="font-['Inter',sans-serif] tracking-wider uppercase inline-flex items-center gap-2 justify-center px-6 md:px-8 py-3 md:py-4 rounded-lg transition-all duration-300 hover:scale-105 active:scale-95 relative overflow-hidden hover:shadow-2xl"
                 style={{
-                  background: 'white',
-                  color: 'black',
-                  fontSize: '0.875rem',
-                  border: '1px solid #e5e7eb'
+                  background: "white",
+                  color: "black",
+                  fontSize: "0.875rem",
+                  border: "1px solid #e5e7eb",
                 }}
               >
                 read me {external && <ExternalLink className="w-4 h-4" />}
@@ -92,6 +100,9 @@ export default function FeaturedProjectCard({
           </div>
         </div>
       </div>
+
+      {/* Spacer to ensure content clears */}
+      <div className="h-[30vh]" />
     </div>
   );
 }
