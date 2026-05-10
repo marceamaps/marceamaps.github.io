@@ -53,7 +53,7 @@ export default function SkillsSection({ imageUrl }: SkillsSectionProps) {
                 {category.skills.map((skill, skillIndex) => (
                   <li 
                     key={skillIndex}
-                    className="font-['Playfair_Display',serif] text-xl leading-relaxed"
+                    className="text-xl leading-relaxed"
                   >
                     {skill}
                   </li>

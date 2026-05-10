@@ -4,12 +4,12 @@ export default function AboutSection() {
   return (
     <section className="py-12 px-8 md:px-16 lg:px-24" id="about">
       <div className="max-w-7xl mx-auto">
-        <h2 className="font-['Playfair_Display',serif] font-bold italic text-5xl mb-8">
+        <h2 className="font-bold italic text-5xl mb-8">
           About Me
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div className="space-y-4 font-['Playfair_Display',serif] text-base leading-relaxed">
+          <div className="space-y-4 text-base leading-relaxed">
             <p>
               I'm a product designer who focuses on building clear, focused experiences that scale for the future. With 8+ years of experience across startups and established products, I've worked on everything from foundational UX and design systems to high-impact features used by millions of people.
             </p>

@@ -41,11 +41,11 @@ export default function ProjectCard({
           {date} • {category}
         </p>
         
-        <h3 className={`font-['Playfair_Display',serif] font-bold ${isLarge ? 'text-3xl' : 'text-xl'}`}>
+        <h3 className={`font-bold ${isLarge ? 'text-3xl' : 'text-xl'}`}>
           {title}
         </h3>
         
-        <p className="font-['Playfair_Display',serif] text-sm leading-relaxed">
+        <p className="text-sm leading-relaxed">
           {description}
         </p>
         

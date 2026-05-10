@@ -26,7 +26,7 @@ export default function CaseStudyCard({
       <div className="grid grid-cols-1 md:grid-cols-2 min-h-[400px]">
         {/* Left side - Text content */}
         <div className="p-8 md:p-12 flex flex-col gap-6">
-          <h2 className="font-['Playfair_Display',serif] font-bold text-4xl md:text-5xl">
+          <h2 className="font-bold text-4xl md:text-5xl">
             {number}. {title}
           </h2>
 
@@ -34,7 +34,7 @@ export default function CaseStudyCard({
             <h3 className="font-['Inter',sans-serif] text-xs tracking-wider uppercase mb-2">
               YOUR VIBE:
             </h3>
-            <p className="font-['Playfair_Display',serif] text-base leading-relaxed">
+            <p className="text-base leading-relaxed">
               {vibe}
             </p>
           </div>
@@ -43,7 +43,7 @@ export default function CaseStudyCard({
             <h3 className="font-['Inter',sans-serif] text-xs tracking-wider uppercase mb-2">
               TRENDS THAT SUIT YOU:
             </h3>
-            <ul className="font-['Playfair_Display',serif] text-base leading-relaxed space-y-1">
+            <ul className="text-base leading-relaxed space-y-1">
               {trends.map((trend, index) => (
                 <li key={index}>#{index + 1} {trend}</li>
               ))}
@@ -54,7 +54,7 @@ export default function CaseStudyCard({
             <h3 className="font-['Inter',sans-serif] text-xs tracking-wider uppercase mb-2">
               OUR 2026 TIP:
             </h3>
-            <p className="font-['Playfair_Display',serif] text-base leading-relaxed">
+            <p className="text-base leading-relaxed">
               {tip}
             </p>
           </div>
