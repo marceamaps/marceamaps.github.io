@@ -74,13 +74,21 @@ export default function FloatingNav() {
           About
         </a>
 
-        <a
-          href="#contact"
-          onClick={handleContactClick}
-          className="relative text-lg font-semibold tracking-[-0.01em] text-black/75 hover:text-black transition-all duration-200 whitespace-nowrap after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-black after:transition-all after:duration-200 hover:after:w-full"
+        <button
+          onClick={() => {
+            const contactSection = document.getElementById("contact");
+
+            if (contactSection) {
+              contactSection.scrollIntoView({
+                behavior: "smooth",
+              });
+            }
+          }}
+          className="text-lg font-semibold tracking-[-0.01em] text-black/80 hover:text-black hover:scale-[1.04] transition-all duration-200 whitespace-nowrap"
         >
           Contact
-        </a>
+        </button>
+        
       </div>
     </nav>
   );
