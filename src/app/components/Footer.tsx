@@ -13,7 +13,7 @@ export default function Footer() {
 
         <a
           href="mailto:marcea.irene@gmail.com"
-          className="block text-4xl md:text-7xl font-bold tracking-tight mb-12 hover:opacity-60 transition-opacity"
+          className="block text-[42px] leading-[0.95] sm:text-5xl md:text-7xl font-bold tracking-tight mb-12 break-all hover:opacity-60 transition-opacity"
         >
           marcea.irene@gmail.com
         </a>

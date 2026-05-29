@@ -1,141 +1,153 @@
-import heroImg1 from "../../assets/hero-strava-award.png";
-import heroImg2 from "../../assets/hero-rock-climbing.png";
-import heroImg3 from "../../assets/hero-trail-running.png";
-import heroImg4 from "../../assets/strava-editors-choice.png";
-import { motion, useScroll, useTransform } from "motion/react";
-import { useRef, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import contours from "../../assets/contours.svg";
 
 export default function Hero() {
-  const [activeCard, setActiveCard] = useState<number | null>(null);
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
+  const [pos, setPos] = useState({ x: -999, y: -999 });
+  const sectionRef = useRef<HTMLElement>(null);
+  const [inHero, setInHero] = useState(true);
 
-  const x1 = useTransform(scrollYProgress, [0, 1], [0, -6]);
-  const x2 = useTransform(scrollYProgress, [0, 1], [0, -8]);
-  const x3 = useTransform(scrollYProgress, [0, 1], [0, 10]);
-  const x4 = useTransform(scrollYProgress, [0, 1], [0, 8]);
+  useEffect(() => {
+    document.body.style.cursor = inHero ? "none" : "auto";
+    return () => { document.body.style.cursor = "auto"; };
+  }, [inHero]);
+  const [visible, setVisible] = useState(true);
 
-  const imageVariants = {
-    hidden: (index: number) => ({
-      y: -index * 56,
-      opacity: 0.85,
-    }),
-    visible: (index: number) => ({
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        delay: index * 0.12,
-        ease: [0.25, 0.4, 0.25, 1] as const,
-      },
-    }),
-  };
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setPos({ x: e.clientX, y: e.clientY });
+    };
+    const handleMouseEnter = () => setVisible(true);
+    const handleMouseLeave = () => setVisible(false);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseenter", handleMouseEnter);
+    window.addEventListener("mouseleave", handleMouseLeave);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseenter", handleMouseEnter);
+      window.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setInHero(entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section className="px-8 pt-36 pb-24 max-w-7xl mx-auto relative">
-      <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
-        <div className="flex flex-col items-start gap-10 flex-1">
-          <h1 className="text-3xl md:text-5xl font-bold">Hi, I'm Marcea</h1>
+    <section ref={sectionRef} className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center cursor-none">
 
-          <p className="text-lg md:text-3xl text-black leading-relaxed">
-            I'm a product designer at{" "}
-            <a
-              href="https://strava.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-bold underline underline-offset-2 transition-all hover:italic"
-              style={{ color: "#fc5200" }}
-            >
-              Strava
-            </a>
-            , where I design how athletes record, experience, and relive their
-            activities across web, mobile, and wearables. My work on Strava's
-            Apple Watch app won the{" "}
-            <a
-              href="https://www.apple.com/newsroom/2025/12/apple-unveils-the-winners-of-the-2025-app-store-awards/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-bold underline underline-offset-2 transition-all hover:italic"
-            >
-              2026 Apple Watch App of the Year
-            </a>
-            , and is used by millions of athletes worldwide.
-          </p>
-
-          <p className="text-lg md:text-3xl text-black leading-relaxed">
-            With 8+ years across startups and established products, I've shipped
-            everything from foundational systems to high-impact features at
-            global scale. I approach design with a perspective of
-            experimentation and risk assessment, balancing velocity with the
-            details.
-          </p>
-
-          <p className="text-lg md:text-3xl text-black leading-relaxed">
-            I live at the intersection of passion and craft in{" "}
-            <a
-              href="https://en.wikipedia.org/wiki/Chamonix"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-bold underline underline-offset-2 transition-all hover:italic"
-            >
-              Chamonix
-            </a>
-            , designing in motion through trail runs and rock climbs in the
-            mountains that shape the moments I design — real life, off the
-            screen.
-          </p>
-        </div>
-
-        <motion.div
-          className="relative w-full md:w-[340px] lg:w-[380px] min-h-[560px] md:pt-4"
-          ref={ref}
-        >
-
-          <motion.img
-            src={heroImg3}
-            alt="Trail running in mountains"
-            className="absolute top-0 right-0 w-72 md:w-80 h-auto object-cover rounded-[22px] shadow-xl"
-            custom={0}
-            initial="hidden"
-            animate="visible"
-            variants={imageVariants}
-            style={{ rotate: 3, x: x1, zIndex: 30 }}
-            whileHover={{ rotate: 4, scale: 1.02, y: -6 }}
-            transition={{ type: "spring", stiffness: 240, damping: 20 }}
-          />
-
-          <motion.img
-            src={heroImg1}
-            alt="Marcea at Strava"
-            className="absolute top-[180px] left-0 w-64 md:w-72 h-auto object-cover object-top rounded-[22px] shadow-xl"
-            custom={1}
-            initial="hidden"
-            animate="visible"
-            variants={imageVariants}
-            style={{ rotate: -3, x: x2, zIndex: 20 }}
-            whileHover={{ rotate: -4, scale: 1.02, y: -6 }}
-            transition={{ type: "spring", stiffness: 240, damping: 20 }}
-          />
-
-
-          <motion.img
-            src={heroImg4}
-            alt="Strava Editors' Choice award"
-            className="absolute top-[560px] right-0 w-56 md:w-64 h-auto object-cover rounded-[22px] shadow-xl"
-            custom={2}
-            initial="hidden"
-            animate="visible"
-            variants={imageVariants}
-            style={{ rotate: 1, x: x4, zIndex: 10 }}
-            whileHover={{ rotate: 2, scale: 1.02, y: -6 }}
-            transition={{ type: "spring", stiffness: 240, damping: 20 }}
-          />
-
-        </motion.div>
+      {/* Contour layer — revealed by cursor spotlight */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          WebkitMaskImage: `radial-gradient(circle 280px at ${pos.x}px ${pos.y}px, black 0%, transparent 100%)`,
+          maskImage: `radial-gradient(circle 280px at ${pos.x}px ${pos.y}px, black 0%, transparent 100%)`,
+        }}
+      >
+        <img
+          src={contours}
+          alt=""
+          className="w-full h-full object-cover"
+        />
       </div>
+
+      {/* Coordinates */}
+      <p className="absolute top-8 left-8 text-xs tracking-[0.3em] text-black/40">
+        45.9237° N &nbsp; 6.8694° E &nbsp;—&nbsp; Chamonix, France
+      </p>
+
+      {/* Name */}
+      <h1 className="relative text-center text-6xl md:text-8xl lg:text-[112px] font-bold tracking-[-0.03em] leading-none">
+        Marcea Ennamorato
+      </h1>
+
+      {/* Tagline */}
+      <p className="relative mt-6 text-base md:text-xl text-black/50 tracking-[0.02em]">
+        product designer. maps, motion, mountains.
+      </p>
+
+      {/* Scroll hint */}
+      <p className="absolute bottom-8 text-xs tracking-[0.3em] text-black/30">
+        ↓ &nbsp; scroll
+      </p>
+
+
+      {/* GPS location cursor */}
+      <div
+        className="fixed pointer-events-none z-50"
+        style={{
+          left: pos.x,
+          top: pos.y,
+          transform: "translate(-50%, -50%)",
+          opacity: pos.x === -999 || !inHero ? 0 : 1,
+        }}
+      >
+        {/* Outer pulsing ring */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: 36,
+            height: 36,
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            border: "1.5px solid rgba(30, 20, 10, 0.25)",
+            animation: "gps-pulse 2s ease-out infinite",
+          }}
+        />
+        {/* Second ring, offset in timing */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: 36,
+            height: 36,
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            border: "1.5px solid rgba(30, 20, 10, 0.15)",
+            animation: "gps-pulse 2s ease-out infinite 0.8s",
+          }}
+        />
+        {/* Inner accuracy circle */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: 16,
+            height: 16,
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "rgba(30, 20, 10, 0.08)",
+            border: "1px solid rgba(30, 20, 10, 0.2)",
+          }}
+        />
+        {/* Center dot */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: 6,
+            height: 6,
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "rgba(30, 20, 10, 0.7)",
+          }}
+        />
+      </div>
+
+      <style>{`
+        @keyframes gps-pulse {
+          0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.8; }
+          100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+        }
+      `}</style>
+
     </section>
+
+
   );
-}
+} 

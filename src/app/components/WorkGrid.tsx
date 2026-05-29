@@ -8,7 +8,7 @@ type Project = {
 
 export default function WorkGrid({ projects }: { projects: Project[] }) {
     return (
-        <section className="px-8 pb-24">
+        <section className="px-8 pt-2 pb-24 md:pt-6">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
                 {projects.map((project, index) => (
                     <a

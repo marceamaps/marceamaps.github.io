@@ -31,7 +31,7 @@ export default function FeaturedProjectCard({
       className="group block"
     >
       <section ref={stickyRef} className="bg-white px-8 py-12 md:py-20">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.4fr_0.6fr] gap-12 lg:gap-16 items-start pb-28 md:pb-36">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.4fr_0.6fr] gap-8 lg:gap-16 items-start pb-16 md:pb-24">
           <motion.figure
             className="overflow-hidden rounded-[28px] bg-black"
             style={{ scale }}
