@@ -1,7 +1,12 @@
 import { useParams, Link } from "react-router-dom";
+import MobileRecordCaseStudy from "./MobileRecordCaseStudy";
 
 export default function CaseStudyPage() {
   const { slug } = useParams<{ slug: string }>();
+
+  if (slug === "mobile-record") {
+    return <MobileRecordCaseStudy />;
+  }
 
   return (
     <div className="min-h-screen bg-white px-8 py-24 max-w-5xl mx-auto">
