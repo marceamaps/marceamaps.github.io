@@ -95,7 +95,7 @@ export default function MobileRecordCaseStudy() {
       <div className="max-w-[880px] mx-auto px-7">
 
         {/* ── Hero ────────────────────────────────────────────────────── */}
-        <section className="pt-[76px] pb-[42px]">
+        <section className="pt-[76px] pb-[80px]">
           <FadeUp>
             <Eyebrow>Strava · 0→1 · Mobile Record</Eyebrow>
             <h1
@@ -126,7 +126,18 @@ export default function MobileRecordCaseStudy() {
           </FadeUp>
 
           {/* 3-up device shots */}
-          <div className="mt-12 grid grid-cols-3 gap-4 sm:gap-6">
+          <div className="mt-12 flex items-center gap-3 mb-4">
+            <span
+              className="text-[10px] font-semibold uppercase tracking-[0.18em] px-3 py-[5px] rounded-full text-white"
+              style={{ background: AMBER }}
+            >
+              After
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-black/30">
+              The redesign
+            </span>
+          </div>
+          <div className="grid grid-cols-3 gap-4 sm:gap-6">
             {[
               {
                 src: preRecord,
@@ -163,10 +174,8 @@ export default function MobileRecordCaseStudy() {
           </div>
         </section>
 
-        <hr className="border-0 border-t border-black/[0.12]" />
-
         {/* ── Context ─────────────────────────────────────────────────── */}
-        <section className="py-[42px]">
+        <section className="py-[80px]">
           <FadeUp>
             <Eyebrow>Context</Eyebrow>
             <p className="text-[20px] leading-[1.66] text-black/80">
@@ -182,10 +191,8 @@ export default function MobileRecordCaseStudy() {
           </FadeUp>
         </section>
 
-        <hr className="border-0 border-t border-black/[0.12]" />
-
         {/* ── The Problem ─────────────────────────────────────────────── */}
-        <section className="py-[42px]">
+        <section className="py-[80px]">
           <FadeUp>
             <Eyebrow>The problem</Eyebrow>
             <h2
@@ -234,6 +241,14 @@ export default function MobileRecordCaseStudy() {
               </figcaption>
             </figure>
             <figure>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] px-3 py-[5px] rounded-full bg-black/[0.07] text-black/40">
+                  Before
+                </span>
+                <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-black/30">
+                  ~7 years untouched
+                </span>
+              </div>
               <div className="grid grid-cols-3 gap-4 sm:gap-6">
                 {[
                   {
@@ -274,10 +289,8 @@ export default function MobileRecordCaseStudy() {
           </FadeUp>
         </section>
 
-        <hr className="border-0 border-t border-black/[0.12]" />
-
         {/* ── The Approach ────────────────────────────────────────────── */}
-        <section className="py-[42px]">
+        <section className="py-[80px]">
           <FadeUp>
             <Eyebrow>The approach</Eyebrow>
             <p
@@ -316,10 +329,8 @@ export default function MobileRecordCaseStudy() {
           </div>
         </section>
 
-        <hr className="border-0 border-t border-black/[0.12]" />
-
         {/* ── The Decision ────────────────────────────────────────────── */}
-        <section className="py-[42px]">
+        <section className="py-[80px]">
           <FadeUp>
             <Eyebrow>The decision</Eyebrow>
             <h2
@@ -365,10 +376,8 @@ export default function MobileRecordCaseStudy() {
           </FadeUp>
         </section>
 
-        <hr className="border-0 border-t border-black/[0.12]" />
-
         {/* ── Outcome ─────────────────────────────────────────────────── */}
-        <section className="py-[42px]">
+        <section className="py-[80px]">
           <FadeUp>
             <Eyebrow>Outcome</Eyebrow>
             <h2
@@ -531,10 +540,8 @@ export default function MobileRecordCaseStudy() {
           </div>
         </section>
 
-        <hr className="border-0 border-t border-black/[0.12]" />
-
         {/* ── What I'd Change ─────────────────────────────────────────── */}
-        <section className="py-[42px]">
+        <section className="py-[80px]">
           <FadeUp>
             <Eyebrow>What I'd change</Eyebrow>
           </FadeUp>
@@ -559,10 +566,8 @@ export default function MobileRecordCaseStudy() {
           </FadeUp>
         </section>
 
-        <hr className="border-0 border-t border-black/[0.12]" />
-
         {/* ── Some stuff I did ────────────────────────────────────────── */}
-        <section className="py-[42px]">
+        <section className="py-[80px]">
           <FadeUp>
             <Eyebrow>Some stuff I did</Eyebrow>
             <p className="text-[17px] leading-[1.66] text-black/80">
@@ -577,8 +582,6 @@ export default function MobileRecordCaseStudy() {
             </p>
           </FadeUp>
         </section>
-
-        <hr className="border-0 border-t border-black/[0.12]" />
 
         {/* ── Footer ──────────────────────────────────────────────────── */}
         <footer className="py-[42px] flex items-center justify-between">
