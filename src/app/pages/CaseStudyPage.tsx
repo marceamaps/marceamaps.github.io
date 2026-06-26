@@ -1,11 +1,26 @@
 import { useParams, Link } from "react-router-dom";
 import MobileRecordCaseStudy from "./MobileRecordCaseStudy";
+import ADPCaseStudy from "./ADPCaseStudy";
+import LiveSegmentsCaseStudy from "./LiveSegmentsCaseStudy";
+import AppleWatchRedesignCaseStudy from "./AppleWatchRedesignCaseStudy";
 
 export default function CaseStudyPage() {
   const { slug } = useParams<{ slug: string }>();
 
   if (slug === "mobile-record") {
     return <MobileRecordCaseStudy />;
+  }
+
+  if (slug === "activity-details-page" || slug === "adp") {
+    return <ADPCaseStudy />;
+  }
+
+  if (slug === "live-segments") {
+    return <LiveSegmentsCaseStudy />;
+  }
+
+  if (slug === "apple-watch-redesign") {
+    return <AppleWatchRedesignCaseStudy />;
   }
 
   return (

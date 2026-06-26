@@ -21,6 +21,14 @@ const CASE_STUDIES = [
   },
   {
     index: 2,
+    title: "Live Segments",
+    subtitle: "Turned a post-workout metric into a pre-effort ritual — designing the approaching and competing states that make segment racing feel alive on your wrist.",
+    mediaUrl: liveSegVideo,
+    mediaType: "video" as const,
+    link: "/case-study/live-segments",
+  },
+  {
+    index: 3,
     title: "Maps on Apple Watch",
     subtitle: "Brought glanceable navigation to athletes' wrists for the first time — with strong early engagement among route-followers, already outpacing mobile route starts.",
     mediaUrl: awMapsVideo,
@@ -28,7 +36,7 @@ const CASE_STUDIES = [
     link: "/case-study/apple-watch-maps",
   },
   {
-    index: 3,
+    index: 4,
     title: "Recording, Revamped",
     subtitle: "A ground-up rebuild of Strava's highest-volume recording surface — where the majority of first uploads happen — driving measurable lifts in map engagement and laying the foundation for features that grew weekly active users.",
     mediaUrl: mobileRecVideo,
@@ -36,7 +44,7 @@ const CASE_STUDIES = [
     link: "/case-study/mobile-record",
   },
   {
-    index: 4,
+    index: 5,
     title: "Heatmaps & Map Settings",
     subtitle: "A new map settings infrastructure and heatmap redesign that became a key driver of Maps Tab subscriber growth, contributing to Strava's strongest year of maps engagement to date.",
     mediaUrl: heatmapsVideo,
@@ -44,7 +52,7 @@ const CASE_STUDIES = [
     link: "/case-study/heatmaps",
   },
   {
-    index: 5,
+    index: 6,
     title: "Activity Details Page",
     subtitle: "Stepped in as design lead to ship a FATMAP integration, driving meaningful lifts in map interaction and overall page engagement — with map icons becoming the second most-clicked element on the page.",
     mediaUrl: adpImage,
@@ -63,11 +71,6 @@ export default function HomePage() {
         <Hero />
       </section>
 
-      {/* About */}
-      <section id="about">
-        <ExperienceSection />
-      </section>
-
       {/* Projects */}
       <section id="projects" className="py-24 px-8 max-w-7xl mx-auto">
         <h2 className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase mb-16">
@@ -78,6 +81,11 @@ export default function HomePage() {
             <CaseStudyCard key={project.index} {...project} />
           ))}
         </div>
+      </section>
+
+      {/* About */}
+      <section id="about" className="pt-32">
+        <ExperienceSection />
       </section>
 
       {/* Contact */}
