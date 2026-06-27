@@ -180,7 +180,7 @@ export default function MobileRecordPrototype() {
               {/* Fullscreen collapse button */}
               <motion.div
                 className="absolute right-0 top-0 flex items-center"
-                style={{ padding: "14px 16px 0" }}
+                style={{ padding: "20px 24px 0" }}
                 animate={{ opacity: isIsland ? 0 : 1 }}
                 transition={{
                   duration: 0.16,
