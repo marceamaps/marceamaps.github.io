@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useReducedMotion } from "motion/react";
 
 const NAV_ITEMS = [
   { label: "About",    id: "about"    },
@@ -9,8 +10,10 @@ const NAV_ITEMS = [
 type SectionId = typeof NAV_ITEMS[number]["id"] | "home";
 
 export default function FloatingNav() {
+  const reduced                  = useReducedMotion();
   const [active, setActive]     = useState<SectionId>("home");
   const [visible, setVisible]   = useState(true);
+  const [mounted, setMounted]   = useState(false);
   const [pastHero, setPastHero] = useState(false);
   const pillRef                 = useRef<HTMLSpanElement>(null);
   const itemRefs                = useRef<Record<string, HTMLButtonElement | null>>({});
@@ -70,6 +73,13 @@ export default function FloatingNav() {
     pill.style.width   = `${btnBox.width}px`;
   }, [active]);
 
+  // ── Entrance: slide in from top after hero text has settled ────────────
+  useEffect(() => {
+    if (reduced) { setMounted(true); return; }
+    const t = setTimeout(() => setMounted(true), 1050);
+    return () => clearTimeout(t);
+  }, [reduced]);
+
   // ── Hide while scrolling ────────────────────────────────────────────────
   useEffect(() => {
     const onScroll = () => {
@@ -99,7 +109,7 @@ export default function FloatingNav() {
         onClick={() => scrollTo("home")}
         aria-label="Back to top"
         className={`fixed top-8 left-8 z-50 transition-all duration-500 ease-out ${
-          visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3"
+          visible && mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3"
         }`}
         style={{
           filter: pastHero
@@ -122,7 +132,7 @@ export default function FloatingNav() {
       {/* ── Nav pill — centred ── */}
       <nav
         className={`fixed top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-out ${
-          visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3"
+          visible && mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3"
         }`}
       >
         <div className="flex items-center bg-[rgba(249,246,241,0.85)] backdrop-blur-xl border border-black/[0.08] rounded-full px-2 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.07)]">

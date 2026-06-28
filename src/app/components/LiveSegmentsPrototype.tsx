@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import prBadge from "../../assets/pr-badge.svg";
 import avatarImg from "../../assets/avatar.png";
+import watchBezel from "../../assets/watch-bezel-46mm.png";
 
 const STRAVA = "#FC5200";
 
@@ -75,6 +76,9 @@ const MAX_DIST = 0.8;
 // ── Watch geometry (Figma spec: 208×248, nav=62) ───────────────────────────
 const W = 208;
 const H = 248;
+// Bezel image natural 1x dimensions; screen window sits at (36, 96) within this space
+const BEZEL_W = 280;
+const BEZEL_H = 440;
 const NAV = 62;
 const CONTENT_H = H - NAV; // 186
 
@@ -83,7 +87,7 @@ const CONTENT_H = H - NAV; // 186
 // Arc runs CLOCKWISE from 320° → right → bottom → left → 270° = 310° of arc.
 // Unwinding (dashoffset) removes from the 320° tail first → counter-clockwise visual retreat.
 const CX = W / 2;  // 104
-const CY = 95;     // centre within content-area SVG
+const CY = 82;     // centre within content-area SVG
 const R  = 70;
 
 const toRad = (d: number) => (d * Math.PI) / 180;
@@ -99,7 +103,7 @@ const ARC_D   = `M ${sx.toFixed(2)} ${sy.toFixed(2)} A ${R} ${R} 0 1 1 ${ex.toFi
 const ARC_LEN = (310 / 360) * 2 * Math.PI * R; // ≈ 377 px
 
 // ── Simulation hook ────────────────────────────────────────────────────────
-type Phase = "approaching" | "go" | "competing" | "moving-away";
+type Phase = "approaching" | "go" | "competing" | "moving-away" | "finished";
 
 function useLiveSegSim() {
   const [dist, setDist]               = useState(MAX_DIST);
@@ -115,6 +119,7 @@ function useLiveSegSim() {
 
   const resetRef          = useRef<() => void>();
   const startCompetingRef = useRef<() => void>();
+  const startFinishedRef  = useRef<() => void>();
 
   const reset = useCallback(() => {
     clear();
@@ -144,7 +149,7 @@ function useLiveSegSim() {
         const next = parseFloat((p + 0.008).toFixed(3));
         if (next >= 1) {
           clearInterval(iv.current!); iv.current = null;
-          tid.current = setTimeout(() => resetRef.current?.(), 2500);
+          startFinishedRef.current?.();
           return 1;
         }
         return next;
@@ -154,6 +159,13 @@ function useLiveSegSim() {
 
   resetRef.current          = reset;
   startCompetingRef.current = startCompeting;
+
+  const startFinished = useCallback(() => {
+    clear();
+    setPhase("finished");
+    tid.current = setTimeout(() => resetRef.current?.(), 4500);
+  }, []);
+  startFinishedRef.current = startFinished;
 
   const movingAway = useCallback(() => {
     clear();
@@ -169,28 +181,46 @@ function useLiveSegSim() {
     return clear;
   }, [reset]);
 
-  return { dist, phase, segProgress, reset, movingAway };
+  return { dist, phase, segProgress, reset, movingAway, jumpToCompeting: startCompeting, jumpToFinished: startFinished };
 }
 
 const AHEAD_GREEN = "#70CF25";
 const BEHIND_RED  = "#E53535";
 
+const CONFETTI_COLORS = ["#FC5200", "#04DE71", "#5AC8FA", "#FFCC00", "#FF3B30", "#BF5AF2", "#FF9F0A"];
+const CONFETTI_PIECES = Array.from({ length: 22 }, (_, i) => {
+  const r1 = (Math.sin(i * 2.37 + 0.91) + 1) / 2;
+  const r2 = (Math.sin(i * 3.91 + 1.73) + 1) / 2;
+  const r3 = (Math.sin(i * 5.13 + 2.47) + 1) / 2;
+  const r4 = (Math.sin(i * 7.29 + 0.33) + 1) / 2;
+  const r5 = (Math.sin(i * 11.3 + 3.14) + 1) / 2;
+  return {
+    color:  CONFETTI_COLORS[Math.floor(r1 * CONFETTI_COLORS.length)],
+    x:      10 + r2 * (W - 20),
+    delay:  r3 * 0.5,
+    rotate: r4 * 360 - 180,
+    isRect: r5 > 0.5,
+    size:   5 + r1 * 6,
+  };
+});
+
 // ── Watch screen ───────────────────────────────────────────────────────────
 function WatchScreen({ dist, phase, segProgress, isBehind }: {
   dist: number; phase: Phase; segProgress: number; isBehind: boolean;
 }) {
-  const progress      = Math.max(0, Math.min(1, dist / MAX_DIST));
-  const dashOffset    = (1 - progress) * ARC_LEN;
-  const isGo          = phase === "go";
-  const isAway        = phase === "moving-away";
-  const isCompeting   = phase === "competing";
+  const progress       = Math.max(0, Math.min(1, dist / MAX_DIST));
+  const dashOffset     = (1 - progress) * ARC_LEN;
+  const isGo           = phase === "go";
+  const isAway         = phase === "moving-away";
+  const isCompeting    = phase === "competing";
+  const isFinished     = phase === "finished";
   // ahead: grows 0→5s with progress; behind: fixed 3s (representative demo)
-  const timeDelta     = isBehind ? 3 : Math.round(segProgress * 5);
-  const raceColor     = isBehind ? BEHIND_RED : AHEAD_GREEN;
+  const timeDelta      = isBehind ? 3 : Math.round(segProgress * 5);
+  const raceColor      = isBehind ? BEHIND_RED : AHEAD_GREEN;
   // Avatar tip: angle sweeps clockwise from 320° to 270° as segProgress 0→1
-  const avatarAngle   = toRad(320 + segProgress * 310);
-  const avatarCX      = CX + R * Math.cos(avatarAngle);
-  const avatarCY      = CY + R * Math.sin(avatarAngle); // SVG-space y
+  const avatarAngle    = toRad(320 + segProgress * 310);
+  const avatarCX       = CX + R * Math.cos(avatarAngle);
+  const avatarCY       = CY + R * Math.sin(avatarAngle); // SVG-space y
   const compDashOffset = (1 - segProgress) * ARC_LEN;
 
   return (
@@ -206,7 +236,9 @@ function WatchScreen({ dist, phase, segProgress, isBehind }: {
       {/* Ambient glow */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
-        background: isCompeting
+        background: isFinished
+          ? `radial-gradient(ellipse 130% 70% at 50% 45%, rgba(252,82,0,0.32) 0%, transparent 65%)`
+          : isCompeting
           ? `radial-gradient(ellipse 110% 55% at 50% 85%, ${isBehind ? "rgba(229,53,53,0.28)" : "rgba(112,207,37,0.22)"} 0%, transparent 70%)`
           : `radial-gradient(ellipse 110% 55% at 50% 85%, rgba(252,82,0,${isGo ? 0.32 : 0.08 + progress * 0.14}) 0%, transparent 70%)`,
         transition: "background 0.8s ease",
@@ -218,12 +250,14 @@ function WatchScreen({ dist, phase, segProgress, isBehind }: {
         padding: "17px 14px 0",
         display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 6,
       }}>
-        {/* PR badge */}
-        <img
-          src={prBadge}
-          alt="PR target goal"
-          style={{ width: 36, height: 36, flexShrink: 0, filter: "drop-shadow(0px 2px 3px rgba(0,0,0,0.4))" }}
-        />
+        {/* PR badge — hidden in finished state (appears as overlay on avatar instead) */}
+        {!isFinished && (
+          <img
+            src={prBadge}
+            alt="PR target goal"
+            style={{ width: 36, height: 36, flexShrink: 0, filter: "drop-shadow(0px 2px 3px rgba(0,0,0,0.4))" }}
+          />
+        )}
 
         {/* Time + segment name */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 2, flex: 1, minWidth: 0 }}>
@@ -233,98 +267,156 @@ function WatchScreen({ dist, phase, segProgress, isBehind }: {
           }}>10:09</span>
           <MarqueeText
             text={
+              isFinished  ? "Segment complete!" :
               isCompeting ? "Competing on Colton Rd" :
               isGo        ? "Starting Colton Rd" :
               isAway      ? "Moving away from Colton Rd" :
                             "Approaching Colton Rd"
             }
-            color={isAway ? "rgba(255,255,255,0.45)" : "white"}
+            color={isAway ? "rgba(255,255,255,0.45)" : isFinished ? STRAVA : "white"}
           />
         </div>
       </div>
 
-      {/* Horseshoe SVG */}
-      <svg
-        width={W} height={CONTENT_H}
-        viewBox={`0 0 ${W} ${CONTENT_H}`}
-        style={{ position: "absolute", top: NAV, left: 0 }}
-      >
-        <defs>
-          {/* Approaching gradient: black → dark red → orange → white, bottom→top */}
-          {/* Gradient runs top→bottom (dark at arc ends near gap, bright at arc bottom).
-              y=-100 puts 0% well above arc top (y=25), y=270 puts 100% below arc bottom (y=165).
-              Result: 270° tip ≈ 34% (dark red), bottom ≈ 72% (bright orange) — matches Figma. */}
-          <linearGradient id="lsGrad" x1={CX} y1={-100} x2={CX} y2={270} gradientUnits="userSpaceOnUse">
-            <stop offset="0%"      stopColor="#000000" />
-            <stop offset="35.3%"   stopColor="#4D0000" />
-            <stop offset="69.3%"   stopColor="#FC5200" />
-            <stop offset="100%"    stopColor="#FFFFFF" stopOpacity="0.9" />
-          </linearGradient>
-          <filter id="lsGlow" x="-25%" y="-25%" width="150%" height="150%">
-            <feGaussianBlur stdDeviation="4" result="b" />
-            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
-        </defs>
+      {/* Horseshoe SVG — hidden in finished state */}
+      {!isFinished && (
+        <svg
+          width={W} height={CONTENT_H}
+          viewBox={`0 0 ${W} ${CONTENT_H}`}
+          style={{ position: "absolute", top: NAV, left: 0 }}
+        >
+          <defs>
+            {/* Approaching gradient: black → dark red → orange → white, bottom→top */}
+            {/* Gradient runs top→bottom (dark at arc ends near gap, bright at arc bottom).
+                y=-100 puts 0% well above arc top (y=25), y=270 puts 100% below arc bottom (y=165).
+                Result: 270° tip ≈ 34% (dark red), bottom ≈ 72% (bright orange) — matches Figma. */}
+            <linearGradient id="lsGrad" x1={CX} y1={-100} x2={CX} y2={270} gradientUnits="userSpaceOnUse">
+              <stop offset="0%"      stopColor="#000000" />
+              <stop offset="35.3%"   stopColor="#4D0000" />
+              <stop offset="69.3%"   stopColor="#FC5200" />
+              <stop offset="100%"    stopColor="#FFFFFF" stopOpacity="0.9" />
+            </linearGradient>
+            <filter id="lsGlow" x="-25%" y="-25%" width="150%" height="150%">
+              <feGaussianBlur stdDeviation="4" result="b" />
+              <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+          </defs>
 
-        {/* Track */}
-        <path
-          d={ARC_D} fill="none"
-          stroke={isCompeting ? "rgba(255,255,255,0.1)" : "rgba(252,82,0,0.12)"}
-          strokeWidth={26} strokeLinecap="round"
-        />
-
-        {/* Approaching / moving-away arc */}
-        {!isCompeting && (
-          <motion.path
-            d={ARC_D}
-            fill="none"
-            stroke="url(#lsGrad)"
-            strokeWidth={26}
-            strokeLinecap="round"
-            filter="url(#lsGlow)"
-            strokeDasharray={ARC_LEN}
-            animate={{
-              strokeDashoffset: dashOffset,
-              opacity: isAway ? [1, 0.35, 1] : 1,
-            }}
-            transition={{
-              strokeDashoffset: { duration: 0.22, ease: "easeOut" },
-              opacity: isAway ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 },
-            }}
+          {/* Track */}
+          <path
+            d={ARC_D} fill="none"
+            stroke={isCompeting ? "rgba(255,255,255,0.1)" : "rgba(252,82,0,0.12)"}
+            strokeWidth={26} strokeLinecap="round"
           />
-        )}
 
-        {/* Competing LightWave — grows from 0 to full as segment progresses */}
-        {isCompeting && (
-          <motion.path
-            d={ARC_D}
-            fill="none"
-            stroke={raceColor}
-            strokeWidth={26}
-            strokeLinecap="round"
-            filter="url(#lsGlow)"
-            strokeDasharray={ARC_LEN}
-            animate={{ strokeDashoffset: compDashOffset }}
-            transition={{ duration: 0.12, ease: "linear" }}
-          />
-        )}
-      </svg>
+          {/* Approaching / moving-away arc */}
+          {!isCompeting && (
+            <motion.path
+              d={ARC_D}
+              fill="none"
+              stroke="url(#lsGrad)"
+              strokeWidth={26}
+              strokeLinecap="round"
+              filter="url(#lsGlow)"
+              strokeDasharray={ARC_LEN}
+              animate={{
+                strokeDashoffset: dashOffset,
+                opacity: isAway ? [1, 0.35, 1] : 1,
+              }}
+              transition={{
+                strokeDashoffset: { duration: 0.22, ease: "easeOut" },
+                opacity: isAway ? { duration: 1.1, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 },
+              }}
+            />
+          )}
 
-      {/* Avatar — rides the tip of the LightWave during competing */}
-      {isCompeting && (
-        <div style={{
-          position: "absolute",
-          left: avatarCX - 14,
-          top: NAV + avatarCY - 14,
-          width: 28, height: 28,
-          borderRadius: "50%",
-          border: "2.5px solid white",
-          boxShadow: "0 -3px 8px rgba(0,0,0,0.45), 0 2px 5px rgba(0,0,0,0.5)",
-          overflow: "hidden",
-          pointerEvents: "none",
-          zIndex: 10,
-        }}>
-          <img src={avatarImg} alt="athlete" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
+          {/* Competing LightWave — grows from 0 to full as segment progresses */}
+          {isCompeting && (
+            <motion.path
+              d={ARC_D}
+              fill="none"
+              stroke={raceColor}
+              strokeWidth={26}
+              strokeLinecap="round"
+              filter="url(#lsGlow)"
+              strokeDasharray={ARC_LEN}
+              animate={{ strokeDashoffset: compDashOffset }}
+              transition={{ duration: 0.12, ease: "linear" }}
+            />
+          )}
+        </svg>
+      )}
+
+      {/* Avatar — rides the arc tip during competing, springs to center when finished */}
+      {(isCompeting || isFinished) && (
+        <motion.div
+          animate={isFinished
+            ? { left: 74, top: 102, width: 60, height: 60 }
+            : { left: avatarCX - 14, top: NAV + avatarCY - 14, width: 28, height: 28 }
+          }
+          transition={isFinished
+            ? { type: "spring", stiffness: 180, damping: 22, delay: 0.05 }
+            : { duration: 0 }
+          }
+          style={{
+            position: "absolute",
+            borderRadius: "50%",
+            border: isFinished ? "3px solid white" : "2.5px solid white",
+            boxShadow: "0 -3px 8px rgba(0,0,0,0.45), 0 2px 5px rgba(0,0,0,0.5)",
+            overflow: "visible",
+            pointerEvents: "none",
+            zIndex: 10,
+          }}
+        >
+          <div style={{ width: "100%", height: "100%", borderRadius: "50%", overflow: "hidden" }}>
+            <img src={avatarImg} alt="athlete" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top" }} />
+          </div>
+          {/* PR badge — pops in when finished */}
+          {isFinished && (
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 18, delay: 0.65 }}
+              style={{
+                position: "absolute",
+                bottom: -6, right: -6,
+                width: 24, height: 24,
+                pointerEvents: "none",
+              }}
+            >
+              <img src={prBadge} alt="PR" style={{ width: "100%", height: "100%", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.6))" }} />
+            </motion.div>
+          )}
+        </motion.div>
+      )}
+
+      {/* Confetti — falls when finished */}
+      {isFinished && (
+        <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 5 }}>
+          {CONFETTI_PIECES.map((p, i) => {
+            const w = p.isRect ? Math.round(p.size * 0.65) : Math.round(p.size);
+            const h = p.isRect ? Math.round(p.size * 1.7)  : Math.round(p.size);
+            return (
+              <motion.div
+                key={i}
+                initial={{ y: 0, opacity: 1 }}
+                animate={{ y: H + h, opacity: [1, 1, 0.15, 0] }}
+                transition={{ duration: 2.2 + p.delay * 0.8, delay: p.delay, ease: "easeIn" }}
+                style={{
+                  position: "absolute",
+                  top: -h,
+                  left: Math.round(p.x - w / 2),
+                  width: w,
+                  height: h,
+                  borderRadius: p.isRect ? 2 : "50%",
+                  background: p.color,
+                  transform: `rotate(${Math.round(p.rotate)}deg)`,
+                  willChange: "transform",
+                  backfaceVisibility: "hidden",
+                }}
+              />
+            );
+          })}
         </div>
       )}
 
@@ -338,7 +430,7 @@ function WatchScreen({ dist, phase, segProgress, isBehind }: {
         pointerEvents: "none",
       }}>
         <AnimatePresence mode="wait">
-          {isGo ? (
+          {isFinished ? null : isGo ? (
             <motion.span
               key="go"
               initial={{ scale: 0.3, opacity: 0 }}
@@ -408,6 +500,40 @@ function WatchScreen({ dist, phase, segProgress, isBehind }: {
         </AnimatePresence>
       </div>
 
+      {/* Bottom stats bar — slides up when finished */}
+      <AnimatePresence>
+        {isFinished && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            style={{
+              position: "absolute",
+              bottom: 0, left: 0, right: 0,
+              height: 72,
+              background: "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.55) 60%, transparent 100%)",
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "space-between",
+              padding: "0 28px 20px",
+              zIndex: 8,
+            }}
+          >
+            {/* Prev PR */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 2 }}>
+              <span style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", fontFamily: "'Cabin', sans-serif", textTransform: "uppercase" }}>Prev. PR</span>
+              <span style={{ fontSize: 22, fontWeight: 800, color: "white", lineHeight: 1, fontFamily: "'Barlow Semi Condensed', sans-serif" }}>7:28</span>
+            </div>
+            {/* Today */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 2 }}>
+              <span style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", fontFamily: "'Cabin', sans-serif", textTransform: "uppercase" }}>Today</span>
+              <span style={{ fontSize: 22, fontWeight: 800, color: isBehind ? BEHIND_RED : AHEAD_GREEN, lineHeight: 1, fontFamily: "'Barlow Semi Condensed', sans-serif" }}>{isBehind ? "7:34" : "7:25"}</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Right page control */}
       <div style={{
         position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)",
@@ -425,125 +551,86 @@ function WatchScreen({ dist, phase, segProgress, isBehind }: {
 }
 
 // ── Watch shell (bezel) ────────────────────────────────────────────────────
+// Works in the bezel's full coordinate space (BEZEL_W × BEZEL_H).
+// Screen is positioned at (36, 96) to align with the transparent window in the PNG.
 function WatchShell({ dist, phase, segProgress, isBehind }: {
   dist: number; phase: Phase; segProgress: number; isBehind: boolean;
 }) {
   return (
-    <div style={{ position: "relative", display: "inline-block" }}>
-      {/* Bezel */}
-      <div style={{
-        position: "absolute", top: -12, left: -12, right: -12, bottom: -24,
-        borderRadius: 54,
-        background: "linear-gradient(135deg, #2C2C2E 0%, #1A1A1C 40%, #242426 100%)",
-        boxShadow: "0 24px 64px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.07)",
-      }} />
-      {/* Band stubs */}
-      {[{ top: -56, h: 52 }, { top: H + 12, h: 48 }].map(({ top, h }, i) => (
-        <div key={i} style={{
-          position: "absolute", left: 10, right: 10, top, height: h,
-          background: "linear-gradient(180deg, #3A3A3C, #2A2A2C)",
-          borderRadius: i === 0 ? "8px 8px 0 0" : "0 0 8px 8px",
-        }} />
-      ))}
-      {/* Crown */}
-      <div style={{
-        position: "absolute", right: -20, top: "42%",
-        width: 8, height: 30, borderRadius: 4,
-        background: "linear-gradient(90deg, #2C2C2E, #404042, #2C2C2E)",
-        boxShadow: "2px 0 6px rgba(0,0,0,0.6)",
-      }} />
-      <WatchScreen dist={dist} phase={phase} segProgress={segProgress} isBehind={isBehind} />
+    <div style={{ position: "relative", width: BEZEL_W, height: BEZEL_H }}>
+      {/* Screen content — aligned to the transparent window in the bezel image */}
+      <div style={{ position: "absolute", left: 36, top: 96 }}>
+        <WatchScreen dist={dist} phase={phase} segProgress={segProgress} isBehind={isBehind} />
+      </div>
+      {/* Bezel PNG overlaid on top — transparent over the screen window */}
+      <img
+        src={watchBezel}
+        alt=""
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+          zIndex: 10,
+        }}
+      />
     </div>
   );
 }
 
 // ── Export ─────────────────────────────────────────────────────────────────
-const SCALE = 2.2;
+const SCALE = 1.6; // uniform scale applied to the full BEZEL_W×BEZEL_H container
 
-export default function LiveSegmentsPrototype() {
-  const { dist, phase, segProgress, reset, movingAway } = useLiveSegSim();
+export type LiveSegmentsPrototypeHandle = {
+  jumpToApproaching: () => void;
+  jumpToCompeting:   () => void;
+  jumpToFinished:    () => void;
+};
+
+const LiveSegmentsPrototype = forwardRef<
+  LiveSegmentsPrototypeHandle,
+  { onPhaseChange?: (phase: Phase) => void }
+>(function LiveSegmentsPrototype({ onPhaseChange }, ref) {
+  const { dist, phase, segProgress, reset, jumpToCompeting, jumpToFinished } = useLiveSegSim();
   const [isBehind, setIsBehind] = useState(false);
-  const isAway      = phase === "moving-away";
-  const isCompeting = phase === "competing";
 
-  // Reset behind flag whenever we leave competing
+  // Reset behind flag when returning to approaching (preserve through finished)
   useEffect(() => {
-    if (!isCompeting) setIsBehind(false);
-  }, [isCompeting]);
+    if (phase === "approaching") setIsBehind(false);
+  }, [phase]);
 
-  const handleReset = () => { setIsBehind(false); reset(); };
+  // Notify parent of phase changes
+  useEffect(() => { onPhaseChange?.(phase); }, [phase, onPhaseChange]);
 
-  const raceSeconds = isBehind ? 3 : Math.round(segProgress * 5);
-  const stateLabel = phase === "go"
-    ? "Segment start reached"
-    : phase === "moving-away"
-    ? "Moving away — horseshoe paused"
-    : phase === "competing"
-    ? `Competing · ${(segProgress * 100).toFixed(0)}% · ${isBehind ? `-${raceSeconds}s behind` : `+${raceSeconds}s ahead`}`
-    : `Approaching · ${dist.toFixed(2)} mi to start`;
-
-  const canMoveAway = !isAway && !isCompeting && phase !== "go";
-
-  // First button: context-sensitive
-  const firstBtn = isCompeting
-    ? (isBehind
-        ? { label: "Back ahead",        onClick: () => setIsBehind(false) }
-        : { label: "Simulate behind PR", onClick: () => setIsBehind(true)  })
-    : (isAway
-        ? { label: "Resuming…",           onClick: undefined }
-        : { label: "Simulate moving away", onClick: canMoveAway ? movingAway : undefined });
+  useImperativeHandle(ref, () => ({
+    jumpToApproaching: () => { setIsBehind(false); reset(); },
+    jumpToCompeting,
+    jumpToFinished,
+  }), [reset, jumpToCompeting, jumpToFinished]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 32 }}>
-      {/* Scaled watch */}
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      {/* Outer container sized to the final rendered dimensions */}
       <div style={{
-        width:  (W + 24) * SCALE,
-        height: (H + 80) * SCALE,
+        width:  BEZEL_W * SCALE,
+        height: BEZEL_H * SCALE,
         display: "flex", alignItems: "center", justifyContent: "center",
       }}>
-        <div style={{ transform: `scale(${SCALE})`, transformOrigin: "center" }}>
+        {/* Scale the full BEZEL_W×BEZEL_H container uniformly — aspect ratio locked */}
+        <div style={{
+          width: BEZEL_W,
+          height: BEZEL_H,
+          transform: `scale(${SCALE})`,
+          transformOrigin: "center center",
+          flexShrink: 0,
+        }}>
           <WatchShell dist={dist} phase={phase} segProgress={segProgress} isBehind={isBehind} />
         </div>
       </div>
-
-      {/* State label */}
-      <p style={{
-        fontSize: 13, fontWeight: 500, letterSpacing: "0.06em",
-        color: isAway ? "rgba(255,255,255,0.4)"
-             : isCompeting && isBehind  ? "rgba(229,53,53,0.75)"
-             : isCompeting              ? "rgba(112,207,37,0.7)"
-             : "rgba(255,255,255,0.55)",
-        textTransform: "uppercase", textAlign: "center",
-        transition: "color 0.3s",
-        fontFamily: "system-ui, sans-serif",
-      }}>{stateLabel}</p>
-
-      {/* Controls */}
-      <div style={{ display: "flex", gap: 10 }}>
-        {[
-          { ...firstBtn, primary: false },
-          { label: "Restart", onClick: handleReset, primary: true },
-        ].map(({ label, onClick, primary }) => (
-          <button
-            key={label}
-            onClick={onClick}
-            disabled={!onClick}
-            style={{
-              padding: "9px 18px",
-              borderRadius: 100,
-              border: "1px solid",
-              borderColor: primary ? STRAVA : "rgba(255,255,255,0.18)",
-              background: primary ? STRAVA : "transparent",
-              color: primary ? "white" : "rgba(255,255,255,0.65)",
-              fontSize: 13, fontWeight: 600,
-              cursor: onClick ? "pointer" : "default",
-              opacity: onClick ? 1 : 0.45,
-              transition: "opacity 0.2s",
-              fontFamily: "system-ui, sans-serif",
-            }}
-          >{label}</button>
-        ))}
-      </div>
     </div>
   );
-}
+});
+
+export default LiveSegmentsPrototype;

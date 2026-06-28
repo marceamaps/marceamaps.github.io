@@ -24,7 +24,7 @@ export default function CaseStudyCard({
       className="group grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-stretch"
     >
       {/* Left — text, outside the card */}
-      <div className="flex flex-col justify-between py-2">
+      <div className="flex flex-col py-2">
         <div className="flex flex-col gap-5">
           <span className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase">
             {String(index).padStart(2, "0")}
@@ -37,9 +37,11 @@ export default function CaseStudyCard({
           </p>
         </div>
 
-        <div className="mt-10 flex items-center gap-2 text-sm font-semibold text-black/70 group-hover:text-black transition-colors duration-200">
-          View case study
-          <ArrowUpRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        <div className="mt-6">
+          <span className="inline-flex items-center gap-2 px-5 py-[9px] rounded-full border border-black/20 text-xs font-semibold uppercase tracking-[0.14em] text-black/50 group-hover:border-black/40 group-hover:text-black transition-colors duration-200">
+            View case study
+            <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </span>
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 
 // ─── SVG path data from contours.svg (794×445 viewBox) ───────────────────────
 const RAW_PATHS = [
@@ -126,6 +127,8 @@ export default function Hero() {
   // Click burst state — tracks a distortion shockwave
   // phase: 0 = idle, 1 = bursting (radius shrinking), 2 = healing (radius recovering)
   const burst = useRef({ active: false, progress: 0 });
+
+  const reduced = useReducedMotion();
 
   const [inHero, setInHero] = useState(true);
   const [cursorScreen, setCursorScreen] = useState({ x: -999, y: -999 });
@@ -373,22 +376,37 @@ export default function Hero() {
       />
 
       {/* Text content */}
-      <div className="relative flex flex-col items-center gap-4">
+      <motion.div
+        className="relative flex flex-col items-center gap-4"
+        initial={reduced ? undefined : { opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={reduced ? undefined : { duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+      >
         <p className="text-xs tracking-[0.3em] text-black/40">
           45.9237° N &nbsp; 6.8694° E &nbsp;—&nbsp; Chamonix, France
         </p>
         <h1 className="text-center text-6xl md:text-8xl lg:text-[112px] font-bold tracking-[-0.03em] leading-none">
           Marcea Ennamorato
         </h1>
-      </div>
+      </motion.div>
 
-      <p className="relative mt-6 text-base md:text-xl text-black/50 tracking-[0.02em]">
+      <motion.p
+        className="relative mt-6 text-base md:text-xl text-black/50 tracking-[0.02em]"
+        initial={reduced ? undefined : { opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={reduced ? undefined : { duration: 0.55, delay: 0.52, ease: [0.25, 0.1, 0.25, 1] }}
+      >
         product designer. maps, motion, mountains.
-      </p>
+      </motion.p>
 
-      <p className="absolute bottom-8 text-xs tracking-[0.3em] text-black/30">
+      <motion.p
+        className="absolute bottom-8 text-xs tracking-[0.3em] text-black/30"
+        initial={reduced ? undefined : { opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={reduced ? undefined : { duration: 0.45, delay: 1.05, ease: [0.25, 0.1, 0.25, 1] }}
+      >
         ↓ &nbsp; scroll
-      </p>
+      </motion.p>
 
       {/* GPS cursor */}
       <div

@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import CaseStudyCard from "../components/CaseStudyCard";
 
 import adpImage        from "../../assets/ADP.png";
+import awRedesignVideo from "../../assets/apple-watch-re-design.mp4";
 import liveSegVideo    from "../../assets/live-segments.mp4";
 import heatmapsVideo   from "../../assets/map-settings-heatmaps.mp4";
 import mobileRecVideo  from "../../assets/mobile-record.mp4";
@@ -15,14 +16,14 @@ const CASE_STUDIES = [
     index: 1,
     title: "Apple Watch Redesign",
     subtitle: "A platform redesign that earned Apple's 2025 App Store Award, drove sustained growth in daily active athletes, and was featured across 22 global outlets with 96% positive sentiment.",
-    mediaUrl: liveSegVideo,
+    mediaUrl: awRedesignVideo,
     mediaType: "video" as const,
     link: "/case-study/apple-watch-redesign",
   },
   {
     index: 2,
     title: "Live Segments",
-    subtitle: "Turned a post-workout metric into a pre-effort ritual — designing the approaching and competing states that make segment racing feel alive on your wrist.",
+    subtitle: "Brought live segments to Apple Watch for the first time — designing natively for the wrist so segment racing feels alive on the smallest screen.",
     mediaUrl: liveSegVideo,
     mediaType: "video" as const,
     link: "/case-study/live-segments",

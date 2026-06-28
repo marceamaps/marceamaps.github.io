@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { motion, useReducedMotion } from "motion/react";
 import SaveFlowPrototype from "../components/SaveFlowPrototype";
 
-import liveSegmentsVideo from "../../assets/live-segments.mp4";
+import redesignAllVideo from "../../assets/apple-watch-redesign/redesign-all.mp4";
 import appleFeature from "../../assets/apple-feature.png";
 import editorsChoice from "../../assets/strava-editors-choice.png";
 import beforeControls from "../../assets/apple-watch-redesign/Before-controls.png";
@@ -10,6 +10,7 @@ import beforeSportpicker from "../../assets/apple-watch-redesign/Before-sportpic
 import beforeStats from "../../assets/apple-watch-redesign/Before-stats.png";
 
 const AMBER = "#E8640A";
+const BLUE  = "#738CC7";
 
 // ─── Primitives ───────────────────────────────────────────────────────────────
 
@@ -25,7 +26,7 @@ function Eyebrow({
       <div
         aria-hidden
         className="flex-shrink-0 w-[26px] h-[3px] rounded-sm"
-        style={{ background: AMBER }}
+        style={{ background: BLUE }}
       />
       <p
         className="text-xs tracking-[0.2em] font-medium uppercase leading-none"
@@ -89,7 +90,7 @@ export default function AppleWatchRedesignCaseStudy() {
       <div className="max-w-[880px] mx-auto px-7">
 
         {/* ── Hero ────────────────────────────────────────────────────── */}
-        <section className="pt-[76px] pb-[80px]">
+        <section className="pt-[120px] pb-[100px]">
           <FadeUp>
             <Eyebrow>Strava · Platform Redesign · watchOS</Eyebrow>
             <h1
@@ -112,7 +113,7 @@ export default function AppleWatchRedesignCaseStudy() {
                 { term: "Surface", desc: "watchOS" },
                 { term: "Timeline", desc: "2025 · Jun–Aug" },
               ].map(({ term, desc }) => (
-                <div key={term} className="flex gap-[6px] text-sm">
+                <div key={term} className="flex gap-[6px] text-base">
                   <dt className="text-black/30 font-medium">{term}</dt>
                   <dd className="text-black/55 font-medium">— {desc}</dd>
                 </div>
@@ -127,7 +128,7 @@ export default function AppleWatchRedesignCaseStudy() {
                 className="text-[10px] font-semibold uppercase tracking-[0.18em] px-3 py-[5px] rounded-full text-white"
                 style={{ background: AMBER }}
               >
-                After
+                Before &amp; After
               </span>
               <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-black/30">
                 The redesign
@@ -138,7 +139,7 @@ export default function AppleWatchRedesignCaseStudy() {
               style={{ background: "#1A1A1A" }}
             >
               <video
-                src={liveSegmentsVideo}
+                src={redesignAllVideo}
                 autoPlay
                 muted
                 loop
@@ -165,6 +166,48 @@ export default function AppleWatchRedesignCaseStudy() {
               and whatever came next could ship without reinventing the visual
               foundation each time.
             </p>
+          </FadeUp>
+
+        </section>
+
+        {/* ── The Problem ─────────────────────────────────────────────── */}
+        <section className="py-[80px]">
+          <FadeUp>
+            <Eyebrow>The problem</Eyebrow>
+            <h2
+              className="font-bold tracking-tight"
+              style={{ fontSize: "clamp(27px,4.2vw,37px)", lineHeight: 1.15 }}
+            >
+              An unbranded screen that couldn't grow — and athletes losing their runs.
+            </h2>
+            <p className="mt-5 text-[17px] leading-[1.66] text-black/55">
+              The old recording experience had two compounding problems: a design
+              system that had no room to extend, and a save flow so unreliable
+              that 75% of all Apple Watch support tickets were athletes asking
+              where their run went.
+            </p>
+            <ul className="mt-6 space-y-3">
+              {[
+                "No design language — unbranded, nothing reusable.",
+                "75% of CS tickets: activities not syncing to Strava.",
+                "8% of athletes manually syncing through settings — a terrible fallback experience.",
+                "A dormant Apple partnership with no design-to-design relationship.",
+                "Live Segments — a key retention feature — didn't exist on Watch.",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span
+                    aria-hidden
+                    className="flex-shrink-0 font-medium text-[17px] leading-[1.66]"
+                    style={{ color: AMBER }}
+                  >
+                    →
+                  </span>
+                  <span className="text-[17px] leading-[1.66] text-black/55">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </FadeUp>
 
           <FadeUp delay={0.08} className="mt-10">
@@ -196,49 +239,7 @@ export default function AppleWatchRedesignCaseStudy() {
                   </figure>
                 ))}
               </div>
-              <figcaption className="mt-3 text-xs tracking-[0.05em] text-black/40 font-medium">
-                Before — unbranded screens with no room to extend or iterate on.
-              </figcaption>
             </figure>
-          </FadeUp>
-        </section>
-
-        {/* ── The Problem ─────────────────────────────────────────────── */}
-        <section className="py-[80px]">
-          <FadeUp>
-            <Eyebrow>The problem</Eyebrow>
-            <h2
-              className="font-bold tracking-tight"
-              style={{ fontSize: "clamp(27px,4.2vw,37px)", lineHeight: 1.15 }}
-            >
-              An unbranded screen that couldn't grow — and athletes losing their runs.
-            </h2>
-            <p className="mt-5 text-[17px] leading-[1.66] text-black/55">
-              The old recording experience had two compounding problems: a design
-              system that had no room to extend, and a save flow so unreliable
-              that 75% of all Apple Watch support tickets were athletes asking
-              where their run went.
-            </p>
-            <ul className="mt-6 space-y-3">
-              {[
-                "No design language — unbranded, nothing reusable.",
-                "75% of CS tickets: activities not syncing to Strava.",
-                "8% of athletes manually syncing through settings — a terrible fallback experience.",
-                "A dormant Apple partnership with no design-to-design relationship.",
-                "Live Segments — a key retention feature — didn't exist on Watch.",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <span
-                    aria-hidden
-                    className="mt-[0.55em] flex-shrink-0 w-[6px] h-[6px] rounded-full"
-                    style={{ background: AMBER }}
-                  />
-                  <span className="text-[17px] leading-[1.66] text-black/55">
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ul>
           </FadeUp>
         </section>
 
@@ -276,6 +277,36 @@ export default function AppleWatchRedesignCaseStudy() {
               </FadeUp>
             ))}
           </div>
+
+          <FadeUp delay={0.05} className="mt-10">
+            <Link
+              to="/case-study/live-segments"
+              className="group flex items-center justify-between gap-4 rounded-[14px] px-6 py-5 no-underline transition-colors duration-200"
+              style={{
+                border: `1.5px solid ${BLUE}`,
+                background: "rgba(115,140,199,0.05)",
+                outlineColor: BLUE,
+              }}
+            >
+              <div>
+                <p
+                  className="text-[10px] font-semibold uppercase tracking-[0.18em] mb-1.5"
+                  style={{ color: BLUE }}
+                >
+                  First feature built on this system
+                </p>
+                <p className="text-[18px] font-bold text-black/80 leading-snug">
+                  Live Segments case study
+                </p>
+              </div>
+              <span
+                className="text-2xl font-light text-black/25 group-hover:text-black/50 transition-colors duration-200 flex-shrink-0"
+                aria-hidden
+              >
+                →
+              </span>
+            </Link>
+          </FadeUp>
         </section>
 
         {/* ── The Decision ────────────────────────────────────────────── */}
@@ -304,27 +335,6 @@ export default function AppleWatchRedesignCaseStudy() {
             </p>
           </FadeUp>
 
-          <FadeUp delay={0.08} className="mt-10">
-            <div
-              className="pl-6 py-6 pr-6 rounded-r-md"
-              style={{
-                borderLeft: `4px solid ${AMBER}`,
-                background: "rgba(232,100,10,0.04)",
-              }}
-            >
-              <Eyebrow amber>Workshop validation with Apple leadership</Eyebrow>
-              <p className="font-bold text-[20px] leading-snug">
-                Designs were called "brilliant" by Apple leadership in a formal
-                workshop — an unusually high-stakes design review that required
-                fluency in both Apple's HIG and Strava's brand simultaneously.
-              </p>
-              <p className="mt-4 text-[17px] leading-[1.66] text-black/55">
-                Before this redesign, Strava had no design-to-design relationship
-                with the Apple Watch team. This unlocked one for the first time.
-              </p>
-            </div>
-          </FadeUp>
-
           {/* ── Save flow interactive centerpiece ──────────────────────────── */}
           {/* Shows: recording → saving → synced, plus failure/re-sync state.   */}
           {/* The story: 75% of CS tickets were about this moment. This is the  */}
@@ -332,12 +342,12 @@ export default function AppleWatchRedesignCaseStudy() {
           <FadeUp delay={0.1} className="mt-12">
             <div
               className="rounded-[20px] border-2 border-dashed p-8"
-              style={{ borderColor: AMBER, background: "rgba(232,100,10,0.02)" }}
+              style={{ borderColor: BLUE, background: "rgba(115,140,199,0.03)" }}
             >
               <div className="flex items-center gap-3 mb-3">
                 <span
                   className="inline-block text-[10px] font-bold tracking-[0.18em] uppercase rounded-full px-3 py-1"
-                  style={{ color: AMBER, background: "rgba(232,100,10,0.10)" }}
+                  style={{ color: BLUE, background: "rgba(115,140,199,0.10)" }}
                 >
                   Interactive — save flow states
                 </span>
@@ -398,7 +408,7 @@ export default function AppleWatchRedesignCaseStudy() {
                 <div
                   aria-hidden
                   className="mt-3 mb-3 w-[26px] h-[3px] rounded-sm"
-                  style={{ background: AMBER }}
+                  style={{ background: BLUE }}
                 />
                 <p className="text-sm leading-snug text-black/55">{label}</p>
               </FadeUp>
@@ -410,8 +420,8 @@ export default function AppleWatchRedesignCaseStudy() {
             <div
               className="pl-6 py-6 pr-6 rounded-r-md"
               style={{
-                borderLeft: `4px solid ${AMBER}`,
-                background: "rgba(232,100,10,0.04)",
+                borderLeft: `4px solid ${BLUE}`,
+                background: "rgba(115,140,199,0.07)",
               }}
             >
               <Eyebrow amber>Save flow — fixing the most painful moment</Eyebrow>
@@ -440,7 +450,7 @@ export default function AppleWatchRedesignCaseStudy() {
                       className="font-bold flex-shrink-0"
                       style={{
                         fontSize: "clamp(22px,2.8vw,28px)",
-                        color: AMBER,
+                        color: BLUE,
                         lineHeight: 1,
                       }}
                     >
@@ -479,17 +489,15 @@ export default function AppleWatchRedesignCaseStudy() {
 
           {/* Press */}
           <FadeUp delay={0.05} className="mt-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <img
-                src={appleFeature}
-                alt="Strava featured on Apple's App Store — Apple Watch Redesign"
-                className="w-full h-auto block rounded-[14px]"
-              />
-              <img
-                src={editorsChoice}
-                alt="Strava's 2025 App Store Award recognition"
-                className="w-full h-auto block rounded-[14px]"
-              />
+            <div className="flex flex-col gap-4">
+              {[
+                { src: appleFeature,   alt: "Strava featured on Apple's App Store — Apple Watch Redesign" },
+                { src: editorsChoice,  alt: "Strava's 2025 App Store Award recognition" },
+              ].map(({ src, alt }) => (
+                <div key={alt} className="overflow-hidden rounded-[14px]">
+                  <img src={src} alt={alt} className="w-full h-auto block" />
+                </div>
+              ))}
             </div>
             <p className="mt-3 text-xs tracking-[0.05em] text-black/40 font-medium">
               Apple spotlighted the redesign across 5 surfaces — .com, newsroom,
