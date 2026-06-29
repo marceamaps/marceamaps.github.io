@@ -86,6 +86,17 @@ const FILL_PATH   = `${LINE_PATH} L ${VB_W} ${BASELINE_Y} L 0 ${BASELINE_Y} Z`;
 const SUMMIT_IDX = 139;
 const SUMMIT_X   = indexToX(SUMMIT_IDX);
 
+// ─── Steepness gradient ───────────────────────────────────────────────────────
+// Central difference slope at each point, normalized with a power curve so
+// moderate gradients are visible, not just the sharpest spikes.
+const SLOPES_RAW = ELEV_RAW.map((_, i) => {
+  const prev = ELEV_RAW[Math.max(0, i - 1)];
+  const next = ELEV_RAW[Math.min(ELEV_RAW.length - 1, i + 1)];
+  return Math.abs(next - prev) / 2;
+});
+const SLOPE_MAX  = Math.max(...SLOPES_RAW);
+const SLOPES_NORM = SLOPES_RAW.map(s => Math.pow(s / SLOPE_MAX, 0.6));
+
 // Dot entrance delays: proportional to x position along ascent
 // Range: 0.5s (leftmost) → 1.55s (summit)
 function dotDelay(peakX: number): number {
@@ -209,8 +220,6 @@ export default function ExperienceSection() {
       className="px-8 py-20 max-w-7xl mx-auto"
       id="experience"
     >
-      <Eyebrow>Experience</Eyebrow>
-
       {/* ── Elevation profile ────────────────────────────────────── */}
       <motion.div
         className="mb-14 select-none"
@@ -249,15 +258,47 @@ export default function ExperienceSection() {
             {/* Sweeping window gradients — soft leading & trailing edges */}
             <linearGradient id="flashMaskGrad" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%"   stopColor="white" stopOpacity="0" />
-              <stop offset="20%"  stopColor="white" stopOpacity="1" />
-              <stop offset="65%"  stopColor="white" stopOpacity="1" />
+              <stop offset="30%"  stopColor="white" stopOpacity="1" />
+              <stop offset="70%"  stopColor="white" stopOpacity="1" />
               <stop offset="100%" stopColor="white" stopOpacity="0" />
             </linearGradient>
             <linearGradient id="glowMaskGrad" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%"   stopColor="white" stopOpacity="0" />
-              <stop offset="16%"  stopColor="white" stopOpacity="1" />
-              <stop offset="70%"  stopColor="white" stopOpacity="1" />
+              <stop offset="28%"  stopColor="white" stopOpacity="1" />
+              <stop offset="72%"  stopColor="white" stopOpacity="1" />
               <stop offset="100%" stopColor="white" stopOpacity="0" />
+            </linearGradient>
+
+            {/* Soft boundary fade — replaces hard clipPath for blurred layers.
+                Fades to 0 at x=0 and x=SUMMIT_X so blur never bleeds into a
+                hard clip edge. */}
+            <linearGradient id="boundaryFadeGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VB_W} y2="0">
+              <stop offset="0%"                                                    stopColor="white" stopOpacity="0" />
+              <stop offset={`${(24 / VB_W * 100).toFixed(2)}%`}                   stopColor="white" stopOpacity="1" />
+              <stop offset={`${((SUMMIT_X - 24) / VB_W * 100).toFixed(2)}%`}      stopColor="white" stopOpacity="1" />
+              <stop offset={`${(SUMMIT_X / VB_W * 100).toFixed(2)}%`}             stopColor="white" stopOpacity="0" />
+              <stop offset="100%"                                                  stopColor="white" stopOpacity="0" />
+            </linearGradient>
+            <mask id="boundaryFadeMask">
+              <rect x="-10" y="-20" width={VB_W + 20} height={VB_H + 40} fill="url(#boundaryFadeGrad)" />
+            </mask>
+
+            {/* Steepness gradient — one stop per data point, intensity ∝ slope */}
+            <linearGradient id="steepnessGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2={VB_W} y2="0">
+              {SLOPES_NORM.map((s, i) => {
+                const x = indexToX(i);
+                const opacity = i <= SUMMIT_IDX
+                  ? (0.06 + s * 0.85).toFixed(3)
+                  : "0";
+                return (
+                  <stop
+                    key={i}
+                    offset={`${((x / VB_W) * 100).toFixed(2)}%`}
+                    stopColor={AMBER}
+                    stopOpacity={opacity}
+                  />
+                );
+              })}
             </linearGradient>
 
             {/* Animated mask windows */}
@@ -292,32 +333,28 @@ export default function ExperienceSection() {
             strokeWidth="1"
           />
 
-          {/* ── Lightning flash layer — sweeping mask window ── */}
+          {/* ── Flash + glow — boundary mask replaces hard clipPath ── */}
           {!reduced && (
-            <path
-              d={LINE_PATH}
-              fill="none"
-              stroke="rgba(255, 210, 60, 0.95)"
-              strokeWidth="8"
-              strokeLinejoin="round"
-              clipPath="url(#ascentClip)"
-              mask="url(#flashMask)"
-              style={{ filter: "blur(7px)" }}
-            />
-          )}
-
-          {/* ── Glow layer — softer amber halo ── */}
-          {!reduced && (
-            <path
-              d={LINE_PATH}
-              fill="none"
-              stroke={AMBER}
-              strokeWidth="5"
-              strokeLinejoin="round"
-              clipPath="url(#ascentClip)"
-              mask="url(#glowMask)"
-              style={{ filter: "blur(3px)" }}
-            />
+            <g mask="url(#boundaryFadeMask)">
+              <path
+                d={LINE_PATH}
+                fill="none"
+                stroke="rgba(255, 210, 60, 0.95)"
+                strokeWidth="6"
+                strokeLinejoin="round"
+                mask="url(#flashMask)"
+                style={{ filter: "blur(2px)" }}
+              />
+              <path
+                d={LINE_PATH}
+                fill="none"
+                stroke={AMBER}
+                strokeWidth="4"
+                strokeLinejoin="round"
+                mask="url(#glowMask)"
+                style={{ filter: "blur(1.5px)" }}
+              />
+            </g>
           )}
 
           {/* ── Ascent line (solid, draws in) ── */}
@@ -331,6 +368,16 @@ export default function ExperienceSection() {
             initial={reduced ? false : { pathLength: 0 }}
             animate={inView || fired ? { pathLength: 1 } : {}}
             transition={{ duration: 1.5, ease: "linear", delay: 0.1 }}
+          />
+
+          {/* ── Steepness overlay — color intensity follows slope ── */}
+          <path
+            d={LINE_PATH}
+            fill="none"
+            stroke="url(#steepnessGrad)"
+            strokeWidth="2.5"
+            strokeLinejoin="round"
+            clipPath="url(#ascentClip)"
           />
 
           {/* ── Descent line (faint, static — hints at the unknown) ── */}
@@ -361,32 +408,14 @@ export default function ExperienceSection() {
             const isSelected = i === selectedPeak;
             const isStrava   = i === 4;
             const startYear  = EXPERIENCES[peak.expIdx].date.split("–")[0];
-            const delay      = dotDelay(peak.x);
+            const delay      = isStrava ? 1.0 : dotDelay(peak.x);
+            const labelDelay = delay + 0.28;
 
             return (
-              <motion.g
+              <g
                 key={i}
                 onClick={() => setSelectedPeak(i)}
-                style={{
-                  cursor: "pointer",
-                  transformBox: "fill-box",
-                  transformOrigin: "50% 50%",
-                }}
-                initial={reduced ? false : { scale: 0, opacity: 0 }}
-                animate={inView || fired ? { scale: 1, opacity: 1 } : {}}
-                transition={
-                  reduced
-                    ? undefined
-                    : isStrava
-                    ? {
-                        scale:   { type: "spring", stiffness: 280, damping: 13, delay: 1.0 },
-                        opacity: { duration: 0.01, delay: 1.0 },
-                      }
-                    : {
-                        scale:   { type: "spring", stiffness: 380, damping: 18, delay },
-                        opacity: { duration: 0.01, delay },
-                      }
-                }
+                style={{ cursor: "pointer" }}
               >
                 {/* Oversized hit area */}
                 <circle cx={peak.x} cy={peak.y} r={22} fill="transparent" />
@@ -414,17 +443,27 @@ export default function ExperienceSection() {
                   />
                 )}
 
-                {/* Summit dot */}
-                <circle
+                {/* Summit dot — clean ease-out scale, no bounce */}
+                <motion.circle
                   cx={peak.x}
                   cy={peak.y}
                   r={isSelected ? 4.5 : 3}
                   fill={isSelected ? AMBER : "rgba(0,0,0,0.22)"}
-                  style={{ transition: "all 0.25s ease" }}
+                  initial={reduced ? false : { scale: 0, opacity: 0 }}
+                  animate={inView || fired ? { scale: 1, opacity: 1 } : {}}
+                  transition={reduced ? undefined : {
+                    scale:   { duration: 0.32, delay, ease: [0.25, 0.1, 0.25, 1] },
+                    opacity: { duration: 0.16, delay },
+                  }}
+                  style={{
+                    transformBox: "fill-box",
+                    transformOrigin: "50% 50%",
+                    transition: "fill 0.25s ease, r 0.25s ease",
+                  }}
                 />
 
-                {/* Company label */}
-                <text
+                {/* Company label — fades in after dot */}
+                <motion.text
                   x={peak.x}
                   y={peak.y - 17}
                   textAnchor="middle"
@@ -433,12 +472,15 @@ export default function ExperienceSection() {
                   fill={isSelected ? AMBER : "rgba(0,0,0,0.28)"}
                   fontFamily="ui-sans-serif, system-ui, -apple-system, sans-serif"
                   style={{ textTransform: "uppercase", letterSpacing: "0.1em", transition: "fill 0.25s ease" }}
+                  initial={reduced ? false : { opacity: 0 }}
+                  animate={inView || fired ? { opacity: 1 } : {}}
+                  transition={reduced ? undefined : { duration: 0.35, delay: labelDelay }}
                 >
                   {peak.label}
-                </text>
+                </motion.text>
 
-                {/* Year below baseline */}
-                <text
+                {/* Year below baseline — fades in with label */}
+                <motion.text
                   x={peak.x}
                   y={BASELINE_Y + 14}
                   textAnchor="middle"
@@ -446,10 +488,13 @@ export default function ExperienceSection() {
                   fill={isSelected ? "rgba(0,0,0,0.42)" : "rgba(0,0,0,0.18)"}
                   fontFamily="ui-sans-serif, system-ui, -apple-system, sans-serif"
                   style={{ transition: "fill 0.25s ease" }}
+                  initial={reduced ? false : { opacity: 0 }}
+                  animate={inView || fired ? { opacity: 1 } : {}}
+                  transition={reduced ? undefined : { duration: 0.35, delay: labelDelay }}
                 >
                   {startYear}
-                </text>
-              </motion.g>
+                </motion.text>
+              </g>
             );
           })}
         </svg>

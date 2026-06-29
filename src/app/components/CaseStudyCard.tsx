@@ -26,9 +26,6 @@ export default function CaseStudyCard({
       {/* Left — text, outside the card */}
       <div className="flex flex-col py-2">
         <div className="flex flex-col gap-5">
-          <span className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase">
-            {String(index).padStart(2, "0")}
-          </span>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight leading-[1.1]">
             {title}
           </h2>

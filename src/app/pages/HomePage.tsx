@@ -74,9 +74,6 @@ export default function HomePage() {
 
       {/* Projects */}
       <section id="projects" className="py-24 px-8 max-w-7xl mx-auto">
-        <h2 className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase mb-16">
-          Case Studies
-        </h2>
         <div className="flex flex-col gap-24">
           {CASE_STUDIES.map((project) => (
             <CaseStudyCard key={project.index} {...project} />
