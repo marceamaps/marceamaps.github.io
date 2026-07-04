@@ -124,11 +124,23 @@ export default function Hero() {
   // Idle breathing
   const idleT = useRef(0);
 
+  // Ambient color cursor — follows phantom cursor (or real cursor) position
+  const colorCursor = useRef({ x: 397, y: 222 });
+
+  // Phantom cursor — drives lens warp autonomously when no real cursor is present.
+  // Starts near top-left corner. Velocity uses irrational-ratio sine accelerations
+  // so the path never visibly repeats within a session.
+  const phantomCursor = useRef({ x: 60, y: 40, vx: 0.55, vy: 0.35 });
+
   // Click burst state — tracks a distortion shockwave
   // phase: 0 = idle, 1 = bursting (radius shrinking), 2 = healing (radius recovering)
   const burst = useRef({ active: false, progress: 0 });
 
   const reduced = useReducedMotion();
+
+  // Ref so the RAF closure always reads the current reduced-motion value
+  // (initialised false; sync effect below corrects it before meaningful use)
+  const reducedRef  = useRef(false);
 
   const [inHero, setInHero] = useState(true);
   const [cursorScreen, setCursorScreen] = useState({ x: -999, y: -999 });
@@ -157,7 +169,13 @@ export default function Hero() {
       setCursorScreen({ x: e.clientX, y: e.clientY });
       setCursorVisible(true);
     };
-    const onLeave  = () => { setCursorVisible(false); cursorSvg.current.active = false; };
+    const onLeave  = () => {
+      setCursorVisible(false);
+      cursorSvg.current.active = false;
+      // Sync phantom to where the real cursor was so there's no visual jump
+      phantomCursor.current.x = smoothCursor.current.x;
+      phantomCursor.current.y = smoothCursor.current.y;
+    };
     const onEnter  = () => setCursorVisible(true);
     const onClick = () => {
       // Trigger a fresh burst from wherever the cursor currently is
@@ -184,6 +202,9 @@ export default function Hero() {
     if (sectionRef.current) obs.observe(sectionRef.current);
     return () => obs.disconnect();
   }, []);
+
+  // Keep reducedRef in sync with the OS reduced-motion preference
+  useEffect(() => { reducedRef.current = reduced; }, [reduced]);
 
   // Canvas resize handler
   useEffect(() => {
@@ -237,6 +258,56 @@ export default function Hero() {
       smoothCursor.current.y += (target.y - smoothCursor.current.y) * LERP;
       const mx = smoothCursor.current.x;
       const my = smoothCursor.current.y;
+
+      // ── Phantom cursor (autonomous lens warp) ─────────────────────────────
+      // When no real cursor is active, a phantom cursor wanders the SVG canvas
+      // using velocity that is continuously nudged by overlapping sine waves at
+      // irrational frequency ratios — so the trajectory never looks periodic.
+      // Soft edge repulsion keeps it from dwelling in corners too long.
+      // The real cursor takes over seamlessly when present.
+      const isReduced = reducedRef.current;
+
+      if (!cursorSvg.current.active && !isReduced) {
+        const ph = phantomCursor.current;
+        const t = now / 1000; // seconds
+
+        // Acceleration nudges — three overlapping waves, irrational ratios
+        const ax = Math.sin(t * 0.17) * 0.0028
+                 + Math.sin(t * 0.41) * 0.0015
+                 + Math.sin(t * 0.97) * 0.0007;
+        const ay = Math.cos(t * 0.23) * 0.0028
+                 + Math.cos(t * 0.53) * 0.0015
+                 + Math.cos(t * 1.13) * 0.0007;
+        ph.vx += ax;
+        ph.vy += ay;
+
+        // Speed cap — prevents runaway velocity
+        const speed = Math.sqrt(ph.vx * ph.vx + ph.vy * ph.vy);
+        const MAX_SPEED = 1.4;
+        if (speed > MAX_SPEED) { ph.vx *= MAX_SPEED / speed; ph.vy *= MAX_SPEED / speed; }
+
+        // Soft edge repulsion — smoothly pushes away from SVG bounds
+        const MARGIN = 70;
+        if (ph.x < MARGIN)       ph.vx += (MARGIN - ph.x)       * 0.0018;
+        if (ph.x > 794 - MARGIN) ph.vx -= (ph.x - (794 - MARGIN)) * 0.0018;
+        if (ph.y < MARGIN)       ph.vy += (MARGIN - ph.y)       * 0.0018;
+        if (ph.y > 445 - MARGIN) ph.vy -= (ph.y - (445 - MARGIN)) * 0.0018;
+
+        ph.x += ph.vx;
+        ph.y += ph.vy;
+      }
+
+      // lensX/lensY: what the lens warp actually uses
+      const lensX = cursorSvg.current.active ? mx : phantomCursor.current.x;
+      const lensY = cursorSvg.current.active ? my : phantomCursor.current.y;
+
+      // Color cursor lerps toward lens position (slower ambient, faster real)
+      const colorLerp    = cursorSvg.current.active ? 0.08 : 0.018;
+      colorCursor.current.x += (lensX - colorCursor.current.x) * colorLerp;
+      colorCursor.current.y += (lensY - colorCursor.current.y) * colorLerp;
+      const cmx = colorCursor.current.x;
+      const cmy = colorCursor.current.y;
+      // ──────────────────────────────────────────────────────────────────────
 
       // ── Burst radius calculation ──────────────────────────────────────────
       // When a click fires, burst.active becomes true and we track elapsed time.
@@ -308,8 +379,8 @@ export default function Hero() {
 
           // First pass: compute warped canvas positions for all points
           const warped: [number, number][] = pts.map(([px, py]) => {
-            const dx = px - mx;
-            const dy = py - my;
+            const dx = px - lensX;
+            const dy = py - lensY;
             const dist = Math.sqrt(dx * dx + dy * dy);
             let wx = px, wy = py;
             if (dist < activeLensR && dist > 0.001) {
@@ -343,7 +414,7 @@ export default function Hero() {
             // Midpoint back in SVG units for distance measurement
             const midSvgX = (x0 + x1) / 2 / scaleX;
             const midSvgY = (y0 + y1) / 2 / scaleY;
-            const midDist = Math.sqrt((midSvgX - mx) ** 2 + (midSvgY - my) ** 2);
+            const midDist = Math.sqrt((midSvgX - cmx) ** 2 + (midSvgY - cmy) ** 2);
             // Smoothstep 0 (at cursor) → 1 (at COLOR_RADIUS)
             const tRaw = Math.min(midDist / COLOR_RADIUS, 1);
             const tEased = tRaw * tRaw * (3 - 2 * tRaw);
@@ -366,7 +437,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center cursor-none"
+      className="relative w-full h-screen overflow-hidden cursor-none"
     >
       {/* Canvas layer */}
       <canvas
@@ -375,32 +446,37 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      {/* Text content */}
+      {/* Coordinates — quiet top-left label */}
+      <motion.p
+        className="absolute top-16 left-7 text-[11px] tracking-[0.25em] text-black/30 pointer-events-none"
+        initial={reduced ? undefined : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={reduced ? undefined : { duration: 0.6, delay: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        45.9237° N &nbsp; 6.8694° E &nbsp;—&nbsp; Chamonix, France
+      </motion.p>
+
+      {/* Name + tagline — bottom-left */}
       <motion.div
-        className="relative flex flex-col items-center gap-4"
+        className="absolute bottom-12 left-7 flex flex-col gap-3"
         initial={reduced ? undefined : { opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={reduced ? undefined : { duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
       >
-        <p className="text-xs tracking-[0.3em] text-black/40">
-          45.9237° N &nbsp; 6.8694° E &nbsp;—&nbsp; Chamonix, France
+        <p className="text-6xl md:text-8xl lg:text-[112px] font-bold tracking-[-0.03em] leading-none text-black/60">
+          Product Designer
         </p>
-        <h1 className="text-center text-6xl md:text-8xl lg:text-[112px] font-bold tracking-[-0.03em] leading-none">
+        <h1 className="text-6xl md:text-8xl lg:text-[112px] font-bold tracking-[-0.03em] leading-none">
           Marcea Ennamorato
         </h1>
+        <p className="text-base md:text-lg text-black/40 tracking-[0.06em] uppercase">
+          maps and motion
+        </p>
       </motion.div>
 
+      {/* Scroll indicator — bottom-right, clear of text block */}
       <motion.p
-        className="relative mt-6 text-base md:text-xl text-black/50 tracking-[0.02em]"
-        initial={reduced ? undefined : { opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={reduced ? undefined : { duration: 0.55, delay: 0.52, ease: [0.25, 0.1, 0.25, 1] }}
-      >
-        product designer. maps, motion, mountains.
-      </motion.p>
-
-      <motion.p
-        className="absolute bottom-8 text-xs tracking-[0.3em] text-black/30"
+        className="absolute bottom-8 right-7 text-xs tracking-[0.3em] text-black/30"
         initial={reduced ? undefined : { opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={reduced ? undefined : { duration: 0.45, delay: 1.05, ease: [0.25, 0.1, 0.25, 1] }}

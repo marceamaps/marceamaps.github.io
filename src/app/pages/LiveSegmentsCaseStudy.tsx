@@ -5,6 +5,8 @@ import LiveSegmentsPrototype, { type LiveSegmentsPrototypeHandle } from "../comp
 
 // ── Assets ────────────────────────────────────────────────────────────────────
 import finalDesignImg      from "../../assets/live-segments/live-segment-final-design.png";
+import segmentsIntroImg    from "../../assets/live-segments/segments-intro.png";
+import liveSegmentFinalMp4 from "../../assets/live-segments/live-segment-final.mp4";
 import visualizationsImg   from "../../assets/live-segments/live-segment-visualizations.png";
 import oldMobile01         from "../../assets/live-segments/live-segments-old-01.png";
 import oldMobile03         from "../../assets/live-segments/live-segments-old-03.png";
@@ -15,21 +17,23 @@ import wavelightGif        from "../../assets/live-segments/Original Wavelight.g
 // @ts-ignore
 import adaptedGif          from "../../assets/live-segments/Adapted Wavelight.gif";
 // @ts-ignore
+import adaptedWavelight4   from "../../assets/live-segments/Adapated Wavelight 4.mov";
+// @ts-ignore
 import chasingGif          from "../../assets/live-segments/Adapted Wavelight Chasing.gif";
 // @ts-ignore
 import avatarArcGif        from "../../assets/live-segments/Avatar Wavelight.gif";
 // @ts-ignore
 import outerRingGif        from "../../assets/live-segments/Outer Ring High Res GIF.gif";
 
-const STRAVA = "#FC5200";
+const BLUE = "#738CC7";
 
 // ── Primitives ────────────────────────────────────────────────────────────────
 function Eyebrow({ children, dark = false }: { children: ReactNode; dark?: boolean }) {
   return (
     <div className="flex items-center gap-3 mb-5">
-      <div aria-hidden className="flex-shrink-0 w-[26px] h-[3px] rounded-sm" style={{ background: STRAVA }} />
+      <div aria-hidden className="flex-shrink-0 w-[26px] h-[3px] rounded-sm" style={{ background: BLUE }} />
       <p className="text-xs tracking-[0.2em] font-medium uppercase leading-none"
-        style={{ color: dark ? STRAVA : "rgba(0,0,0,0.35)" }}>
+        style={{ color: dark ? BLUE : "rgba(0,0,0,0.35)" }}>
         {children}
       </p>
     </div>
@@ -52,9 +56,6 @@ function FadeUp({ children, delay = 0, className }: {
   );
 }
 
-function Hr() {
-  return <hr className="border-0 border-t border-black/[0.08]" />;
-}
 
 // ── Prototype tab data ────────────────────────────────────────────────────────
 type TabId = "approaching" | "competing" | "celebration";
@@ -103,7 +104,7 @@ export default function LiveSegmentsCaseStudy() {
         <Link
           to="/"
           className="text-xs tracking-[0.2em] text-black/40 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
-          style={{ outlineColor: STRAVA }}
+          style={{ outlineColor: BLUE }}
         >← Marcea · Work</Link>
         <span className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase">
           Live Segments
@@ -141,22 +142,40 @@ export default function LiveSegmentsCaseStudy() {
                 </div>
               ))}
             </dl>
-            <img
-              src={finalDesignImg}
-              alt="Live Segments final design — three Apple Watch states with anatomy labels"
-              style={{ display: "block", width: "100%", borderRadius: 16 }}
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
+              <span style={{
+                padding: "5px 14px",
+                borderRadius: 100,
+                background: BLUE,
+                color: "white",
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: "0.14em",
+                textTransform: "uppercase" as const,
+              }}>After</span>
+            </div>
+            <video
+              src={liveSegmentFinalMp4}
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{ display: "block", width: "50%", borderRadius: 16, margin: "0 auto" }}
             />
-            <p style={{ fontSize: 12, color: "rgba(0,0,0,0.4)", marginTop: 12, letterSpacing: "0.04em" }}>
-              The shipped design — PR badge, horseshoe arc, pace fill, directional arrow, user avatar. Five elements. Each one earned its place.
-            </p>
           </FadeUp>
         </section>
 
-        <Hr />
 
         {/* Context */}
         <section className="py-[80px]">
           <FadeUp>
+            <div style={{ marginBottom: 44 }}>
+              <img
+                src={segmentsIntroImg}
+                alt="Segments intro"
+                style={{ display: "block", width: "100%", borderRadius: 12 }}
+              />
+            </div>
             <Eyebrow>Context</Eyebrow>
             <p style={{ fontSize: 20, lineHeight: 1.65, color: "rgba(0,0,0,0.8)" }}>
               Strava segments are invisible race courses laid over roads and trails. Before Live Segments came to Apple Watch, you wouldn't know you'd PR'd a segment until after you uploaded. Live Segments changed that — alerting you the moment a segment is ahead, counting you down, and switching into race mode the instant you cross the start line, all on your wrist.
@@ -167,7 +186,6 @@ export default function LiveSegmentsCaseStudy() {
           </FadeUp>
         </section>
 
-        <Hr />
 
         {/* The case for losing */}
         <section className="py-[80px]">
@@ -183,8 +201,8 @@ export default function LiveSegmentsCaseStudy() {
               Of course, not every time you compete will you beat your PR. But there's more to learn from losing than from winning. I believe learning to lose is really, really wonderful. Every time you lose is proof you did something, just for you. Proof you got out there and did the damn thing.
             </p>
             <div style={{
-              borderLeft: `4px solid ${STRAVA}`,
-              background: "rgba(252,82,0,0.04)",
+              borderLeft: `4px solid ${BLUE}`,
+              background: "rgba(115,140,199,0.04)",
               borderRadius: "0 12px 12px 0",
               padding: "28px 32px",
               marginTop: 44,
@@ -209,7 +227,6 @@ export default function LiveSegmentsCaseStudy() {
           </FadeUp>
         </section>
 
-        <Hr />
 
         {/* The problem */}
         <section className="py-[80px]">
@@ -219,7 +236,7 @@ export default function LiveSegmentsCaseStudy() {
               The metaphor was the same everywhere.<br />And it wasn't working.
             </h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 24 }}>
-              Across every implementation — Garmin, Wahoo, Strava mobile — the visual metaphor was identical: a linear track. Your avatar and a PR pacer, both moving along a horizontal bar. Progress was linear, which meant scanning left to right to understand position. The completion state was underwhelming — when the segment ended, the screen went quiet. And the core identification problem remained: two avatars on one track, at full effort — which one am I?
+              Across every implementation — Garmin, Wahoo, Strava mobile — the visual metaphor was identical: linear progress where your avatar and PR move along the vertical line. Multiple numbers visible at the same time. The design didn't fit the form factor on a rounded watch screen, the vibe was like a late 90's video game.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
               On a cycling computer mounted to handlebars, these problems are manageable. You have a few seconds and you can scan. On a 45mm watch screen, at pace, in a glance — none of it works. The information has to land before you have time to read anything.
@@ -230,14 +247,13 @@ export default function LiveSegmentsCaseStudy() {
                 alt="Third-party segment visualization reference — Garmin and Wahoo dense data views"
                 style={{ display: "block", width: "100%", borderRadius: 12 }}
               />
-              <p style={{ fontSize: 12, color: "rgba(0,0,0,0.4)", marginTop: 12, letterSpacing: "0.04em" }}>
+              <p style={{ fontSize: 12, color: "rgba(0,0,0,0.4)", marginTop: 24, letterSpacing: "0.04em" }}>
                 The existing visualization across platforms: linear progress bars, dense stats, multiple simultaneous numbers. Right for a handlebar computer. Insufficient for a glance.
               </p>
             </div>
           </FadeUp>
         </section>
 
-        <Hr />
 
         {/* Where it started */}
         <section className="py-[80px]">
@@ -247,7 +263,7 @@ export default function LiveSegmentsCaseStudy() {
               The mobile version had the same underlying logic.
             </h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 24 }}>
-              Strava's mobile Live Segments experience was smarter than the competition — but the core design metaphor was the same: a linear track. Your avatar and the PR pacer moving along a horizontal line. Readable at rest. Comprehensible when you're stationary and looking at a phone.
+              Strava's mobile Live Segment experience was designed seven years ago, and it shows its age. It's comprehensible when you're stationary — but reading a phone screen while running at a hard effort is a different problem entirely. At max exertion, attention narrows to the essentials: breathing, footing, pace. Fine details on a screen are the first thing to go.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
               Compress that to a 45mm screen, at pace, in a glance — and the linear metaphor collapses. You can't scan left to right when you have half a second and your heart rate is at 170.
@@ -262,7 +278,7 @@ export default function LiveSegmentsCaseStudy() {
                   <img key={alt} src={src} alt={alt} style={{ display: "block", width: "100%", borderRadius: 40, filter: "drop-shadow(0 10px 24px rgba(26,26,26,.12))" }} />
                 ))}
               </div>
-              <p style={{ fontSize: 12, color: "rgba(0,0,0,0.4)", marginTop: 12, letterSpacing: "0.04em" }}>
+              <p style={{ fontSize: 12, color: "rgba(0,0,0,0.4)", marginTop: 24, letterSpacing: "0.04em" }}>
                 Mobile: approaching (left), competing ahead (center), competing behind (right). Linear, readable, phone-native. None of it translates to a glance.
               </p>
             </div>
@@ -272,34 +288,29 @@ export default function LiveSegmentsCaseStudy() {
       </div>{/* end white column 1 */}
 
       {/* ── Metaphors through track meets (dark) ─────────────────────────────── */}
-      <section className="py-[100px]" style={{ background: "#0A0A0A" }}>
+      <section className="pb-[100px]" style={{ background: "#0A0A0A" }}>
+        <div className="max-w-[880px] mx-auto px-7" style={{ paddingTop: 64 }}>
+          <img
+            src={wavelightExampleImg}
+            alt="Wavelight at a track meet — a pulse of light at the inside lane marking goal pace"
+            style={{ display: "block", width: "100%", borderRadius: 12, marginBottom: 64 }}
+          />
+        </div>
         <div className="max-w-[880px] mx-auto px-7">
           <FadeUp>
             <Eyebrow dark>Metaphors through track meets</Eyebrow>
             <h2 style={{ color: "white", fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em", maxWidth: 680, marginBottom: 32 }}>
-              I watch a lot of track and field with my partner, who is a former competitive runner.
+              I'm a track and field fan — thanks to my former competitive runner partner.
             </h2>
+            <p style={{ fontSize: 20, lineHeight: 1.65, color: "rgba(255,255,255,0.8)", maxWidth: 640, marginBottom: 20 }}>
+              Learning a sport which in theory is simple — people running on a track — but has rules, nuances, and modern technology that added an unexpected learning curve. One of the first things I noticed watching track and field was the light that runs alongside the track: Wavelight, built by <a href="https://www.wavelight-technologies.com/" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.8)", textDecorationColor: "rgba(255,255,255,0.3)" }}>Wavelight Technologies</a>.
+            </p>
             <p style={{ fontSize: 20, lineHeight: 1.65, color: "rgba(255,255,255,0.8)", maxWidth: 640 }}>
-              There were a lot of learning curves taking on a modernized sport. But one of the most intuitive things I encountered was the light that runs along the inside of the track — the Wavelight. The moment I saw it, I understood the race better than any split pace or number on a screen. No scoreboard glance. I just knew who was ahead and by how much. This technology has helped break more world records than ever before. And it was good for viewership too.
+              The moment I saw it, I understood the race in a way no split or number on a screen had given me. I didn't need to know the pace or glance at a clock. I just knew — who was ahead, by how much, was the race a slow one or a fast one? It felt less like computing and more like feeling the race, and it seemed to help the runners, too.
             </p>
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(255,255,255,0.50)", marginTop: 20, maxWidth: 640 }}>
-              That observation reframed the whole design problem. I'd been asking how to show a Live Segment on a 45mm screen. The better question was: how do you give someone the <em style={{ color: "rgba(255,255,255,0.70)" }}>feeling</em> of racing — in a glance, at pace — without making them read anything?
+              When faced with designing the Live Segment experience on the watch, that memory reframed the whole design problem for me. After a conversation with my partner, it clicked. I'd been asked to show a Live Segment on a 45mm screen. The question was: how do I give someone that same feeling — of racing, in a glance, at pace — without making them read anything at all.
             </p>
-            <div style={{ marginTop: 48, maxWidth: 373 }}>
-              <img
-                src={wavelightExampleImg}
-                alt="Wavelight at a track meet — a pulse of light at the inside lane marking goal pace"
-                style={{ display: "block", width: "100%", borderRadius: 12, marginBottom: 20 }}
-              />
-              <img
-                src={wavelightGif}
-                alt="The Wavelight — a pulse of light running along the track at goal pace"
-                style={{ display: "block", width: "100%", borderRadius: 12 }}
-              />
-              <p style={{ marginTop: 12, fontSize: 12, color: "rgba(255,255,255,0.3)", letterSpacing: "0.06em" }}>
-                The Wavelight — Diamond League
-              </p>
-            </div>
           </FadeUp>
         </div>
       </section>
@@ -310,21 +321,37 @@ export default function LiveSegmentsCaseStudy() {
           <FadeUp>
             <Eyebrow>Adapting the metaphor</Eyebrow>
             <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
-              The Wavelight is linear.<br />The watch is circular.
+              Metaphorical iterations to the solution
             </h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
-              Early on I explored multiple ways to encode the segment race onto what I called the horseshoe — my version of the track. The Wavelight runs along a straight line. A watch face is a ring. Taking a linear metaphor and making it native to a circular screen wasn't obvious.
+              Early on I understood that the Wavelight solves a real problem for track and field. For athletes, it lets them chase a pace and cuts cognitive load. For spectators, it shows whether a record's about to fall, and by how much.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
+              The Wavelight does this through position. It runs alongside the runners, tuned to a set pace, and a separate light marks the goal pace itself. Chasing the pace is visual and immediate — you're ahead of it or behind it, and you can see it at a glance without ever checking a number.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
+              What I borrowed wasn't the metaphor exactly — it was the solve. Athletes on the watch needed the same thing: a way to chase pace with less cognitive load. But position didn't translate. Measuring pixel distance from a PR icon was harder to read at a glance than a physical light stream next to you on the track.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
+              The adaptation was color: using it to encode chasing progress instead of position. That solved the legibility problem but created an accessibility one — solvable with iconography and numbers layered on top.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
+              The other adjustment was goal pace itself. On the track, it's a second Wavelight running alongside you. On the watch, a second visual element split attention — people didn't know where to look. Merging it into a single, unified element simplified the animation and delivered the actual reduction in cognitive load I was after.
             </p>
             <div style={{ marginTop: 48 }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14 }}>
                 {[
-                  { src: adaptedGif,   label: "Adapted Wavelight", kept: false },
-                  { src: chasingGif,   label: "Chasing state",      kept: false },
-                  { src: avatarArcGif, label: "Avatar + arc",       kept: false },
-                  { src: outerRingGif, label: "Arc fill — shipped", kept: true  },
-                ].map(({ src, label, kept }) => (
+                  { src: chasingGif,        label: "Detached Ghost",      kept: false, isVideo: false },
+                  { src: avatarArcGif,      label: "Detached Avatar",     kept: false, isVideo: false },
+                  { src: outerRingGif,      label: "Detached Wavelight",  kept: false, isVideo: false },
+                  { src: adaptedWavelight4, label: "Dispersed wavelight", kept: false, isVideo: true },
+                ].map(({ src, label, kept, isVideo }) => (
                   <div key={label}>
-                    <img src={src} alt={label} style={{ display: "block", width: "100%", borderRadius: 10 }} />
+                    {isVideo ? (
+                      <video src={src} autoPlay loop muted playsInline style={{ display: "block", width: "100%", borderRadius: 10 }} />
+                    ) : (
+                      <img src={src} alt={label} style={{ display: "block", width: "100%", borderRadius: 10 }} />
+                    )}
                     <p style={{
                       marginTop: 10, fontSize: 11, fontWeight: 600,
                       letterSpacing: "0.12em", textTransform: "uppercase" as const,
@@ -334,9 +361,6 @@ export default function LiveSegmentsCaseStudy() {
                   </div>
                 ))}
               </div>
-              <p style={{ fontSize: 12, color: "rgba(0,0,0,0.4)", marginTop: 20, letterSpacing: "0.04em" }}>
-                The progression: literal Wavelight translation → chasing animation → avatar attached to the arc → the arc as the athlete themselves. Each step removed complexity.
-              </p>
             </div>
           </FadeUp>
         </section>
@@ -353,7 +377,7 @@ export default function LiveSegmentsCaseStudy() {
                 <p style={{ fontSize: 16, color: "rgba(255,255,255,0.4)", marginTop: 16, lineHeight: 1.6 }}>
                   of 7 athletes chose the Ghost model — your PR pacer on the ring, your avatar tracking your own position. Two objects. One ring. The most faithful translation of the race metaphor.
                 </p>
-                <div style={{ marginTop: "auto", paddingTop: 28, padding: "20px 24px", background: "rgba(255,255,255,0.04)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
+                <div style={{ marginTop: 32, padding: "20px 24px", background: "rgba(255,255,255,0.04)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
                   <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, fontStyle: "italic" }}>"Two icons overwhelming at pace. Users glance at colour, not icons."</p>
                   <p style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", marginTop: 8, letterSpacing: "0.08em", textTransform: "uppercase" as const }}>Research finding</p>
                 </div>
@@ -363,20 +387,20 @@ export default function LiveSegmentsCaseStudy() {
                 <p style={{ fontSize: 16, color: "rgba(255,255,255,0.4)", marginTop: 16, lineHeight: 1.6 }}>
                   of 7 chose the Attached model — one element on the ring, color as the signal, avatar at the arc tip. No PR pacer visible. No second object to track.
                 </p>
-                <div style={{ marginTop: "auto", paddingTop: 28, padding: "20px 24px", background: "rgba(255,255,255,0.04)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
+                <div style={{ marginTop: 32, padding: "20px 24px", background: "rgba(255,255,255,0.04)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
                   <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, fontStyle: "italic" }}>"Reduced areas trying to get user's attention. Easily gauge stats while glancing."</p>
                   <p style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", marginTop: 8, letterSpacing: "0.08em", textTransform: "uppercase" as const }}>Research finding</p>
                 </div>
               </div>
             </div>
 
-            <div style={{ marginTop: 60, borderTop: "1px solid rgba(255,255,255,0.07)", paddingTop: 48 }}>
+            <div style={{ marginTop: 60, paddingTop: 48 }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }}>
                 <div>
                   <div style={{ background: "#111", borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.06)" }}>
                     <img src={wavelightGif} alt="The Wavelight — the metaphor that started it all" style={{ display: "block", width: "100%", maxHeight: 400, objectFit: "cover" }} />
                   </div>
-                  <p style={{ marginTop: 10, fontSize: 12, color: "rgba(255,255,255,0.25)", letterSpacing: "0.06em" }}>
+                  <p style={{ marginTop: 24, fontSize: 12, color: "rgba(255,255,255,0.25)", letterSpacing: "0.06em", textAlign: "center" }}>
                     The Ghost: two objects, one ring. Selected by 0 of 7 athletes.
                   </p>
                 </div>
@@ -397,13 +421,11 @@ export default function LiveSegmentsCaseStudy() {
         </div>
       </section>
 
-      {/* ── White column 3: insight + anatomy ── */}
-      <div className="max-w-[880px] mx-auto px-7">
-
-        {/* The insight */}
-        <section className="py-[80px]">
+      {/* ── Prototype / Full experience ──────────────────────────────────────── */}
+      <section className="py-[100px]">
+        <div className="max-w-[880px] mx-auto px-7">
           <FadeUp>
-            <Eyebrow>The insight</Eyebrow>
+            <Eyebrow>The full experience</Eyebrow>
             <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
               The ring doesn't represent the PR.<br />The ring is you.
             </h2>
@@ -413,76 +435,10 @@ export default function LiveSegmentsCaseStudy() {
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
               The design stopped trying to show the race and started trying to encode the feeling of it.
             </p>
-            <div style={{ marginTop: 48, maxWidth: 400 }}>
-              <img
-                src={outerRingGif}
-                alt="The arc fills at your pace — green ahead, red behind"
-                style={{ display: "block", width: "100%", borderRadius: 12 }}
-              />
-              <p style={{ fontSize: 12, color: "rgba(0,0,0,0.4)", marginTop: 12, letterSpacing: "0.04em" }}>
-                The arc fills at your pace. Green = ahead. Red = behind. One element. One glance.
-              </p>
-            </div>
-          </FadeUp>
-        </section>
-
-        <Hr />
-
-        {/* The anatomy */}
-        <section className="py-[80px]">
-          <FadeUp>
-            <Eyebrow>The anatomy</Eyebrow>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
-              Five elements. Each one earned its place.
-            </h2>
-            <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20, marginBottom: 16 }}>
-              The design went through many stat combinations — time left, distance remaining, pace, time ahead/behind — before landing on a final configuration. Nothing survived by default. Every element had to justify its pixel count at a glance.
-            </p>
-            <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginBottom: 48 }}>
-              We prioritized elements based on accessibility. The color signal — green or red — is intuitive but creates problems for athletes with color vision impairments. We needed an element equally prominent that communicated ahead or behind independently of color. And crucially, that element had to work for both the fullscreen segment page and the live segment indicator that carries across other navigational pages.
-            </p>
-            <div>
-              <img
-                src={finalDesignImg}
-                alt="Final design anatomy — annotated Apple Watch Live Segments"
-                style={{ display: "block", width: "100%", borderRadius: 12, marginBottom: 48 }}
-              />
-              <div>
-                {[
-                  { color: STRAVA,               name: "PR Badge",         desc: "Top-left, fixed. Your target. Not on the ring — the ring belongs to you. It fills at your pace, not the PR's." },
-                  { color: "rgba(0,0,0,0.15)",   name: "Horseshoe arc",    desc: "The segment — start to finish. Always the same shape. The track the race happens on." },
-                  { color: "#4ade80",             name: "Arc fill",         desc: "Fills at your pace. Green = ahead of PR. Red = behind. The only signal you need to read the race." },
-                  { color: STRAVA,               name: "User avatar",      desc: "Rides the tip of the arc. You are the light. No identification problem — your position is self-evident." },
-                  { color: "#1a1a1a",            name: "Arrow + time delta", desc: "▲/▼ is the accessible signal — ahead or behind, no color required. The number gives the margin. Together they work across the fullscreen page and the compact cross-page indicator." },
-                ].map(({ color, name, desc }, i, arr) => (
-                  <div key={name} style={{
-                    display: "flex", alignItems: "flex-start", gap: 16,
-                    padding: "16px 0",
-                    borderBottom: i < arr.length - 1 ? "1px solid rgba(0,0,0,0.08)" : "none",
-                  }}>
-                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: color, flexShrink: 0, marginTop: 5 }} />
-                    <div>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: "#000", marginBottom: 3 }}>{name}</div>
-                      <div style={{ fontSize: 14, color: "rgba(0,0,0,0.55)", lineHeight: 1.5 }}>{desc}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </FadeUp>
-        </section>
-
-      </div>{/* end white column 3 */}
-
-      {/* ── Prototype / Full experience (dark) ──────────────────────────────── */}
-      <section className="py-[100px]" style={{ background: "#0A0A0A" }}>
-        <div className="max-w-[880px] mx-auto px-7">
-          <FadeUp>
-            <Eyebrow dark>The full experience</Eyebrow>
-            <h2 style={{ color: "white", fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: 12 }}>
+            <h3 style={{ fontSize: "clamp(22px,3vw,32px)", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.02em", marginTop: 64, marginBottom: 12 }}>
               Three states. One coherent race.
-            </h2>
-            <p style={{ fontSize: 17, color: "rgba(255,255,255,0.45)", lineHeight: 1.65, maxWidth: 580, marginBottom: 52 }}>
+            </h3>
+            <p style={{ fontSize: 17, color: "rgba(0,0,0,0.55)", lineHeight: 1.65, maxWidth: 580, marginBottom: 52 }}>
               The design isn't just the competing view — it's a sequence. Each state has its own job.
             </p>
           </FadeUp>
@@ -507,9 +463,9 @@ export default function LiveSegmentsCaseStudy() {
                     style={{
                       padding: "8px 20px",
                       borderRadius: 100,
-                      background: isActive ? "rgba(255,255,255,0.10)" : "transparent",
-                      border: `1px solid ${isActive ? "rgba(255,255,255,0.20)" : "rgba(255,255,255,0.10)"}`,
-                      color: isActive ? "white" : "rgba(255,255,255,0.35)",
+                      background: isActive ? "rgba(0,0,0,0.07)" : "transparent",
+                      border: `1px solid ${isActive ? "rgba(0,0,0,0.15)" : "rgba(0,0,0,0.08)"}`,
+                      color: isActive ? "#1a1a1a" : "rgba(0,0,0,0.40)",
                       fontSize: 13, fontWeight: 600, letterSpacing: "0.02em",
                       cursor: "pointer",
                       transition: "all 0.2s ease",
@@ -531,8 +487,8 @@ export default function LiveSegmentsCaseStudy() {
                     transition={{ duration: 0.25 }}
                     style={{ textAlign: "center", maxWidth: 560, margin: "0 auto" }}
                   >
-                    <h3 style={{ color: "white", fontSize: 17, fontWeight: 700, lineHeight: 1.4, marginBottom: 12 }}>{title}</h3>
-                    <p style={{ fontSize: 15, color: "rgba(255,255,255,0.50)", lineHeight: 1.65 }}>{body}</p>
+                    <h3 style={{ color: "#1a1a1a", fontSize: 17, fontWeight: 700, lineHeight: 1.4, marginBottom: 12 }}>{title}</h3>
+                    <p style={{ fontSize: 15, color: "rgba(0,0,0,0.50)", lineHeight: 1.65 }}>{body}</p>
                   </motion.div>
                 ))}
               </AnimatePresence>
@@ -540,6 +496,52 @@ export default function LiveSegmentsCaseStudy() {
           </FadeUp>
         </div>
       </section>
+
+      {/* ── The anatomy ── */}
+      <div className="max-w-[880px] mx-auto px-7">
+        <section className="py-[80px]">
+          <FadeUp>
+            <Eyebrow>The anatomy</Eyebrow>
+            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
+              Five elements. Each one earned its place.
+            </h2>
+            <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20, marginBottom: 16 }}>
+              The design went through many stat combinations — time left, distance remaining, pace, time ahead/behind — before landing on a final configuration. Nothing survived by default. Every element had to justify its pixel count at a glance.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginBottom: 48 }}>
+              We prioritized elements based on accessibility. The color signal — green or red — is intuitive but creates problems for athletes with color vision impairments. We needed an element equally prominent that communicated ahead or behind independently of color. And crucially, that element had to work for both the fullscreen segment page and the live segment indicator that carries across other navigational pages.
+            </p>
+            <div>
+              <img
+                src={finalDesignImg}
+                alt="Final design anatomy — annotated Apple Watch Live Segments"
+                style={{ display: "block", width: "100%", borderRadius: 12, marginBottom: 48 }}
+              />
+              <div>
+                {[
+                  { color: BLUE,               name: "PR Badge",         desc: "Top-left, fixed. Your target. Not on the ring — the ring belongs to you. It fills at your pace, not the PR's." },
+                  { color: "rgba(0,0,0,0.15)",   name: "Horseshoe arc",    desc: "The segment — start to finish. Always the same shape. The track the race happens on." },
+                  { color: "#4ade80",             name: "Arc fill",         desc: "Fills at your pace. Green = ahead of PR. Red = behind. The only signal you need to read the race." },
+                  { color: BLUE,               name: "User avatar",      desc: "Rides the tip of the arc. You are the light. No identification problem — your position is self-evident." },
+                  { color: "#1a1a1a",            name: "Arrow + time delta", desc: "▲/▼ is the accessible signal — ahead or behind, no color required. The number gives the margin. Together they work across the fullscreen page and the compact cross-page indicator." },
+                ].map(({ color, name, desc }, i, arr) => (
+                  <div key={name} style={{
+                    display: "flex", alignItems: "flex-start", gap: 16,
+                    padding: "16px 0",
+                    borderBottom: i < arr.length - 1 ? "1px solid rgba(0,0,0,0.08)" : "none",
+                  }}>
+                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: color, flexShrink: 0, marginTop: 5 }} />
+                    <div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: "#000", marginBottom: 3 }}>{name}</div>
+                      <div style={{ fontSize: 14, color: "rgba(0,0,0,0.55)", lineHeight: 1.5 }}>{desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </FadeUp>
+        </section>
+      </div>{/* end anatomy */}
 
       {/* ── White column 4: outcome + reviews + credits + footer ── */}
       <div className="max-w-[880px] mx-auto px-7">
@@ -562,14 +564,14 @@ export default function LiveSegmentsCaseStudy() {
               ].map(({ num, label }) => (
                 <div key={num}>
                   <div style={{ fontSize: "clamp(36px,5vw,56px)", fontWeight: 700, color: "#1a1a1a", lineHeight: 1 }}>{num}</div>
-                  <div style={{ width: 28, height: 3, background: STRAVA, borderRadius: 2, margin: "12px 0" }} />
+                  <div style={{ width: 28, height: 3, background: BLUE, borderRadius: 2, margin: "12px 0" }} />
                   <div style={{ fontSize: 14, color: "rgba(0,0,0,0.55)", lineHeight: 1.5 }}>{label}</div>
                 </div>
               ))}
             </div>
             <div style={{
-              borderLeft: `4px solid ${STRAVA}`,
-              background: "rgba(252,82,0,0.04)",
+              borderLeft: `4px solid ${BLUE}`,
+              background: "rgba(115,140,199,0.04)",
               borderRadius: "0 12px 12px 0",
               padding: "28px 32px",
               marginTop: 48,
@@ -584,7 +586,6 @@ export default function LiveSegmentsCaseStudy() {
           </FadeUp>
         </section>
 
-        <Hr />
 
         {/* Apple Park design reviews */}
         <section className="py-[80px]">
@@ -618,7 +619,7 @@ export default function LiveSegmentsCaseStudy() {
             ].map(({ date, title, body }, i) => (
               <FadeUp key={i} delay={i * 0.06}>
                 <div style={{ border: "1px solid rgba(0,0,0,0.08)", borderRadius: 14, padding: "32px 36px" }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: STRAVA, marginBottom: 14 }}>{date}</p>
+                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: BLUE, marginBottom: 14 }}>{date}</p>
                   <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 12, lineHeight: 1.3 }}>{title}</h3>
                   <p style={{ fontSize: 16, lineHeight: 1.65, color: "rgba(0,0,0,0.55)" }}>{body}</p>
                 </div>
@@ -627,7 +628,6 @@ export default function LiveSegmentsCaseStudy() {
           </div>
         </section>
 
-        <Hr />
 
         {/* Credits */}
         <section className="py-[80px]">
@@ -642,7 +642,6 @@ export default function LiveSegmentsCaseStudy() {
           </FadeUp>
         </section>
 
-        <Hr />
 
         {/* Footer */}
         <footer className="py-[42px] flex items-center justify-between">
@@ -652,7 +651,7 @@ export default function LiveSegmentsCaseStudy() {
           <Link
             to="/"
             className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
-            style={{ outlineColor: STRAVA }}
+            style={{ outlineColor: BLUE }}
           >Marcea — Selected Work</Link>
         </footer>
 

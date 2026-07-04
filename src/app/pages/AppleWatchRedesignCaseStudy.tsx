@@ -233,7 +233,7 @@ export default function AppleWatchRedesignCaseStudy() {
                       className="w-full h-auto block"
                       style={{ filter: "drop-shadow(0 10px 24px rgba(26,26,26,.12))" }}
                     />
-                    <figcaption className="mt-2 text-[10px] tracking-[0.12em] text-black/30 font-medium uppercase text-center">
+                    <figcaption className="mt-5 text-[10px] tracking-[0.12em] text-black/30 font-medium uppercase text-center">
                       {label}
                     </figcaption>
                   </figure>

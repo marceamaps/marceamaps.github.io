@@ -1,5 +1,6 @@
 import Hero from "../components/Hero";
 import FloatingNav from "../components/FloatingNav";
+import AboutSection from "../components/AboutSection";
 import ExperienceSection from "../components/ExperienceSection";
 import Footer from "../components/Footer";
 import CaseStudyCard from "../components/CaseStudyCard";
@@ -82,7 +83,8 @@ export default function HomePage() {
       </section>
 
       {/* About */}
-      <section id="about" className="pt-32">
+      <section id="about">
+        <AboutSection />
         <ExperienceSection />
       </section>
 

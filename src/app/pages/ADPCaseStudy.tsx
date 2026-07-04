@@ -11,10 +11,7 @@ import { motion, useReducedMotion } from "motion/react";
 // import adpFullSubscriber from "../../assets/adp/adp-full-subscriber.png";
 // import adpPolylineFocused from "../../assets/adp/adp-polyline-focused.png";
 
-// TODO(design token): #E8640A is the brand amber from the mockup spec.
-// No matching token found in theme.css. Add a --color-amber token if this
-// colour is formalised in the design system.
-const AMBER = "#E8640A";
+const BLUE = "#738CC7";
 
 // ─── Primitives ───────────────────────────────────────────────────────────────
 
@@ -30,11 +27,11 @@ function Eyebrow({
       <div
         aria-hidden
         className="flex-shrink-0 w-[26px] h-[3px] rounded-sm"
-        style={{ background: AMBER }}
+        style={{ background: BLUE }}
       />
       <p
         className="text-xs tracking-[0.2em] font-medium uppercase leading-none"
-        style={{ color: amber ? AMBER : "rgba(0,0,0,0.35)" }}
+        style={{ color: amber ? BLUE : "rgba(0,0,0,0.35)" }}
       >
         {children}
       </p>
@@ -93,7 +90,7 @@ export default function ADPCaseStudy() {
         <Link
           to="/"
           className="text-xs tracking-[0.2em] text-black/40 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
-          style={{ outlineColor: AMBER }}
+          style={{ outlineColor: BLUE }}
         >
           ← Marcea · Work
         </Link>
@@ -144,7 +141,7 @@ export default function ADPCaseStudy() {
           <div className="mt-12 flex items-center gap-3 mb-4">
             <span
               className="text-[10px] font-semibold uppercase tracking-[0.18em] px-3 py-[5px] rounded-full text-white"
-              style={{ background: AMBER }}
+              style={{ background: BLUE }}
             >
               After
             </span>
@@ -173,7 +170,7 @@ export default function ADPCaseStudy() {
               <FadeUp key={label} delay={i * 0.1}>
                 <figure>
                   <ImgPlaceholder label={label} />
-                  <figcaption className="mt-2 text-[10px] tracking-[0.12em] text-black/30 font-medium uppercase text-center">
+                  <figcaption className="mt-5 text-[10px] tracking-[0.12em] text-black/30 font-medium uppercase text-center">
                     {label}
                   </figcaption>
                 </figure>
@@ -235,7 +232,7 @@ export default function ADPCaseStudy() {
           <FadeUp delay={0.08} className="mt-10">
             <figure>
               <ImgPlaceholder label="adp-permutation-matrix.png" />
-              <figcaption className="mt-2 text-xs tracking-[0.05em] text-black/40 font-medium">
+              <figcaption className="mt-5 text-xs tracking-[0.05em] text-black/40 font-medium">
                 Mapping every configuration — user state, content state,
                 platform — is what got leadership back on board.
               </figcaption>
@@ -271,7 +268,7 @@ export default function ADPCaseStudy() {
               <FadeUp key={beat} delay={i * 0.1}>
                 <p
                   className="text-[10px] tracking-[0.2em] font-medium uppercase mb-4"
-                  style={{ color: AMBER }}
+                  style={{ color: BLUE }}
                 >
                   {beat}
                 </p>
@@ -293,7 +290,7 @@ export default function ADPCaseStudy() {
               ].map(({ label, caption }, i) => (
                 <figure key={label}>
                   <ImgPlaceholder label={label} />
-                  <figcaption className="mt-2 text-[10px] tracking-[0.12em] text-black/30 font-medium uppercase text-center">
+                  <figcaption className="mt-5 text-[10px] tracking-[0.12em] text-black/30 font-medium uppercase text-center">
                     {caption}
                   </figcaption>
                 </figure>
@@ -314,11 +311,11 @@ export default function ADPCaseStudy() {
           {/* TODO(interactive): build polyline highlight prototype */}
           <div
             className="rounded-[20px] border-2 border-dashed p-8"
-            style={{ borderColor: AMBER, background: "rgba(232,100,10,0.02)" }}
+            style={{ borderColor: BLUE, background: "rgba(115,140,199,0.02)" }}
           >
             <span
               className="inline-block text-[10px] font-bold tracking-[0.18em] uppercase rounded-full px-3 py-1 mb-4"
-              style={{ color: AMBER, background: "rgba(232,100,10,0.10)" }}
+              style={{ color: BLUE, background: "rgba(115,140,199,0.10)" }}
             >
               Interactive — build in Claude Code
             </span>
@@ -378,7 +375,7 @@ export default function ADPCaseStudy() {
                 <div
                   aria-hidden
                   className="mt-3 mb-3 w-[26px] h-[3px] rounded-sm"
-                  style={{ background: AMBER }}
+                  style={{ background: BLUE }}
                 />
                 <p className="text-sm leading-snug text-black/55">{label}</p>
               </FadeUp>
@@ -390,8 +387,8 @@ export default function ADPCaseStudy() {
             <div
               className="pl-6 py-6 pr-6 rounded-r-md"
               style={{
-                borderLeft: `4px solid ${AMBER}`,
-                background: "rgba(232,100,10,0.04)",
+                borderLeft: `4px solid ${BLUE}`,
+                background: "rgba(115,140,199,0.04)",
               }}
             >
               <Eyebrow amber>The loop closes</Eyebrow>
@@ -474,7 +471,7 @@ export default function ADPCaseStudy() {
           <Link
             to="/"
             className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
-            style={{ outlineColor: AMBER }}
+            style={{ outlineColor: BLUE }}
           >
             Marcea — Selected Work
           </Link>
