@@ -1,18 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marcea Ennamorato — Product Designer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Product Design Portfolio</title>
-      <script type="module" crossorigin src="/assets/index-DC13nP5r.js"></script>
-      <link rel="modulepreload" crossorigin href="/assets/vendor-OskAq2oX.js">
-      <link rel="modulepreload" crossorigin href="/assets/motion-3HWHR5_i.js">
-      <link rel="stylesheet" crossorigin href="/assets/index-CTuwIAtc.css">
-    </head>
+      body {
+        font-family: "Cabin", sans-serif;
+        background: #f5f2ed;
+        color: #030213;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 40px;
+      }
 
-    <body>
-      <div id="root"></div>
-    </body>
-  </html>
-  
+      .top {
+        font-size: 11px;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        color: rgba(3, 2, 19, 0.35);
+      }
+
+      .middle {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .name {
+        font-size: clamp(40px, 8vw, 96px);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        color: rgba(3, 2, 19, 0.75);
+      }
+
+      .role {
+        font-size: clamp(14px, 2vw, 18px);
+        color: rgba(3, 2, 19, 0.4);
+        letter-spacing: 0.04em;
+      }
+
+      .bottom {
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(3, 2, 19, 0.25);
+      }
+    </style>
+  </head>
+  <body>
+    <p class="top">45.9237&#176; N &nbsp; 6.8694&#176; E</p>
+
+    <div class="middle">
+      <h1 class="name">Marcea<br />Ennamorato</h1>
+      <p class="role">Product Designer &mdash; Portfolio coming soon.</p>
+    </div>
+
+    <p class="bottom">maps &amp; motion</p>
+  </body>
+</html>
