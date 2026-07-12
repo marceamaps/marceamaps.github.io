@@ -11,6 +11,7 @@ import caveImg     from "../../assets/about-me/cave.jpg";
 import skiTourImg  from "../../assets/about-me/ski-tour.JPG";
 import trailRunImg from "../../assets/about-me/trail-run.jpg";
 import climbingImg from "../../assets/about-me/climbing.jpg";
+import { TYPE } from "./caseStudyKit";
 
 const STEPS = [
   {
@@ -230,7 +231,7 @@ export default function AboutSection() {
         </p>
         <h2
           style={{
-            fontSize: "clamp(30px, 4.5vw, 52px)",
+            fontSize: TYPE.bigStatement,
             fontWeight: 700,
             lineHeight: 1.13,
             letterSpacing: "-0.025em",

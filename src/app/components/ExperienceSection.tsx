@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion, useInView } from "motion/react";
+import { LABEL_CLASS, TYPE } from "./caseStudyKit";
 
 const AMBER = "#E8640A";
 
@@ -80,7 +81,6 @@ function catmullRomPath(pts: { x: number; y: number }[]): string {
 
 const PROFILE_PTS = ELEV_RAW.map((e, i) => ({ x: indexToX(i), y: elevToY(e) }));
 const LINE_PATH   = catmullRomPath(PROFILE_PTS);
-const FILL_PATH   = `${LINE_PATH} L ${VB_W} ${BASELINE_Y} L 0 ${BASELINE_Y} Z`;
 
 // Summit x position — everything to the right is descent
 const SUMMIT_IDX = 139;
@@ -153,6 +153,12 @@ const EXPERIENCES = [
 ];
 
 // ─── Primitives ───────────────────────────────────────────────────────────────
+// This section's Eyebrow uses a taller bottom margin (mb-10 vs. the shared
+// component's mb-5) to match its larger vertical rhythm, so the label markup
+// is inlined here rather than reusing <SharedEyebrow> directly. The label
+// styling itself (10px / tracking-[0.14em] / font-medium / uppercase) comes
+// from the shared LABEL_CLASS constant, so it can never drift from the rest
+// of the site.
 function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-3 mb-10">
@@ -161,7 +167,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
         className="flex-shrink-0 w-[26px] h-[3px] rounded-sm"
         style={{ background: AMBER }}
       />
-      <p className="text-xs tracking-[0.2em] font-medium uppercase leading-none text-black/35">
+      <p className={`${LABEL_CLASS} leading-none text-black/35`}>
         {children}
       </p>
     </div>
@@ -175,6 +181,19 @@ export default function ExperienceSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const dragging   = useRef(false);
   const reduced    = useReducedMotion();
+
+  // Lock the detail panel height to the tallest item seen so far so
+  // AnimatePresence's mode="wait" gap never collapses the section.
+  const detailMinHeightRef = useRef(0);
+  const [detailMinHeight, setDetailMinHeight] = useState(0);
+  const detailMeasureRef = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return;
+    const h = node.offsetHeight;
+    if (h > detailMinHeightRef.current) {
+      detailMinHeightRef.current = h;
+      setDetailMinHeight(h);
+    }
+  }, []);
 
   const [fired, setFired] = useState(false);
 
@@ -217,7 +236,7 @@ export default function ExperienceSection() {
   return (
     <section
       ref={sectionRef}
-      className="px-8 py-20 max-w-7xl mx-auto"
+      className="px-8 pt-32 pb-20 max-w-7xl mx-auto"
       id="experience"
     >
       {/* ── Elevation profile ────────────────────────────────────── */}
@@ -240,11 +259,6 @@ export default function ExperienceSection() {
           role="img"
         >
           <defs>
-            <linearGradient id="elevFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={AMBER} stopOpacity="0.10" />
-              <stop offset="100%" stopColor={AMBER} stopOpacity="0.02" />
-            </linearGradient>
-
             {/* Clip to ascent portion (left of summit) */}
             <clipPath id="ascentClip">
               <rect x="0" y="0" width={SUMMIT_X} height={VB_H} />
@@ -322,16 +336,34 @@ export default function ExperienceSection() {
             </mask>
           </defs>
 
-          {/* Mountain fill */}
-          <path d={FILL_PATH} fill="url(#elevFill)" />
-
-          {/* Baseline */}
-          <line
-            x1="0" y1={BASELINE_Y}
-            x2={VB_W} y2={BASELINE_Y}
-            stroke="rgba(0,0,0,0.07)"
-            strokeWidth="1"
-          />
+          {/* ── Fill + baseline — fade in after the line draws ── */}
+          <motion.g
+            initial={reduced ? false : { opacity: 0 }}
+            animate={inView || fired ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 1.0 }}
+          >
+            {/* ── Descent line (faint — hints at the unknown) ── */}
+            <path
+              d={LINE_PATH}
+              fill="none"
+              stroke="rgba(0,0,0,0.07)"
+              strokeWidth="1.5"
+              strokeLinejoin="round"
+              clipPath="url(#descentClip)"
+            />
+            {/* Track attribution */}
+            <text
+              x={VB_W - 4}
+              y={BASELINE_Y + 14}
+              textAnchor="end"
+              fontSize="7.5"
+              fill="rgba(0,0,0,0.20)"
+              fontFamily="ui-sans-serif, system-ui, -apple-system, sans-serif"
+              style={{ letterSpacing: "0.06em" }}
+            >
+              MOUNT EVA SKI TOUR · 3,975 M
+            </text>
+          </motion.g>
 
           {/* ── Flash + glow — boundary mask replaces hard clipPath ── */}
           {!reduced && (
@@ -379,29 +411,6 @@ export default function ExperienceSection() {
             strokeLinejoin="round"
             clipPath="url(#ascentClip)"
           />
-
-          {/* ── Descent line (faint, static — hints at the unknown) ── */}
-          <path
-            d={LINE_PATH}
-            fill="none"
-            stroke="rgba(0,0,0,0.07)"
-            strokeWidth="1.5"
-            strokeLinejoin="round"
-            clipPath="url(#descentClip)"
-          />
-
-          {/* Track attribution */}
-          <text
-            x={VB_W - 4}
-            y={BASELINE_Y + 14}
-            textAnchor="end"
-            fontSize="7.5"
-            fill="rgba(0,0,0,0.20)"
-            fontFamily="ui-sans-serif, system-ui, -apple-system, sans-serif"
-            style={{ letterSpacing: "0.06em" }}
-          >
-            MOUNT EVA SKI TOUR · 3,975 M
-          </text>
 
           {/* ── Per-peak elements ── */}
           {PEAKS.map((peak, i) => {
@@ -471,7 +480,7 @@ export default function ExperienceSection() {
                   fontWeight={isSelected ? "600" : "400"}
                   fill={isSelected ? AMBER : "rgba(0,0,0,0.28)"}
                   fontFamily="ui-sans-serif, system-ui, -apple-system, sans-serif"
-                  style={{ textTransform: "uppercase", letterSpacing: "0.1em", transition: "fill 0.25s ease" }}
+                  style={{ textTransform: "uppercase", letterSpacing: "0.14em", transition: "fill 0.25s ease" }}
                   initial={reduced ? false : { opacity: 0 }}
                   animate={inView || fired ? { opacity: 1 } : {}}
                   transition={reduced ? undefined : { duration: 0.35, delay: labelDelay }}
@@ -506,20 +515,22 @@ export default function ExperienceSection() {
         animate={inView || fired ? { opacity: 1 } : {}}
         transition={{ duration: 0.6, ease: "easeOut", delay: detailDelay }}
       >
+        <div style={{ minHeight: detailMinHeight || undefined }}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
+            ref={detailMeasureRef}
             key={selectedPeak}
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             exit={reduced ? undefined : { opacity: 0, y: -10 }}
             transition={{ duration: 0.32, ease: [0.25, 0.1, 0.25, 1] }}
-            className="pb-12 mb-10 border-b border-black/[0.06]"
+            className="pb-12 mb-10"
           >
             {/* Pills */}
             <div className="flex flex-wrap gap-2 mb-6">
               {isCurrent && (
                 <span
-                  className="inline-block px-3 py-[5px] rounded-full text-[10px] font-semibold uppercase tracking-[0.18em] text-white"
+                  className={`inline-block px-3 py-[5px] rounded-full text-white ${LABEL_CLASS}`}
                   style={{ background: AMBER }}
                 >
                   Current
@@ -528,7 +539,7 @@ export default function ExperienceSection() {
               {exp.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-block px-3 py-[5px] rounded-full border border-black/20 text-[10px] font-medium uppercase tracking-[0.1em] text-black/50"
+                  className={`inline-block px-3 py-[5px] rounded-full border border-black/20 text-black/50 ${LABEL_CLASS}`}
                 >
                   {tag}
                 </span>
@@ -540,7 +551,7 @@ export default function ExperienceSection() {
               <div>
                 <h3
                   className="font-bold tracking-tight"
-                  style={{ fontSize: "clamp(28px, 5vw, 52px)", lineHeight: 1.0, color: "#1A1A1A" }}
+                  style={{ fontSize: TYPE.bigStatement, lineHeight: 1.0, color: "#1A1A1A" }}
                 >
                   {exp.company}
                 </h3>
@@ -550,12 +561,13 @@ export default function ExperienceSection() {
                 </p>
               </div>
               <div className="md:text-right pt-1">
-                <p className="text-sm font-medium text-black/30">{exp.date}</p>
-                <p className="mt-1 text-sm text-black/[0.22]">{exp.location}</p>
+                <p className="text-sm font-semibold text-black/55">{exp.date}</p>
+                <p className="mt-1 text-sm text-black/40">{exp.location}</p>
               </div>
             </div>
           </motion.div>
         </AnimatePresence>
+        </div>
 
         {/* ── Compact row ──────────────────────────────────────────── */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -565,14 +577,14 @@ export default function ExperienceSection() {
               <motion.button
                 key={peakIdx}
                 onClick={() => setSelectedPeak(peakIdx)}
-                className="text-left px-4 py-3 rounded-xl border border-black/[0.07] hover:border-black/[0.14] hover:bg-black/[0.02] transition-all duration-200 group"
+                className="text-left px-4 py-3 rounded-xl border border-black/[0.14] bg-black/[0.02] hover:border-black/25 hover:bg-black/[0.05] transition-all duration-200 group cursor-pointer"
                 whileHover={reduced ? undefined : { y: -1 }}
                 transition={{ duration: 0.15 }}
               >
-                <p className="text-[10px] text-black/[0.22] font-medium uppercase tracking-[0.12em] mb-1.5">
+                <p className={`text-black/40 mb-1.5 ${LABEL_CLASS}`}>
                   {other.date.split("–")[0]}
                 </p>
-                <p className="text-sm font-semibold text-black/[0.38] group-hover:text-black/60 transition-colors leading-tight">
+                <p className="text-sm font-semibold text-black/55 group-hover:text-black/75 transition-colors leading-tight">
                   {other.company}
                 </p>
                 <p className="text-xs text-black/25 mt-0.5 leading-tight">{other.role}</p>

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import IslandToggle from "../components/IslandToggle";
+import { Eyebrow, FadeUp } from "../components/caseStudyKit";
 
 import preRecord from "../../assets/mobile-record/pre-record.png";
 import recordingImg from "../../assets/mobile-record/recording.png";
@@ -18,56 +19,6 @@ import recordGestures from "../../assets/mobile-record/mobile-record-gestures.pn
 
 const AMBER = "#E8640A";
 const BLUE  = "#738CC7"; // Slate Blue from hero gradient
-
-// ─── Primitives ───────────────────────────────────────────────────────────────
-
-function Eyebrow({
-  children,
-  amber = false,
-}: {
-  children: React.ReactNode;
-  amber?: boolean;
-}) {
-  return (
-    <div className="flex items-center gap-3 mb-5">
-      <div
-        aria-hidden
-        className="flex-shrink-0 w-[26px] h-[3px] rounded-sm"
-        style={{ background: BLUE }}
-      />
-      <p
-        className="text-xs tracking-[0.2em] font-medium uppercase leading-none"
-        style={{ color: amber ? AMBER : "rgba(0,0,0,0.35)" }}
-      >
-        {children}
-      </p>
-    </div>
-  );
-}
-
-function FadeUp({
-  children,
-  delay = 0,
-  className,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-}) {
-  const reduced = useReducedMotion();
-  if (reduced) return <div className={className}>{children}</div>;
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay, ease: [0.25, 0.1, 0.25, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -96,12 +47,12 @@ export default function MobileRecordCaseStudy() {
       >
         <Link
           to="/"
-          className="text-xs tracking-[0.2em] text-black/40 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
+          className="text-[10px] tracking-[0.14em] text-black/40 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
           style={{ outlineColor: AMBER }}
         >
           ← Marcea · Work
         </Link>
-        <span className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase">
+        <span className="text-[10px] tracking-[0.14em] text-black/35 font-medium uppercase">
           Mobile Record
         </span>
       </nav>
@@ -148,7 +99,7 @@ export default function MobileRecordCaseStudy() {
                 <button
                   key={v}
                   onClick={() => setView(v)}
-                  className="relative px-4 py-[7px] text-xs font-semibold uppercase tracking-[0.14em] rounded-full transition-colors duration-200 focus-visible:outline-none"
+                  className="relative px-4 py-[7px] text-[10px] font-medium uppercase tracking-[0.14em] rounded-full transition-colors duration-200 focus-visible:outline-none"
                   style={{ color: view === v ? "white" : "rgba(0,0,0,0.38)", zIndex: 1 }}
                 >
                   {view === v && (
@@ -165,7 +116,7 @@ export default function MobileRecordCaseStudy() {
             </div>
 
             {/* Subtitle */}
-            <p className="text-xs font-medium uppercase tracking-[0.12em] text-black/30 mb-6 text-center">
+            <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-black/30 mb-6 text-center">
               {view === "before" ? "7 years untouched" : "The redesign"}
             </p>
 
@@ -201,7 +152,7 @@ export default function MobileRecordCaseStudy() {
             <div className="flex gap-4 sm:gap-6 mt-4">
               {["Pre-record", "Map + stats", "Full-screen"].map((label) => (
                 <div key={label} className="flex-1 text-center">
-                  <span className="text-xs tracking-[0.12em] text-black/30 font-medium uppercase">
+                  <span className="text-[10px] tracking-[0.14em] text-black/30 font-medium uppercase">
                     {label}
                   </span>
                 </div>
@@ -317,7 +268,7 @@ export default function MobileRecordCaseStudy() {
               "finishing",
             ].map((pill, i) => (
               <FadeUp key={pill} delay={i * 0.04}>
-                <span className="inline-block px-3 py-[6px] rounded-full border border-black/20 text-[11px] font-medium uppercase tracking-[0.1em] text-black/60">
+                <span className="inline-block px-3 py-[6px] rounded-full border border-black/20 text-[10px] font-medium uppercase tracking-[0.14em] text-black/60">
                   {pill}
                 </span>
               </FadeUp>
@@ -377,7 +328,7 @@ export default function MobileRecordCaseStudy() {
               {/* Right: note */}
               <div className="md:pt-0">
                 <p
-                  className="text-xs tracking-[0.2em] font-medium uppercase mb-4"
+                  className="text-[10px] tracking-[0.14em] font-medium uppercase mb-4"
                   style={{ color: AMBER }}
                 >
                   ← Try the toggle
@@ -565,7 +516,7 @@ export default function MobileRecordCaseStudy() {
           </FadeUp>
           <FadeUp delay={0.05}>
             <div className="rounded-[14px] border border-black/[0.12] p-7 sm:p-10">
-              <p className="text-xs tracking-[0.2em] font-medium uppercase text-black/30 mb-6">
+              <p className="text-[10px] tracking-[0.14em] font-medium uppercase text-black/30 mb-6">
                 Field notes
               </p>
               <div className="space-y-5">
@@ -601,12 +552,12 @@ export default function MobileRecordCaseStudy() {
 
         {/* ── Footer ──────────────────────────────────────────────────── */}
         <footer className="py-[42px] flex items-center justify-between">
-          <span className="text-xs tracking-[0.2em] text-black/30 font-medium uppercase">
+          <span className="text-[10px] tracking-[0.14em] text-black/30 font-medium uppercase">
             Strava · Mobile Record
           </span>
           <Link
             to="/"
-            className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
+            className="text-[10px] tracking-[0.14em] text-black/35 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
             style={{ outlineColor: AMBER }}
           >
             Marcea — Selected Work

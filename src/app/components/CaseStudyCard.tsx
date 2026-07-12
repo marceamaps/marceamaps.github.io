@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
+import { LABEL_CLASS } from "./caseStudyKit";
 
 type CaseStudyCardProps = {
   index: number;
@@ -35,7 +36,7 @@ export default function CaseStudyCard({
         </div>
 
         <div className="mt-6">
-          <span className="inline-flex items-center gap-2 px-5 py-[9px] rounded-full border border-black/20 text-xs font-semibold uppercase tracking-[0.14em] text-black/50 group-hover:border-black/40 group-hover:text-black transition-colors duration-200">
+          <span className={`inline-flex items-center gap-2 px-5 py-[9px] rounded-full border border-black/20 ${LABEL_CLASS} text-black/50 group-hover:border-black/40 group-hover:text-black transition-colors duration-200`}>
             View case study
             <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </span>

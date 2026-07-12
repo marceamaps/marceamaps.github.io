@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion } from "motion/react";
 import SaveFlowPrototype from "../components/SaveFlowPrototype";
+import { Eyebrow, FadeUp } from "../components/caseStudyKit";
 
 import redesignAllVideo from "../../assets/apple-watch-redesign/redesign-all.mp4";
 import appleFeature from "../../assets/apple-feature.png";
@@ -11,56 +11,6 @@ import beforeStats from "../../assets/apple-watch-redesign/Before-stats.png";
 
 const AMBER = "#E8640A";
 const BLUE  = "#738CC7";
-
-// ─── Primitives ───────────────────────────────────────────────────────────────
-
-function Eyebrow({
-  children,
-  amber = false,
-}: {
-  children: React.ReactNode;
-  amber?: boolean;
-}) {
-  return (
-    <div className="flex items-center gap-3 mb-5">
-      <div
-        aria-hidden
-        className="flex-shrink-0 w-[26px] h-[3px] rounded-sm"
-        style={{ background: BLUE }}
-      />
-      <p
-        className="text-xs tracking-[0.2em] font-medium uppercase leading-none"
-        style={{ color: amber ? AMBER : "rgba(0,0,0,0.35)" }}
-      >
-        {children}
-      </p>
-    </div>
-  );
-}
-
-function FadeUp({
-  children,
-  delay = 0,
-  className,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-}) {
-  const reduced = useReducedMotion();
-  if (reduced) return <div className={className}>{children}</div>;
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay, ease: [0.25, 0.1, 0.25, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -76,12 +26,12 @@ export default function AppleWatchRedesignCaseStudy() {
       >
         <Link
           to="/"
-          className="text-xs tracking-[0.2em] text-black/40 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
+          className="text-[10px] tracking-[0.14em] text-black/40 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
           style={{ outlineColor: AMBER }}
         >
           ← Marcea · Work
         </Link>
-        <span className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase">
+        <span className="text-[10px] tracking-[0.14em] text-black/35 font-medium uppercase">
           Apple Watch Redesign
         </span>
       </nav>
@@ -125,12 +75,12 @@ export default function AppleWatchRedesignCaseStudy() {
           <FadeUp delay={0.1} className="mt-12">
             <div className="flex items-center gap-3 mb-4">
               <span
-                className="text-[10px] font-semibold uppercase tracking-[0.18em] px-3 py-[5px] rounded-full text-white"
+                className="text-[10px] font-medium uppercase tracking-[0.14em] px-3 py-[5px] rounded-full text-white"
                 style={{ background: AMBER }}
               >
                 Before &amp; After
               </span>
-              <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-black/30">
+              <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-black/30">
                 The redesign
               </span>
             </div>
@@ -213,10 +163,10 @@ export default function AppleWatchRedesignCaseStudy() {
           <FadeUp delay={0.08} className="mt-10">
             <figure>
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] px-3 py-[5px] rounded-full bg-black/[0.07] text-black/40">
+                <span className="text-[10px] font-medium uppercase tracking-[0.14em] px-3 py-[5px] rounded-full bg-black/[0.07] text-black/40">
                   Before
                 </span>
-                <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-black/30">
+                <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-black/30">
                   pre-redesign experience
                 </span>
               </div>
@@ -233,7 +183,7 @@ export default function AppleWatchRedesignCaseStudy() {
                       className="w-full h-auto block"
                       style={{ filter: "drop-shadow(0 10px 24px rgba(26,26,26,.12))" }}
                     />
-                    <figcaption className="mt-5 text-[10px] tracking-[0.12em] text-black/30 font-medium uppercase text-center">
+                    <figcaption className="mt-5 text-[10px] tracking-[0.14em] text-black/30 font-medium uppercase text-center">
                       {label}
                     </figcaption>
                   </figure>
@@ -271,7 +221,7 @@ export default function AppleWatchRedesignCaseStudy() {
               "reliability as UX",
             ].map((pill, i) => (
               <FadeUp key={pill} delay={i * 0.04}>
-                <span className="inline-block px-3 py-[6px] rounded-full border border-black/20 text-[11px] font-medium uppercase tracking-[0.1em] text-black/60">
+                <span className="inline-block px-3 py-[6px] rounded-full border border-black/20 text-[10px] font-medium uppercase tracking-[0.14em] text-black/60">
                   {pill}
                 </span>
               </FadeUp>
@@ -290,7 +240,7 @@ export default function AppleWatchRedesignCaseStudy() {
             >
               <div>
                 <p
-                  className="text-[10px] font-semibold uppercase tracking-[0.18em] mb-1.5"
+                  className="text-[10px] font-medium uppercase tracking-[0.14em] mb-1.5"
                   style={{ color: BLUE }}
                 >
                   First feature built on this system
@@ -346,7 +296,7 @@ export default function AppleWatchRedesignCaseStudy() {
             >
               <div className="flex items-center gap-3 mb-3">
                 <span
-                  className="inline-block text-[10px] font-bold tracking-[0.18em] uppercase rounded-full px-3 py-1"
+                  className="inline-block text-[10px] font-medium uppercase tracking-[0.14em] rounded-full px-3 py-1"
                   style={{ color: BLUE, background: "rgba(115,140,199,0.10)" }}
                 >
                   Interactive — save flow states
@@ -374,45 +324,52 @@ export default function AppleWatchRedesignCaseStudy() {
             </h2>
           </FadeUp>
 
-          {/* Top metrics — 3 up */}
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {[
-              {
-                num: "+19%",
-                label: "YoY growth in Apple Watch athletes",
-              },
-              {
-                // TODO(marcea): +90K is an absolute count derived from
-                // "Sustained +10% lift in daily users after comms (+90K daily
-                // users)". Consider expressing as the underlying % (+10%)
-                // instead of the absolute for public-facing portfolio copy.
-                num: "+90K",
-                label: "Sustained lift in daily users after launch comms",
-              },
-              {
-                num: "-55%",
-                label: "CS tickets — vs. a goal of -15%. Beat it by 3.7×",
-              },
-            ].map(({ num, label }, i) => (
-              <FadeUp key={num} delay={i * 0.1}>
-                <p
-                  className="font-bold"
-                  style={{
-                    fontSize: "clamp(34px,4.8vw,48px)",
-                    lineHeight: 1,
-                    color: "#1A1A1A",
-                  }}
-                >
-                  {num}
-                </p>
-                <div
-                  aria-hidden
-                  className="mt-3 mb-3 w-[26px] h-[3px] rounded-sm"
-                  style={{ background: BLUE }}
+          {/* Top metrics + award image — 2-col */}
+          <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+            <div className="flex flex-col gap-8">
+              {[
+                {
+                  num: "+19%",
+                  label: "YoY growth in Apple Watch athletes",
+                },
+                {
+                  num: "+10%",
+                  label: "Sustained lift in daily users after launch comms",
+                },
+                {
+                  num: "-55%",
+                  label: "CS tickets — vs. a goal of -15%. Beat it by 3.7×",
+                },
+              ].map(({ num, label }, i) => (
+                <FadeUp key={num} delay={i * 0.1}>
+                  <p
+                    className="font-bold"
+                    style={{
+                      fontSize: "clamp(34px,4.8vw,48px)",
+                      lineHeight: 1,
+                      color: "#1A1A1A",
+                    }}
+                  >
+                    {num}
+                  </p>
+                  <div
+                    aria-hidden
+                    className="mt-3 mb-3 w-[26px] h-[3px] rounded-sm"
+                    style={{ background: BLUE }}
+                  />
+                  <p className="text-sm leading-snug text-black/55">{label}</p>
+                </FadeUp>
+              ))}
+            </div>
+            <FadeUp delay={0.15}>
+              <div className="overflow-hidden rounded-[14px]" style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.12), 0 2px 10px rgba(0,0,0,0.07)" }}>
+                <img
+                  src={editorsChoice}
+                  alt="Strava's 2025 App Store Award recognition"
+                  className="w-full h-auto block"
                 />
-                <p className="text-sm leading-snug text-black/55">{label}</p>
-              </FadeUp>
-            ))}
+              </div>
+            </FadeUp>
           </div>
 
           {/* Save flow callout */}
@@ -489,46 +446,13 @@ export default function AppleWatchRedesignCaseStudy() {
 
           {/* Press */}
           <FadeUp delay={0.05} className="mt-10">
-            <div className="flex flex-col gap-4">
-              {[
-                { src: appleFeature,   alt: "Strava featured on Apple's App Store — Apple Watch Redesign" },
-                { src: editorsChoice,  alt: "Strava's 2025 App Store Award recognition" },
-              ].map(({ src, alt }) => (
-                <div key={alt} className="overflow-hidden rounded-[14px]">
-                  <img src={src} alt={alt} className="w-full h-auto block" />
-                </div>
-              ))}
+            <div className="overflow-hidden rounded-[14px]">
+              <img src={appleFeature} alt="Strava featured on Apple's App Store — Apple Watch Redesign" className="w-full h-auto block" />
             </div>
             <p className="mt-3 text-xs tracking-[0.05em] text-black/40 font-medium">
               Apple spotlighted the redesign across 5 surfaces — .com, newsroom,
               and more. Coverage across 22 outlets, 96% positive/neutral sentiment.
             </p>
-          </FadeUp>
-        </section>
-
-        {/* ── What I'd Change ─────────────────────────────────────────── */}
-        <section className="py-[80px]">
-          <FadeUp>
-            <Eyebrow>What I'd change</Eyebrow>
-          </FadeUp>
-          <FadeUp delay={0.05}>
-            <div className="rounded-[14px] border border-black/[0.12] p-7 sm:p-10">
-              <p className="text-[10px] tracking-[0.2em] font-medium uppercase text-black/30 mb-6">
-                Field notes
-              </p>
-              <div className="space-y-5">
-                {[
-                  "The Apple Watch work ran in parallel with Mobile Record — two of Strava's highest-visibility projects at the same time. I managed the context-switch, but the competing priorities compressed the feedback loops. More structured handoff time between the two would've helped both.",
-                  "The save flow earned a lot of the headline metrics. Looking back, I'd have pushed for earlier engineering alignment on the reliability problem — we found the framing late. Treating reliability as a UX problem from day one would have been faster.",
-                  "The redesign unlocked a design-to-design relationship with Apple that didn't exist before. I'm proud of that — but it also means there's now a higher bar for everything that follows on Watch. That's a good problem to have.",
-                  "I built this with one staff engineer to whom I owe a lot.",
-                ].map((para, i) => (
-                  <p key={i} className="text-[17px] leading-[1.66] text-black/55">
-                    {para}
-                  </p>
-                ))}
-              </div>
-            </div>
           </FadeUp>
         </section>
 
@@ -543,20 +467,20 @@ export default function AppleWatchRedesignCaseStudy() {
               Record · shipped to 100%.
             </p>
             <p className="mt-4 text-[17px] leading-[1.66] text-black/40">
-              I built this with a team — and the Apple partnership that came
-              out of it belongs to everyone who worked on it.
+              Small, live team subset — one staff engineer, one PM — built in
+              close collaboration with Apple.
             </p>
           </FadeUp>
         </section>
 
         {/* ── Footer ──────────────────────────────────────────────────── */}
         <footer className="py-[42px] flex items-center justify-between">
-          <span className="text-xs tracking-[0.2em] text-black/30 font-medium uppercase">
+          <span className="text-[10px] tracking-[0.14em] text-black/30 font-medium uppercase">
             Strava · Apple Watch Redesign
           </span>
           <Link
             to="/"
-            className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
+            className="text-[10px] tracking-[0.14em] text-black/35 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
             style={{ outlineColor: AMBER }}
           >
             Marcea — Selected Work

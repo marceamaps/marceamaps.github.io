@@ -1,79 +1,21 @@
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion } from "motion/react";
+import { Eyebrow, FadeUp, ImgPlaceholder } from "../components/caseStudyKit";
 
 // Image imports — uncomment as assets arrive in src/assets/adp/
-// import adpMapView from "../../assets/adp/adp-map-view.png";
-// import adpHighlights from "../../assets/adp/adp-highlights.png";
-// import adpTrophyDetail from "../../assets/adp/adp-trophy-detail.png";
+import adpMediaView from "../../assets/adp/adp-media.png";
+import adpHighlights from "../../assets/adp/adp-default.png";
+import adpTrophyDetail from "../../assets/adp/adp-trophy.png";
 // import adpPermutationMatrix from "../../assets/adp/adp-permutation-matrix.png";
+import adpNonGps from "../../assets/adp/adp-non-gps.png";
+import oldMap from "../../assets/adp/old-map.PNG";
+import oldMedia from "../../assets/adp/old-media.PNG";
+import oldFullPage from "../../assets/adp/old-default.PNG";
 // import adpMidSheet from "../../assets/adp/adp-mid-sheet.png";
 // import adpHighlightFocused from "../../assets/adp/adp-highlight-focused.png";
 // import adpFullSubscriber from "../../assets/adp/adp-full-subscriber.png";
 // import adpPolylineFocused from "../../assets/adp/adp-polyline-focused.png";
 
 const BLUE = "#738CC7";
-
-// ─── Primitives ───────────────────────────────────────────────────────────────
-
-function Eyebrow({
-  children,
-  amber = false,
-}: {
-  children: React.ReactNode;
-  amber?: boolean;
-}) {
-  return (
-    <div className="flex items-center gap-3 mb-5">
-      <div
-        aria-hidden
-        className="flex-shrink-0 w-[26px] h-[3px] rounded-sm"
-        style={{ background: BLUE }}
-      />
-      <p
-        className="text-xs tracking-[0.2em] font-medium uppercase leading-none"
-        style={{ color: amber ? BLUE : "rgba(0,0,0,0.35)" }}
-      >
-        {children}
-      </p>
-    </div>
-  );
-}
-
-function FadeUp({
-  children,
-  delay = 0,
-  className,
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-}) {
-  const reduced = useReducedMotion();
-  if (reduced) return <div className={className}>{children}</div>;
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay, ease: [0.25, 0.1, 0.25, 1] }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-// ─── Image placeholder ────────────────────────────────────────────────────────
-
-function ImgPlaceholder({ label }: { label: string }) {
-  return (
-    <div className="bg-black/[0.04] border border-dashed border-black/15 rounded-[14px] flex items-center justify-center py-16">
-      <p className="text-xs tracking-[0.1em] text-black/30 font-medium uppercase">
-        {label}
-      </p>
-    </div>
-  );
-}
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -89,12 +31,12 @@ export default function ADPCaseStudy() {
       >
         <Link
           to="/"
-          className="text-xs tracking-[0.2em] text-black/40 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
+          className="text-[10px] tracking-[0.14em] text-black/40 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
           style={{ outlineColor: BLUE }}
         >
           ← Marcea · Work
         </Link>
-        <span className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase">
+        <span className="text-[10px] tracking-[0.14em] text-black/35 font-medium uppercase">
           Activity Details Page
         </span>
       </nav>
@@ -140,37 +82,89 @@ export default function ADPCaseStudy() {
           {/* After label + 3-up device shots */}
           <div className="mt-12 flex items-center gap-3 mb-4">
             <span
-              className="text-[10px] font-semibold uppercase tracking-[0.18em] px-3 py-[5px] rounded-full text-white"
+              className="text-[10px] font-medium uppercase tracking-[0.14em] px-3 py-[5px] rounded-full text-white"
               style={{ background: BLUE }}
             >
               After
             </span>
-            <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-black/30">
+            <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-black/30">
               The redesign
             </span>
           </div>
           <div className="grid grid-cols-3 gap-4 sm:gap-6">
             {[
               {
-                // src: adpMapView,
-                label: "Map view",
-                alt: "Activity Details Page map view with MRE-rendered route polyline",
+                src: adpMediaView,
+                label: "Media view",
+                alt: "Activity Details Page media view with photo carousel",
               },
               {
-                // src: adpHighlights,
+                src: adpHighlights,
                 label: "Polyline highlights",
                 alt: "Polyline highlights chip bar showing segments, trophies, and local legends",
               },
               {
-                // src: adpTrophyDetail,
+                src: adpTrophyDetail,
                 label: "Trophy detail",
                 alt: "Trophy detail sheet — tapping a polyline trophy chip frames the route to that effort",
               },
-            ].map(({ label, alt }, i) => (
+            ].map(({ src, label, alt }, i) => (
               <FadeUp key={label} delay={i * 0.1}>
                 <figure>
-                  <ImgPlaceholder label={label} />
-                  <figcaption className="mt-5 text-[10px] tracking-[0.12em] text-black/30 font-medium uppercase text-center">
+                  {src ? (
+                    <img
+                      src={src}
+                      alt={alt}
+                      className="w-full h-auto block rounded-[14px]"
+                      style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.12)" }}
+                    />
+                  ) : (
+                    <ImgPlaceholder label={label} />
+                  )}
+                  <figcaption className="mt-5 text-[10px] tracking-[0.14em] text-black/30 font-medium uppercase text-center">
+                    {label}
+                  </figcaption>
+                </figure>
+              </FadeUp>
+            ))}
+          </div>
+
+          {/* Before label + 3-up device shots — pre-redesign experience */}
+          <div className="mt-14 flex items-center gap-3 mb-4">
+            <span className="text-[10px] font-medium uppercase tracking-[0.14em] px-3 py-[5px] rounded-full bg-black/[0.07] text-black/40">
+              Before
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-[0.14em] text-black/30">
+              pre-redesign experience
+            </span>
+          </div>
+          <div className="grid grid-cols-3 gap-4 sm:gap-6">
+            {[
+              {
+                src: oldMap,
+                label: "Map view",
+                alt: "Old Activity Details Page map view — Mapbox-branded, Save Route action",
+              },
+              {
+                src: oldMedia,
+                label: "Media view",
+                alt: "Old Activity Details Page media view — small map thumbnail plus photo carousel",
+              },
+              {
+                src: oldFullPage,
+                label: "Full activity page",
+                alt: "Old Activity Details Page full view — map and stats, old app navigation visible",
+              },
+            ].map(({ src, label, alt }, i) => (
+              <FadeUp key={label} delay={i * 0.1}>
+                <figure>
+                  <img
+                    src={src}
+                    alt={alt}
+                    className="w-full h-auto block rounded-[14px] opacity-90"
+                    style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.12)" }}
+                  />
+                  <figcaption className="mt-5 text-[10px] tracking-[0.14em] text-black/30 font-medium uppercase text-center">
                     {label}
                   </figcaption>
                 </figure>
@@ -230,13 +224,29 @@ export default function ADPCaseStudy() {
           </FadeUp>
 
           <FadeUp delay={0.08} className="mt-10">
-            <figure>
-              <ImgPlaceholder label="adp-permutation-matrix.png" />
-              <figcaption className="mt-5 text-xs tracking-[0.05em] text-black/40 font-medium">
-                Mapping every configuration — user state, content state,
-                platform — is what got leadership back on board.
-              </figcaption>
-            </figure>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <figure>
+                <ImgPlaceholder label="adp-permutation-matrix.png" />
+                <figcaption className="mt-5 text-xs tracking-[0.05em] text-black/40 font-medium">
+                  Mapping every configuration — user state, content state,
+                  platform — is what got leadership back on board.
+                </figcaption>
+              </figure>
+              <figure>
+                <img
+                  src={adpNonGps}
+                  alt="Non-GPS Activity Details Page — no map, no polyline, workout stats and heart rate only"
+                  className="w-full h-auto block rounded-[14px]"
+                  style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.12)" }}
+                />
+                <figcaption className="mt-5 text-xs tracking-[0.05em] text-black/40 font-medium">
+                  One permutation made concrete: a non-GPS activity has no map
+                  and no polyline at all — a completely different configuration
+                  from the GPS-with-map case above, before even factoring in
+                  media and subscriber state.
+                </figcaption>
+              </figure>
+            </div>
           </FadeUp>
         </section>
 
@@ -267,7 +277,7 @@ export default function ADPCaseStudy() {
             ].map(({ beat, heading, body }, i) => (
               <FadeUp key={beat} delay={i * 0.1}>
                 <p
-                  className="text-[10px] tracking-[0.2em] font-medium uppercase mb-4"
+                  className="text-[10px] tracking-[0.14em] font-medium uppercase mb-4"
                   style={{ color: BLUE }}
                 >
                   {beat}
@@ -290,7 +300,7 @@ export default function ADPCaseStudy() {
               ].map(({ label, caption }, i) => (
                 <figure key={label}>
                   <ImgPlaceholder label={label} />
-                  <figcaption className="mt-5 text-[10px] tracking-[0.12em] text-black/30 font-medium uppercase text-center">
+                  <figcaption className="mt-5 text-[10px] tracking-[0.14em] text-black/30 font-medium uppercase text-center">
                     {caption}
                   </figcaption>
                 </figure>
@@ -314,7 +324,7 @@ export default function ADPCaseStudy() {
             style={{ borderColor: BLUE, background: "rgba(115,140,199,0.02)" }}
           >
             <span
-              className="inline-block text-[10px] font-bold tracking-[0.18em] uppercase rounded-full px-3 py-1 mb-4"
+              className="inline-block text-[10px] font-medium tracking-[0.14em] uppercase rounded-full px-3 py-1 mb-4"
               style={{ color: BLUE, background: "rgba(115,140,199,0.10)" }}
             >
               Interactive — build in Claude Code
@@ -391,7 +401,7 @@ export default function ADPCaseStudy() {
                 background: "rgba(115,140,199,0.04)",
               }}
             >
-              <Eyebrow amber>The loop closes</Eyebrow>
+              <Eyebrow color={BLUE}>The loop closes</Eyebrow>
               <p className="font-bold text-[20px] leading-snug">
                 The thing leadership was worried about got better. The thing I
                 built because I believed in it became the feature athletes
@@ -426,7 +436,7 @@ export default function ADPCaseStudy() {
           </FadeUp>
           <FadeUp delay={0.05}>
             <div className="rounded-[14px] border border-black/[0.12] p-7 sm:p-10">
-              <p className="text-[10px] tracking-[0.2em] font-medium uppercase text-black/30 mb-6">
+              <p className="text-[10px] tracking-[0.14em] font-medium uppercase text-black/30 mb-6">
                 Field notes
               </p>
               <div className="space-y-5">
@@ -465,12 +475,12 @@ export default function ADPCaseStudy() {
 
         {/* ── Footer ──────────────────────────────────────────────────── */}
         <footer className="py-[42px] flex items-center justify-between">
-          <span className="text-xs tracking-[0.2em] text-black/30 font-medium uppercase">
+          <span className="text-[10px] tracking-[0.14em] text-black/30 font-medium uppercase">
             Strava · Activity Details Page
           </span>
           <Link
             to="/"
-            className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
+            className="text-[10px] tracking-[0.14em] text-black/35 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
             style={{ outlineColor: BLUE }}
           >
             Marcea — Selected Work

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import meLogo from "../../assets/me-logo.svg";
 
 // ─── SVG path data from contours.svg (794×445 viewBox) ───────────────────────
 const RAW_PATHS = [
@@ -235,8 +236,10 @@ export default function Hero() {
     const BURST_SHATTER   = 0.10; // fraction of duration spent in shatter phase (0→1)
 
     let burstStartTime = 0;
+    let fadeStartTime  = 0;
 
     const draw = (now: number) => {
+      if (fadeStartTime === 0) fadeStartTime = now;
       rafRef.current = requestAnimationFrame(draw);
       idleT.current += IDLE_SPEED;
 
@@ -344,7 +347,7 @@ export default function Hero() {
 
       ctx.clearRect(0, 0, W, H);
       ctx.lineJoin = "round";
-      ctx.lineCap  = "round";
+      ctx.lineCap  = "butt";
 
       // Cursor-following gradient: Terracotta (close) → Cream (mid) → Slate Blue (far)
       const GRADIENT_STOPS = [
@@ -407,10 +410,19 @@ export default function Hero() {
             return [wx * scaleX, wy * scaleY];
           });
 
-          // Second pass: draw each segment coloured by its midpoint distance from cursor
+          // Second pass: draw each segment coloured by its midpoint distance from cursor.
+          // Midpoint-to-midpoint quadratic beziers: each data point is a control point,
+          // midpoints between consecutive points are the on-curve anchors. This smooths
+          // the polyline into a continuous curve with no angular joints or dot artifacts.
           for (let i = 0; i < warped.length - 1; i++) {
             const [x0, y0] = warped[i];
             const [x1, y1] = warped[i + 1];
+            // On-curve start: midpoint of prev→current (exact point at chain start)
+            const sx = i === 0 ? x0 : (warped[i - 1][0] + x0) / 2;
+            const sy = i === 0 ? y0 : (warped[i - 1][1] + y0) / 2;
+            // On-curve end: midpoint of current→next (exact point at chain end)
+            const ex = i === warped.length - 2 ? x1 : (x0 + x1) / 2;
+            const ey = i === warped.length - 2 ? y1 : (y0 + y1) / 2;
             // Midpoint back in SVG units for distance measurement
             const midSvgX = (x0 + x1) / 2 / scaleX;
             const midSvgY = (y0 + y1) / 2 / scaleY;
@@ -419,11 +431,13 @@ export default function Hero() {
             const tRaw = Math.min(midDist / COLOR_RADIUS, 1);
             const tEased = tRaw * tRaw * (3 - 2 * tRaw);
             const { r, g, bl } = interpColor(tEased);
-            const alpha = 0.78 - tEased * 0.28;
+            const fadeRaw = Math.min((now - fadeStartTime) / 2000, 1);
+            const fadeIn  = fadeRaw * fadeRaw * (3 - 2 * fadeRaw); // smoothstep
+            const alpha = (0.78 - tEased * 0.28) * fadeIn;
             ctx.strokeStyle = `rgba(${r}, ${g}, ${bl}, ${alpha})`;
             ctx.beginPath();
-            ctx.moveTo(x0, y0);
-            ctx.lineTo(x1, y1);
+            ctx.moveTo(sx, sy);
+            ctx.quadraticCurveTo(x0, y0, ex, ey);
             ctx.stroke();
           }
         });
@@ -451,37 +465,35 @@ export default function Hero() {
         className="absolute top-16 left-7 text-[11px] tracking-[0.25em] text-black/30 pointer-events-none"
         initial={reduced ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={reduced ? undefined : { duration: 0.6, delay: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
+        transition={reduced ? undefined : { duration: 1.2, delay: 1.4, ease: [0.25, 0.1, 0.25, 1] }}
       >
         45.9237° N &nbsp; 6.8694° E &nbsp;—&nbsp; Chamonix, France
       </motion.p>
 
-      {/* Name + tagline — bottom-left */}
+      {/* me. mark — centered */}
       <motion.div
-        className="absolute bottom-12 left-7 flex flex-col gap-3"
-        initial={reduced ? undefined : { opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={reduced ? undefined : { duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+        className="absolute pointer-events-none"
+        style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
+        initial={reduced ? undefined : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={reduced ? undefined : { duration: 1.6, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
       >
-        <p className="text-6xl md:text-8xl lg:text-[112px] font-bold tracking-[-0.03em] leading-none text-black/60">
-          Product Designer
-        </p>
-        <h1 className="text-6xl md:text-8xl lg:text-[112px] font-bold tracking-[-0.03em] leading-none">
-          Marcea Ennamorato
-        </h1>
-        <p className="text-base md:text-lg text-black/40 tracking-[0.06em] uppercase">
-          maps and motion
-        </p>
+        <img
+          src={meLogo}
+          alt="me."
+          style={{ width: "clamp(180px, 28vw, 340px)", height: "auto", display: "block" }}
+          draggable={false}
+        />
       </motion.div>
 
-      {/* Scroll indicator — bottom-right, clear of text block */}
+      {/* Scroll indicator — bottom-right */}
       <motion.p
-        className="absolute bottom-8 right-7 text-xs tracking-[0.3em] text-black/30"
-        initial={reduced ? undefined : { opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={reduced ? undefined : { duration: 0.45, delay: 1.05, ease: [0.25, 0.1, 0.25, 1] }}
+        className="absolute bottom-8 right-7 text-[10px] font-medium uppercase tracking-[0.14em] text-black/30"
+        initial={reduced ? undefined : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={reduced ? undefined : { duration: 1.2, delay: 1.8, ease: [0.25, 0.1, 0.25, 1] }}
       >
-        ↓ &nbsp; scroll
+        scroll ↓
       </motion.p>
 
       {/* GPS cursor */}

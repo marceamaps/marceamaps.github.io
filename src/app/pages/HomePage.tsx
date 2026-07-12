@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { motion, useInView } from "motion/react";
 import Hero from "../components/Hero";
 import FloatingNav from "../components/FloatingNav";
 import AboutSection from "../components/AboutSection";
@@ -63,6 +65,33 @@ const CASE_STUDIES = [
   },
 ];
 
+function IdentityReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-10%" });
+
+  return (
+    <div ref={ref} className="px-8 pt-28 pb-16 max-w-7xl mx-auto">
+      <motion.p
+        className="text-[10px] font-medium uppercase tracking-[0.14em] text-black/35 mb-5"
+        initial={{ opacity: 0, y: 14 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        Product Designer
+      </motion.p>
+      <motion.h1
+        className="font-bold tracking-tight leading-[1.0]"
+        style={{ fontSize: "clamp(52px, 9vw, 128px)", letterSpacing: "-0.03em" }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.9, delay: 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+      >
+        Marcea Ennamorato
+      </motion.h1>
+    </div>
+  );
+}
+
 export default function HomePage() {
   return (
     <>
@@ -72,6 +101,9 @@ export default function HomePage() {
       <section id="home">
         <Hero />
       </section>
+
+      {/* Identity */}
+      <IdentityReveal />
 
       {/* Projects */}
       <section id="projects" className="py-24 px-8 max-w-7xl mx-auto">

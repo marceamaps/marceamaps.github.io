@@ -1,7 +1,8 @@
-import { useState, useRef, useCallback, type ReactNode } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import LiveSegmentsPrototype, { type LiveSegmentsPrototypeHandle } from "../components/LiveSegmentsPrototype";
+import { Eyebrow, FadeUp, TYPE } from "../components/caseStudyKit";
 
 // ── Assets ────────────────────────────────────────────────────────────────────
 import finalDesignImg      from "../../assets/live-segments/live-segment-final-design.png";
@@ -14,8 +15,7 @@ import oldMobile05         from "../../assets/live-segments/live-segments-old-05
 import wavelightExampleImg from "../../assets/live-segments/Wavelight-example.png";
 // @ts-ignore – Vite resolves spaces in asset paths correctly
 import wavelightGif        from "../../assets/live-segments/Original Wavelight.gif";
-// @ts-ignore
-import adaptedGif          from "../../assets/live-segments/Adapted Wavelight.gif";
+import appleVisitImg       from "../../assets/live-segments/apple-visit.jpg";
 // @ts-ignore
 import adaptedWavelight4   from "../../assets/live-segments/Adapated Wavelight 4.mov";
 // @ts-ignore
@@ -26,36 +26,6 @@ import avatarArcGif        from "../../assets/live-segments/Avatar Wavelight.gif
 import outerRingGif        from "../../assets/live-segments/Outer Ring High Res GIF.gif";
 
 const BLUE = "#738CC7";
-
-// ── Primitives ────────────────────────────────────────────────────────────────
-function Eyebrow({ children, dark = false }: { children: ReactNode; dark?: boolean }) {
-  return (
-    <div className="flex items-center gap-3 mb-5">
-      <div aria-hidden className="flex-shrink-0 w-[26px] h-[3px] rounded-sm" style={{ background: BLUE }} />
-      <p className="text-xs tracking-[0.2em] font-medium uppercase leading-none"
-        style={{ color: dark ? BLUE : "rgba(0,0,0,0.35)" }}>
-        {children}
-      </p>
-    </div>
-  );
-}
-
-function FadeUp({ children, delay = 0, className }: {
-  children: ReactNode; delay?: number; className?: string;
-}) {
-  const reduced = useReducedMotion();
-  if (reduced) return <div className={className}>{children}</div>;
-  return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay, ease: [0.25, 0.1, 0.25, 1] }}
-    >{children}</motion.div>
-  );
-}
-
 
 // ── Prototype tab data ────────────────────────────────────────────────────────
 type TabId = "approaching" | "competing" | "celebration";
@@ -103,10 +73,10 @@ export default function LiveSegmentsCaseStudy() {
       >
         <Link
           to="/"
-          className="text-xs tracking-[0.2em] text-black/40 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
+          className="text-[10px] tracking-[0.14em] text-black/40 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
           style={{ outlineColor: BLUE }}
         >← Marcea · Work</Link>
-        <span className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase">
+        <span className="text-[10px] tracking-[0.14em] text-black/35 font-medium uppercase">
           Live Segments
         </span>
       </nav>
@@ -148,8 +118,8 @@ export default function LiveSegmentsCaseStudy() {
                 borderRadius: 100,
                 background: BLUE,
                 color: "white",
-                fontSize: 11,
-                fontWeight: 700,
+                fontSize: 10,
+                fontWeight: 500,
                 letterSpacing: "0.14em",
                 textTransform: "uppercase" as const,
               }}>After</span>
@@ -219,7 +189,7 @@ export default function LiveSegmentsCaseStudy() {
                 <span key={tag} style={{
                   padding: "6px 14px", borderRadius: 100,
                   border: "1px solid rgba(0,0,0,0.12)",
-                  fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
+                  fontSize: 10, fontWeight: 500, letterSpacing: "0.14em",
                   textTransform: "uppercase" as const, color: "rgba(0,0,0,0.55)",
                 }}>{tag}</span>
               ))}
@@ -232,7 +202,7 @@ export default function LiveSegmentsCaseStudy() {
         <section className="py-[80px]">
           <FadeUp>
             <Eyebrow>The problem</Eyebrow>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontSize: TYPE.h2.fontSize, fontWeight: 700, lineHeight: TYPE.h2.lineHeight, letterSpacing: "-0.02em" }}>
               The metaphor was the same everywhere.<br />And it wasn't working.
             </h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 24 }}>
@@ -259,7 +229,7 @@ export default function LiveSegmentsCaseStudy() {
         <section className="py-[80px]">
           <FadeUp>
             <Eyebrow>Where it started</Eyebrow>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontSize: TYPE.h2.fontSize, fontWeight: 700, lineHeight: TYPE.h2.lineHeight, letterSpacing: "-0.02em" }}>
               The mobile version had the same underlying logic.
             </h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 24 }}>
@@ -290,16 +260,16 @@ export default function LiveSegmentsCaseStudy() {
       {/* ── Metaphors through track meets (dark) ─────────────────────────────── */}
       <section className="pb-[100px]" style={{ background: "#0A0A0A" }}>
         <div className="max-w-[880px] mx-auto px-7" style={{ paddingTop: 64 }}>
-          <img
-            src={wavelightExampleImg}
-            alt="Wavelight at a track meet — a pulse of light at the inside lane marking goal pace"
-            style={{ display: "block", width: "100%", borderRadius: 12, marginBottom: 64 }}
-          />
-        </div>
-        <div className="max-w-[880px] mx-auto px-7">
           <FadeUp>
+            <div style={{ marginBottom: 64 }}>
+              <img
+                src={wavelightExampleImg}
+                alt="Wavelight at a track meet — a pulse of light at the inside lane marking goal pace"
+                style={{ display: "block", width: "100%", borderRadius: 12 }}
+              />
+            </div>
             <Eyebrow dark>Metaphors through track meets</Eyebrow>
-            <h2 style={{ color: "white", fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em", maxWidth: 680, marginBottom: 32 }}>
+            <h2 style={{ color: "white", fontSize: TYPE.h2.fontSize, fontWeight: 700, lineHeight: TYPE.h2.lineHeight, letterSpacing: "-0.02em", maxWidth: 680, marginBottom: 32 }}>
               I'm a track and field fan — thanks to my former competitive runner partner.
             </h2>
             <p style={{ fontSize: 20, lineHeight: 1.65, color: "rgba(255,255,255,0.8)", maxWidth: 640, marginBottom: 20 }}>
@@ -320,7 +290,7 @@ export default function LiveSegmentsCaseStudy() {
         <section className="py-[80px]">
           <FadeUp>
             <Eyebrow>Adapting the metaphor</Eyebrow>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontSize: TYPE.h2.fontSize, fontWeight: 700, lineHeight: TYPE.h2.lineHeight, letterSpacing: "-0.02em" }}>
               Metaphorical iterations to the solution
             </h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
@@ -353,8 +323,8 @@ export default function LiveSegmentsCaseStudy() {
                       <img src={src} alt={label} style={{ display: "block", width: "100%", borderRadius: 10 }} />
                     )}
                     <p style={{
-                      marginTop: 10, fontSize: 11, fontWeight: 600,
-                      letterSpacing: "0.12em", textTransform: "uppercase" as const,
+                      marginTop: 10, fontSize: 10, fontWeight: 500,
+                      letterSpacing: "0.14em", textTransform: "uppercase" as const,
                       color: kept ? "rgba(60,200,100,0.8)" : "rgba(0,0,0,0.4)",
                       textAlign: "center" as const,
                     }}>{label}</p>
@@ -379,7 +349,7 @@ export default function LiveSegmentsCaseStudy() {
                 </p>
                 <div style={{ marginTop: 32, padding: "20px 24px", background: "rgba(255,255,255,0.04)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
                   <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, fontStyle: "italic" }}>"Two icons overwhelming at pace. Users glance at colour, not icons."</p>
-                  <p style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", marginTop: 8, letterSpacing: "0.08em", textTransform: "uppercase" as const }}>Research finding</p>
+                  <p style={{ fontSize: 10, fontWeight: 500, color: "rgba(255,255,255,0.25)", marginTop: 8, letterSpacing: "0.14em", textTransform: "uppercase" as const }}>Research finding</p>
                 </div>
               </div>
               <div style={{ display: "flex", flexDirection: "column" }}>
@@ -389,7 +359,7 @@ export default function LiveSegmentsCaseStudy() {
                 </p>
                 <div style={{ marginTop: 32, padding: "20px 24px", background: "rgba(255,255,255,0.04)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
                   <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, fontStyle: "italic" }}>"Reduced areas trying to get user's attention. Easily gauge stats while glancing."</p>
-                  <p style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", marginTop: 8, letterSpacing: "0.08em", textTransform: "uppercase" as const }}>Research finding</p>
+                  <p style={{ fontSize: 10, fontWeight: 500, color: "rgba(255,255,255,0.25)", marginTop: 8, letterSpacing: "0.14em", textTransform: "uppercase" as const }}>Research finding</p>
                 </div>
               </div>
             </div>
@@ -426,7 +396,7 @@ export default function LiveSegmentsCaseStudy() {
         <div className="max-w-[880px] mx-auto px-7">
           <FadeUp>
             <Eyebrow>The full experience</Eyebrow>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontSize: TYPE.h2.fontSize, fontWeight: 700, lineHeight: TYPE.h2.lineHeight, letterSpacing: "-0.02em" }}>
               The ring doesn't represent the PR.<br />The ring is you.
             </h2>
             <p style={{ fontSize: 20, lineHeight: 1.65, color: "rgba(0,0,0,0.8)", marginTop: 24 }}>
@@ -502,7 +472,7 @@ export default function LiveSegmentsCaseStudy() {
         <section className="py-[80px]">
           <FadeUp>
             <Eyebrow>The anatomy</Eyebrow>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontSize: TYPE.h2.fontSize, fontWeight: 700, lineHeight: TYPE.h2.lineHeight, letterSpacing: "-0.02em" }}>
               Five elements. Each one earned its place.
             </h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20, marginBottom: 16 }}>
@@ -550,7 +520,7 @@ export default function LiveSegmentsCaseStudy() {
         <section className="py-[80px]">
           <FadeUp>
             <Eyebrow>The result</Eyebrow>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontSize: TYPE.h2.fontSize, fontWeight: 700, lineHeight: TYPE.h2.lineHeight, letterSpacing: "-0.02em" }}>
               Athletes raced. And they finished.
             </h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
@@ -590,42 +560,30 @@ export default function LiveSegmentsCaseStudy() {
         {/* Apple Park design reviews */}
         <section className="py-[80px]">
           <FadeUp>
-            <Eyebrow>Apple Park design reviews</Eyebrow>
-            <h2 style={{ fontSize: "clamp(28px,4vw,42px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}>
-              Three sessions. A few thousand feet of elevation difference between me and Cupertino.
+            <div style={{ marginBottom: 44 }}>
+              <img
+                src={appleVisitImg}
+                alt="At Apple Park for the design review"
+                style={{ display: "block", width: "100%", borderRadius: 12 }}
+              />
+            </div>
+            <Eyebrow>Working with Apple</Eyebrow>
+            <h2 style={{ fontSize: TYPE.h2.fontSize, fontWeight: 700, lineHeight: TYPE.h2.lineHeight, letterSpacing: "-0.02em" }}>
+              My job in the room wasn't to defend the design — it was to keep everyone rowing in the same direction.
             </h2>
             <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
-              Part of the work that made this possible wasn't the design itself — it was the relationship. The Apple Watch team reviewed the Live Segments work at three points across the project.
+              Across three sessions at Apple Park, I ran point on facilitating: sharing the work, pulling honest feedback out of the room instead of polite nods, finding where we actually had consensus, and following up on the open threads between sessions so nothing stalled.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
+              A good chunk of that time went to explaining what Live Segments even was before we could talk about how it looked — why athletes care about racing themselves, why feedback on a live, mid-effort experience works differently than reviewing static screens. I was in the room representing Strava's athletes as much as the design itself.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
+              The one instinct that shaped almost everything downstream: never make someone decide anything mid-effort if we could help it. Don't force a mode switch. Don't ask someone to commit to a goal under pressure. Let people stay exactly where they are, and drill into a segment only if they want to.
+            </p>
+            <p style={{ fontSize: 17, lineHeight: 1.65, color: "rgba(0,0,0,0.55)", marginTop: 20 }}>
+              The moments that worked showed up immediately, not just in the results later. The first time we shared the finished visualization with the room, someone said: "This looks like such a beautiful screen."
             </p>
           </FadeUp>
-
-          <div className="space-y-5 mt-8">
-            {[
-              {
-                date: "June 2025 · Apple Park · Horseshoe orientation",
-                title: "They asked immediately: why is the gap at the top?",
-                body: "We showed the approaching state — the horseshoe draining counter-clockwise as an athlete closes distance to the start. It was early, before the competing state was fully resolved. The Apple Watch team's first instinct was to question the gap placement. Why open at the top? We talked through countdown logic, how a draining ring reads differently depending on where it opens, whether the metaphor was more clock or gauge. The top gap stayed — it reads like a countdown, which was right. But we left that session with a much cleaner rationale for it, and a shared language around what the horseshoe was meant to do.",
-              },
-              {
-                date: "June 2025 · Apple Park · The avatar on the arc",
-                title: '"This looks like such a beautiful screen."',
-                body: 'The first time we showed the competing state with the user avatar riding the arc tip, the room changed. Someone from the Apple Watch design team called it "an iconic view." Someone else said "this looks like such a beautiful screen." We hadn\'t expected the avatar to be the moment — we thought the color coding would get the most attention. But the avatar riding the light was the thing that made it feel native to WatchOS rather than ported from mobile. That reaction gave us confidence we were done exploring the one-object direction and ready to refine it.',
-              },
-              {
-                date: "July 18, 2025 · Apple Park · Accessibility and final configuration",
-                title: "They pushed the arrow bigger than we'd designed it.",
-                body: "The final Apple Park session was about the stat configuration and the directional arrow. We showed three variants for the center stats — time ahead/behind, pace differential, and distance remaining. Time ahead/behind won clearly, but the conversation that changed the most was about the arrow. The Apple team's accessibility bar was higher than ours. They wanted the ▲/▼ larger, heavier, more prominent — something that worked independently of the color signal for athletes with color vision differences. That feedback directly shaped the final arrow weight and sizing. We left with alignment on all five elements and a cleaner story for why each one was there.",
-              },
-            ].map(({ date, title, body }, i) => (
-              <FadeUp key={i} delay={i * 0.06}>
-                <div style={{ border: "1px solid rgba(0,0,0,0.08)", borderRadius: 14, padding: "32px 36px" }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase" as const, color: BLUE, marginBottom: 14 }}>{date}</p>
-                  <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 12, lineHeight: 1.3 }}>{title}</h3>
-                  <p style={{ fontSize: 16, lineHeight: 1.65, color: "rgba(0,0,0,0.55)" }}>{body}</p>
-                </div>
-              </FadeUp>
-            ))}
-          </div>
         </section>
 
 
@@ -645,12 +603,12 @@ export default function LiveSegmentsCaseStudy() {
 
         {/* Footer */}
         <footer className="py-[42px] flex items-center justify-between">
-          <span className="text-xs tracking-[0.2em] text-black/30 font-medium uppercase">
+          <span className="text-[10px] tracking-[0.14em] text-black/30 font-medium uppercase">
             Strava · Live Segments
           </span>
           <Link
             to="/"
-            className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
+            className="text-[10px] tracking-[0.14em] text-black/35 font-medium uppercase hover:text-black transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:rounded-sm"
             style={{ outlineColor: BLUE }}
           >Marcea — Selected Work</Link>
         </footer>
