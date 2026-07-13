@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Maximize2, Minimize2 } from "lucide-react";
 import recordingIsland from "../../assets/mobile-record/recording.png";
 import recordingFullscreen from "../../assets/mobile-record/recording-fullscreen.png";
+import { FONT_DISPLAY_NUMERIC, FONT_BODY } from "./caseStudyKit";
 
 type View = "island" | "fullscreen";
 
@@ -47,8 +48,8 @@ const STATS = [
   },
 ] as const;
 
-const VAL_FONT = "'Barlow Semi Condensed', sans-serif";
-const LBL_FONT = "'Cabin', sans-serif";
+const VAL_FONT = FONT_DISPLAY_NUMERIC;
+const LBL_FONT = FONT_BODY;
 
 export default function MobileRecordPrototype() {
   const [view, setView] = useState<View>("island");

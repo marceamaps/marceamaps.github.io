@@ -20,6 +20,16 @@ export const DEFAULT_ACCENT = "#738CC7";
 export const AMBER = "#E8640A";
 export const BLUE = "#738CC7";
 
+// ─── Font families ────────────────────────────────────────────────────────────
+// Cabin is the one body/content typeface (set globally in index.css; this
+// constant exists only for components that need to declare it inline, e.g.
+// inside prototype UI chrome). Barlow Semi Condensed is a deliberate second
+// typeface used ONLY for simulated watch-face numeric readouts (pace/time
+// digits) inside the interactive prototypes — condensed/bold numerals read
+// better at that scale than Cabin. Both fonts are loaded once in fonts.css.
+export const FONT_BODY = "'Cabin', sans-serif";
+export const FONT_DISPLAY_NUMERIC = "'Barlow Semi Condensed', sans-serif";
+
 // ─── Type scale ───────────────────────────────────────────────────────────────
 // Use these values consistently. Do not introduce new sizes outside this set
 // without updating this file first.
@@ -102,7 +112,7 @@ export function FadeUp({
 export function ImgPlaceholder({ label }: { label: string }) {
   return (
     <div className="bg-black/[0.04] border border-dashed border-black/15 rounded-[14px] flex items-center justify-center py-16">
-      <p className="text-xs tracking-[0.1em] text-black/30 font-medium uppercase">
+      <p className={`${LABEL_CLASS} text-black/30`}>
         {label}
       </p>
     </div>

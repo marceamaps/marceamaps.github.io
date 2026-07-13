@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import prBadge from "../../assets/pr-badge.svg";
 import avatarImg from "../../assets/avatar.png";
 import watchBezel from "../../assets/watch-bezel-46mm.png";
+import { FONT_DISPLAY_NUMERIC, FONT_BODY } from "./caseStudyKit";
 
 const STRAVA = "#FC5200";
 
@@ -54,7 +55,7 @@ function MarqueeText({ text, color }: { text: string; color: string }) {
           display: "inline-block",
           whiteSpace: "nowrap",
           fontSize: 12, fontWeight: 700, lineHeight: 1.2,
-          fontFamily: "'Cabin', sans-serif",
+          fontFamily: FONT_BODY,
           color,
           transition: "color 0.4s ease",
         }}
@@ -440,7 +441,7 @@ function WatchScreen({ dist, phase, segProgress, isBehind }: {
               style={{
                 fontSize: 52, fontWeight: 800, color: STRAVA,
                 lineHeight: 1, letterSpacing: "0px",
-                fontFamily: "'Barlow Semi Condensed', sans-serif",
+                fontFamily: FONT_DISPLAY_NUMERIC,
                 textShadow: "0 0 24px rgba(252,82,0,0.7)",
               }}
             >GO!</motion.span>
@@ -467,14 +468,14 @@ function WatchScreen({ dist, phase, segProgress, isBehind }: {
                   fontSize: 40, fontWeight: 800, lineHeight: 1,
                   fontVariantNumeric: "tabular-nums",
                   color: raceColor,
-                  fontFamily: "'Barlow Semi Condensed', sans-serif",
+                  fontFamily: FONT_DISPLAY_NUMERIC,
                   transition: "color 0.4s ease",
                 }}>{timeDelta}s</span>
               </div>
               {/* ahead / behind label */}
               <span style={{
                 fontSize: 16, fontWeight: 700, color: "white", lineHeight: 1,
-                fontFamily: "'Cabin', sans-serif",
+                fontFamily: FONT_BODY,
               }}>{isBehind ? "behind" : "ahead"}</span>
             </motion.div>
 
@@ -486,12 +487,12 @@ function WatchScreen({ dist, phase, segProgress, isBehind }: {
                 fontSize: 44, fontWeight: 800, lineHeight: 1,
                 fontVariantNumeric: "tabular-nums", letterSpacing: "-0.5px",
                 color: isAway ? "rgba(252,82,0,0.45)" : STRAVA,
-                fontFamily: "'Barlow Semi Condensed', sans-serif",
+                fontFamily: FONT_DISPLAY_NUMERIC,
                 transition: "color 0.3s ease",
               }}>{dist.toFixed(2)}</span>
               <span style={{
                 fontSize: 15, fontWeight: 700, color: "white", lineHeight: 1,
-                fontFamily: "'Cabin', sans-serif",
+                fontFamily: FONT_BODY,
               }}>
                 {isAway ? "mi from start" : "mi to start"}
               </span>
@@ -522,13 +523,13 @@ function WatchScreen({ dist, phase, segProgress, isBehind }: {
           >
             {/* Prev PR */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 2 }}>
-              <span style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", fontFamily: "'Cabin', sans-serif", textTransform: "uppercase" }}>Prev. PR</span>
-              <span style={{ fontSize: 22, fontWeight: 800, color: "white", lineHeight: 1, fontFamily: "'Barlow Semi Condensed', sans-serif" }}>7:28</span>
+              <span style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", fontFamily: FONT_BODY, textTransform: "uppercase" }}>Prev. PR</span>
+              <span style={{ fontSize: 22, fontWeight: 800, color: "white", lineHeight: 1, fontFamily: FONT_DISPLAY_NUMERIC }}>7:28</span>
             </div>
             {/* Today */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 2 }}>
-              <span style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", fontFamily: "'Cabin', sans-serif", textTransform: "uppercase" }}>Today</span>
-              <span style={{ fontSize: 22, fontWeight: 800, color: isBehind ? BEHIND_RED : AHEAD_GREEN, lineHeight: 1, fontFamily: "'Barlow Semi Condensed', sans-serif" }}>{isBehind ? "7:34" : "7:25"}</span>
+              <span style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em", fontFamily: FONT_BODY, textTransform: "uppercase" }}>Today</span>
+              <span style={{ fontSize: 22, fontWeight: 800, color: isBehind ? BEHIND_RED : AHEAD_GREEN, lineHeight: 1, fontFamily: FONT_DISPLAY_NUMERIC }}>{isBehind ? "7:34" : "7:25"}</span>
             </div>
           </motion.div>
         )}

@@ -3,6 +3,7 @@ import MobileRecordCaseStudy from "./MobileRecordCaseStudy";
 import ADPCaseStudy from "./ADPCaseStudy";
 import LiveSegmentsCaseStudy from "./LiveSegmentsCaseStudy";
 import AppleWatchRedesignCaseStudy from "./AppleWatchRedesignCaseStudy";
+import { LABEL_CLASS } from "../components/caseStudyKit";
 
 export default function CaseStudyPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -27,7 +28,7 @@ export default function CaseStudyPage() {
     <div className="min-h-screen bg-white px-8 py-24 max-w-5xl mx-auto">
       <Link
         to="/"
-        className="text-xs tracking-[0.2em] text-black/35 font-medium uppercase hover:text-black transition-colors duration-200"
+        className={`${LABEL_CLASS} text-black/35 hover:text-black transition-colors duration-200`}
       >
         ← Back
       </Link>
