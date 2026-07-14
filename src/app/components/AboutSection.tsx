@@ -11,28 +11,27 @@ import caveImg     from "../../assets/about-me/cave.jpg";
 import skiTourImg  from "../../assets/about-me/ski-tour.JPG";
 import trailRunImg from "../../assets/about-me/trail-run.jpg";
 import climbingImg from "../../assets/about-me/climbing.jpg";
-import { TYPE } from "./caseStudyKit";
 
 const STEPS = [
   {
     image: caveImg,
     alt: "Cave exploration",
-    text: "I'm not afraid to say the hard things. I love a bad idea almost as much as a good one — bad ideas are how you find the edges of the real one. I won't move without a strategy, and I won't pretend a system is elegant if it's untested and based on subjective feelings.",
+    text: "Moving hundreds of meters above the soil is not natural, but it's also surreal. I love entering into places that feel hidden away from normal life.",
   },
   {
     image: skiTourImg,
     alt: "Ski touring in the mountains",
-    text: "That instinct comes from cartography. Maps are systems that have to hold under pressure — every symbol, every line weight is a trade-off someone made on purpose. I studied Geography at UC Berkeley, then spent my career making that same kind of decision at FATMAP, MapQuest, and now Strava.",
+    text: "Morning ski tours amidst glaciers is one sure way to feel small. Something about moving uphill on snow always feels so slow and insecure to me, and the transition to downhill, an anticipation that builds into excitement.",
   },
   {
     image: trailRunImg,
     alt: "Trail running near Chamonix",
-    text: "Outside of work, I find my inspiration in the mountains above Chamonix — trail running, climbing, or just staring at terrain long enough to let my mind wander.",
+    text: "Moving with just your legs and a light pack is empowering... until your knees give out. I may not be made for ultra long distances (yet) but I love the feeling of moving simply like this.",
   },
   {
     image: climbingImg,
     alt: "Rock climbing",
-    text: "Climbing especially mirrors how I work: performance when it matters, deep dedication, calculated risk, and an unrelenting desire to keep improving. It's the same curiosity — staying with a problem, failing at it, and coming back sharper.",
+    text: "Touching rock is like touching mother earth's heart, truly. Featured, detailed, beautiful, diverse: sandstone, granite, limestone, pockets, tufas, slabs. There is no end to the challenges that climbing will throw you — there can be no ego in climbing, the rock will always win.",
   },
 ];
 
@@ -40,7 +39,6 @@ const STEPS = [
 function DesktopPinned() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeStep, setActiveStep] = useState(0);
-  const [hasScrolled, setHasScrolled] = useState(false);
 
   // Track height = (STEPS.length + 1) × 100vh so that with offset
   // ["start start", "end end"] the scroll range is exactly
@@ -58,21 +56,27 @@ function DesktopPinned() {
   useMotionValueEvent(rawStep, "change", (val) => {
     const next = Math.max(0, Math.min(Math.floor(val), STEPS.length - 1));
     setActiveStep(next);
-    if (next > 0) setHasScrolled(true);
   });
 
   return (
     <div ref={trackRef} style={{ height: trackHeight }}>
-      {/* Sticky stage — 100vh, releases naturally when the track ends */}
+      {/* Sticky stage — 100vh so the pin math works, but the actual content
+          is contained to max-w-7xl/px-8 and vertically centered, same as
+          every other section on the site (Hero is the one deliberate
+          full-bleed exception — this shouldn't be a second one). */}
       <div
-        className="sticky top-0 overflow-hidden"
+        className="sticky top-0 overflow-hidden px-8 max-w-7xl mx-auto"
         style={{ height: "100vh" }}
       >
-        <div className="flex h-full">
-          {/* ── Left: crossfading photos ── */}
+        <div className="flex items-center h-full gap-16">
+          {/* ── Photo — contained, rounded, real aspect ratio (not 100vh) ── */}
           <div
-            className="relative overflow-hidden flex-shrink-0"
-            style={{ width: "50%", background: "#edeae5" }}
+            className="relative overflow-hidden rounded-[14px] flex-shrink-0"
+            style={{
+              width: 440,
+              aspectRatio: "4 / 5",
+              boxShadow: "0 8px 40px rgba(0,0,0,0.12)",
+            }}
           >
             {STEPS.map((step, i) => (
               <motion.img
@@ -87,15 +91,8 @@ function DesktopPinned() {
             ))}
           </div>
 
-          {/* ── Right: text panel ── */}
-          <div
-            className="flex flex-col justify-center flex-shrink-0"
-            style={{
-              width: "50%",
-              background: "#faf9f7",
-              padding: "0 80px",
-            }}
-          >
+          {/* ── Text panel ── */}
+          <div className="flex-1 flex flex-col justify-center">
             <div style={{ maxWidth: 480 }}>
               {/* Paragraph — slides up + fades in on each step change */}
               <div style={{ minHeight: 200 }}>
@@ -116,45 +113,6 @@ function DesktopPinned() {
                   </motion.p>
                 </AnimatePresence>
               </div>
-
-              {/* Progress dots */}
-              <div
-                className="flex items-center"
-                style={{ gap: 10, marginTop: 36 }}
-              >
-                {STEPS.map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="rounded-full"
-                    style={{ background: "#030213" }}
-                    animate={{
-                      opacity: i === activeStep ? 1 : 0.18,
-                      scale: i === activeStep ? 1.35 : 1,
-                      width: 8,
-                      height: 8,
-                    }}
-                    transition={{ duration: 0.28, ease: "easeOut" }}
-                  />
-                ))}
-              </div>
-
-              {/* Scroll hint — fades out once reader has advanced past step 0 */}
-              <motion.p
-                animate={{ opacity: hasScrolled ? 0 : 1 }}
-                initial={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-                style={{
-                  marginTop: 28,
-                  fontSize: 11,
-                  letterSpacing: "0.22em",
-                  textTransform: "uppercase",
-                  color: "rgba(3, 2, 19, 0.3)",
-                  pointerEvents: "none",
-                  userSelect: "none",
-                }}
-              >
-                keep scrolling ↓
-              </motion.p>
             </div>
           </div>
         </div>
@@ -213,36 +171,6 @@ export default function AboutSection() {
 
   return (
     <div>
-      {/* ── Lead-in (normal scroll, not pinned) ── */}
-      <div
-        className="mx-auto"
-        style={{ maxWidth: 880, padding: "88px 28px 64px" }}
-      >
-        <p
-          style={{
-            fontSize: 11,
-            letterSpacing: "0.25em",
-            textTransform: "uppercase",
-            color: "rgba(3, 2, 19, 0.38)",
-            marginBottom: 18,
-          }}
-        >
-          About Me
-        </p>
-        <h2
-          style={{
-            fontSize: TYPE.bigStatement,
-            fontWeight: 700,
-            lineHeight: 1.13,
-            letterSpacing: "-0.025em",
-            color: "#030213",
-            maxWidth: 700,
-          }}
-        >
-          I think design is a balance of risk and consequences.
-        </h2>
-      </div>
-
       {/* ── Pinned scrollytelling (wide) / stacked column (narrow) ── */}
       {isWide ? <DesktopPinned /> : <MobileStacked />}
     </div>

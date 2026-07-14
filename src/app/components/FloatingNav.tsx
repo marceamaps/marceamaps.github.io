@@ -104,38 +104,13 @@ export default function FloatingNav() {
 
   return (
     <>
-      {/* ── Logo — top left, fixed, independent of nav pill ── */}
-      <button
-        onClick={() => scrollTo("home")}
-        aria-label="Back to top"
-        className={`fixed top-8 left-8 z-50 transition-all duration-500 ease-out ${
-          visible && mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3"
-        }`}
-        style={{
-          filter: pastHero
-            ? "drop-shadow(0 1px 8px rgba(0,0,0,0.10))"
-            : "none",
-        }}
-      >
-        <svg width="52" height="24" viewBox="0 0 698 326" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M124 199.999C154 164.999 192 123.999 219 120.999C239 118.999 246 132.999 238 150.999C229 170.999 220 187.999 232 193.999C247 201.999 268 166.999 296 157.999C321 149.999 334 163.999 332 182.999C329 212.999 439 199.5 433 178C427 156.5 380 167.5 376 193.999C372 220.498 392.5 237 421 237C449.5 237 489.9 214.9 499.5 200.5"
-            stroke="#232323"
-            strokeWidth="17"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <circle cx="558" cy="190" r="17" fill="#6F8DD5" />
-        </svg>
-      </button>
-
       {/* ── Nav pill — centred ── */}
       <nav
         className={`fixed top-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-out ${
           visible && mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3"
         }`}
       >
-        <div className="flex items-center bg-[rgba(249,246,241,0.85)] backdrop-blur-xl border border-black/[0.08] rounded-full px-2 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.07)]">
+        <div className="flex items-center bg-white backdrop-blur-xl rounded-full px-2 py-2 shadow-[0_8px_48px_rgba(0,0,0,0.16)]">
 
           {/* Nav items */}
           <div ref={trackRef} className="relative flex items-center gap-0.5">

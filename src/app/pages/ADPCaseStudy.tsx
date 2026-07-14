@@ -4,11 +4,14 @@ import { Eyebrow, FadeUp, ImgPlaceholder } from "../components/caseStudyKit";
 // Image imports — uncomment as assets arrive in src/assets/adp/
 import adpMediaView from "../../assets/adp/adp-media.png";
 import adpHighlights from "../../assets/adp/adp-default.png";
-import adpTrophyDetail from "../../assets/adp/adp-trophy.png";
-// import adpPermutationMatrix from "../../assets/adp/adp-permutation-matrix.png";
+import adpMap from "../../assets/adp/adp-map.png";
+import adpPermutationMatrix from "../../assets/adp/adp-permutations-matrix.png";
+import adpLoading from "../../assets/adp/adp-loading.png";
 import adpNonGps from "../../assets/adp/adp-non-gps.png";
+import polyHighlightsVideo from "../../assets/adp/poly-highlights.mp4";
+import adpNonGpsNoMedia from "../../assets/adp/adp-non-gps-non-media.png";
 import oldMap from "../../assets/adp/old-map.PNG";
-import oldMedia from "../../assets/adp/old-media.PNG";
+import oldMedia from "../../assets/adp/old-adp-media.PNG";
 import oldFullPage from "../../assets/adp/old-default.PNG";
 // import adpMidSheet from "../../assets/adp/adp-mid-sheet.png";
 // import adpHighlightFocused from "../../assets/adp/adp-highlight-focused.png";
@@ -94,19 +97,19 @@ export default function ADPCaseStudy() {
           <div className="grid grid-cols-3 gap-4 sm:gap-6">
             {[
               {
+                src: adpHighlights,
+                label: "Default ADP View",
+                alt: "Polyline highlights chip bar showing segments, trophies, and local legends",
+              },
+              {
                 src: adpMediaView,
                 label: "Media view",
                 alt: "Activity Details Page media view with photo carousel",
               },
               {
-                src: adpHighlights,
-                label: "Polyline highlights",
-                alt: "Polyline highlights chip bar showing segments, trophies, and local legends",
-              },
-              {
-                src: adpTrophyDetail,
-                label: "Trophy detail",
-                alt: "Trophy detail sheet — tapping a polyline trophy chip frames the route to that effort",
+                src: adpMap,
+                label: "Map view",
+                alt: "Activity Details Page map view — MRE-powered, polyline highlight chips visible",
               },
             ].map(({ src, label, alt }, i) => (
               <FadeUp key={label} delay={i * 0.1}>
@@ -141,9 +144,9 @@ export default function ADPCaseStudy() {
           <div className="grid grid-cols-3 gap-4 sm:gap-6">
             {[
               {
-                src: oldMap,
-                label: "Map view",
-                alt: "Old Activity Details Page map view — Mapbox-branded, Save Route action",
+                src: oldFullPage,
+                label: "Full activity page",
+                alt: "Old Activity Details Page full view — map and stats, old app navigation visible",
               },
               {
                 src: oldMedia,
@@ -151,9 +154,9 @@ export default function ADPCaseStudy() {
                 alt: "Old Activity Details Page media view — small map thumbnail plus photo carousel",
               },
               {
-                src: oldFullPage,
-                label: "Full activity page",
-                alt: "Old Activity Details Page full view — map and stats, old app navigation visible",
+                src: oldMap,
+                label: "Map view",
+                alt: "Old Activity Details Page map view — Mapbox-branded, Save Route action",
               },
             ].map(({ src, label, alt }, i) => (
               <FadeUp key={label} delay={i * 0.1}>
@@ -226,13 +229,6 @@ export default function ADPCaseStudy() {
           <FadeUp delay={0.08} className="mt-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <figure>
-                <ImgPlaceholder label="adp-permutation-matrix.png" />
-                <figcaption className="mt-5 text-xs tracking-[0.05em] text-black/40 font-medium">
-                  Mapping every configuration — user state, content state,
-                  platform — is what got leadership back on board.
-                </figcaption>
-              </figure>
-              <figure>
                 <img
                   src={adpNonGps}
                   alt="Non-GPS Activity Details Page — no map, no polyline, workout stats and heart rate only"
@@ -244,6 +240,19 @@ export default function ADPCaseStudy() {
                   and no polyline at all — a completely different configuration
                   from the GPS-with-map case above, before even factoring in
                   media and subscriber state.
+                </figcaption>
+              </figure>
+              <figure>
+                <img
+                  src={adpNonGpsNoMedia}
+                  alt="ADP non-GPS, no-media variant — no map, no photo carousel, only workout stats"
+                  className="w-full h-auto block rounded-[14px]"
+                  style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.12)" }}
+                />
+                <figcaption className="mt-5 text-xs tracking-[0.05em] text-black/40 font-medium">
+                  A variant of the screen to the left — strip the map and media
+                  and the system flexes to it. The ADP is one design that can
+                  hold all of its permutations.
                 </figcaption>
               </figure>
             </div>
@@ -265,14 +274,14 @@ export default function ADPCaseStudy() {
           <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-12">
             {[
               {
-                beat: "01 — Make it legible",
-                heading: "Map every permutation. Then show leadership.",
-                body: "The thing that got leadership back on board wasn't a new concept — it was comprehensiveness. I mapped every configuration: user state, content state, platform. Once leadership could see exactly how the page behaved in every state, the ambiguity that had been stalling approval collapsed. Focused reviews — one area at a time — replaced the broader discussions that had been going in circles.",
+                beat: "01 — Make it load",
+                heading: "The map was new. The variability wasn't optional.",
+                body: "Integrating the MRE — FATMAP's map rendering engine — into the ADP for the first time introduced a coordination problem we couldn't engineer away: the map, GraphQL, and other data structures resolved at different speeds, and the sequence was outside our control. The design answer was a loading state that made that variability invisible. A composed skeleton that athletes see from frame one, while the map, stats, and media resolve underneath. You don't experience loading. You experience the page arriving.",
               },
               {
-                beat: "02 — Make it mine",
-                heading: "Polyline highlights — the signature call.",
-                body: "Tap a segment, a best effort, a trophy, or a local legend on the map, and the view focuses to that exact moment of your activity. Getting it right meant rethinking micro-interactions the MRE integration had reopened: how the map repositions when you drop the ADP sheet, how the polyline is framed on load, what the correct focus area is when a highlight is selected. These decisions compound — each one changes the behavior of the others.",
+                beat: "02 — Make it make sense",
+                heading: "ADP Permutations: As diverse as our athlete stats.",
+                body: "Activities with GPS, with maps hidden, with media, with videos, without media, non-GPS — you name it, we had to support it all. In order to ensure stakeholders were confident in our direction, I had to fully flesh out the permutations of the ADP, along with the above-the-fold states and below-the-fold states, across 44+ sport types.",
               },
             ].map(({ beat, heading, body }, i) => (
               <FadeUp key={beat} delay={i * 0.1}>
@@ -294,46 +303,65 @@ export default function ADPCaseStudy() {
 
           <FadeUp delay={0.08} className="mt-10">
             <div className="grid grid-cols-2 gap-4">
-              {[
-                { label: "adp-mid-sheet.png", caption: "Mid-height" },
-                { label: "adp-highlight-focused.png", caption: "Highlight focused" },
-              ].map(({ label, caption }, i) => (
-                <figure key={label}>
-                  <ImgPlaceholder label={label} />
-                  <figcaption className="mt-5 text-[10px] tracking-[0.14em] text-black/30 font-medium uppercase text-center">
-                    {caption}
-                  </figcaption>
-                </figure>
-              ))}
+              <figure>
+                <img
+                  src={adpLoading}
+                  alt="ADP loading state — composed skeleton while MRE and GraphQL resolve"
+                  className="w-full h-auto block rounded-[14px]"
+                  style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.12)" }}
+                />
+                <figcaption className="mt-5 text-[10px] tracking-[0.14em] text-black/30 font-medium uppercase text-center">
+                  Loading state
+                </figcaption>
+              </figure>
+              <figure className="flex flex-col">
+                <img
+                  src={adpPermutationMatrix}
+                  alt="ADP permutation matrix — every configuration mapped: user state, content state, platform"
+                  className="w-full h-auto block rounded-[14px]"
+                  style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.12)" }}
+                />
+                <figcaption className="mt-auto pt-5 text-[10px] tracking-[0.14em] text-black/30 font-medium uppercase text-center">
+                  Permutation matrix
+                </figcaption>
+              </figure>
             </div>
-            <p className="mt-3 text-xs tracking-[0.05em] text-black/40 font-medium">
-              The map repositions differently depending on sheet height and
-              which highlight is selected — details that required close
-              collaboration with Myles Cook on the cartographic implementation.
-            </p>
           </FadeUp>
         </section>
 
-        {/* ── Interactive centerpiece — TODO ──────────────────────────── */}
-        {/* Interaction: tap a polyline highlight chip → map frames to that   */}
-        {/* segment. See adp-case-study-mockup.html for the working scaffold. */}
+        {/* ── Polyline Highlights ─────────────────────────────────────── */}
         <section className="py-[80px]">
-          {/* TODO(interactive): build polyline highlight prototype */}
-          <div
-            className="rounded-[20px] border-2 border-dashed p-8"
-            style={{ borderColor: BLUE, background: "rgba(115,140,199,0.02)" }}
-          >
-            <span
-              className="inline-block text-[10px] font-medium tracking-[0.14em] uppercase rounded-full px-3 py-1 mb-4"
-              style={{ color: BLUE, background: "rgba(115,140,199,0.10)" }}
+          <FadeUp>
+            <Eyebrow>The signature feature</Eyebrow>
+            <h2
+              className="font-bold tracking-tight"
+              style={{ fontSize: "clamp(27px,4.2vw,37px)", lineHeight: 1.15 }}
             >
-              Interactive — build in Claude Code
-            </span>
-            <p className="text-sm text-black/40">
-              Polyline highlight interaction: tap a highlight → map reframes to
-              that moment.
+              Tap a moment. The map goes there.
+            </h2>
+            <p className="mt-5 text-[17px] leading-[1.66] text-black/55">
+              Polyline highlights give every notable moment on a route a
+              physical address on the map. Each chip in the scrollable bar —
+              a segment PR, a best effort, a trophy, a local legend — is a
+              tappable anchor. Select one and the map reframes to that exact
+              stretch, pulling your route into focus at the moment it
+              mattered. It turns the ADP from a summary into a replay: a
+              direct line between the stats athletes care about and the ground
+              where they earned them.
             </p>
-          </div>
+          </FadeUp>
+
+          <FadeUp delay={0.08} className="mt-10">
+            <video
+              src={polyHighlightsVideo}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="block rounded-[14px] mx-auto w-auto"
+              style={{ maxHeight: "80vh", boxShadow: "0 8px 40px rgba(0,0,0,0.12)" }}
+            />
+          </FadeUp>
         </section>
 
         {/* ── Outcome ─────────────────────────────────────────────────── */}
@@ -410,23 +438,6 @@ export default function ADPCaseStudy() {
             </div>
           </FadeUp>
 
-          {/* 2-up image grid */}
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {[
-              {
-                label: "adp-full-subscriber.png",
-                alt: "Full ADP subscriber view — complete redesigned page",
-              },
-              {
-                label: "adp-polyline-focused.png",
-                alt: "Polyline highlight focused state — map framed to selected segment",
-              },
-            ].map(({ label, alt }, i) => (
-              <FadeUp key={label} delay={i * 0.1}>
-                <ImgPlaceholder label={label} />
-              </FadeUp>
-            ))}
-          </div>
         </section>
 
         {/* ── Field Notes ─────────────────────────────────────────────── */}

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CaseStudyPage from "./pages/CaseStudyPage";
+import CursorDot from "./components/CursorDot";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -12,6 +13,7 @@ function ScrollToTop() {
 export default function App() {
   return (
     <>
+      <CursorDot />
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />

@@ -1,6 +1,17 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { motion, AnimatePresence, useReducedMotion, useInView } from "motion/react";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  useInView,
+  useScroll,
+  useTransform,
+  useMotionValueEvent,
+} from "motion/react";
+import { Download, Linkedin, Instagram } from "lucide-react";
 import { LABEL_CLASS, TYPE } from "./caseStudyKit";
+import { StravaIcon } from "./icons";
+import resumePdf from "../../assets/Marcea_Ennamorato_CV.pdf";
 
 const AMBER = "#E8640A";
 
@@ -39,6 +50,12 @@ const VB_H    = 172;
 const BASELINE_Y = 154;
 const USABLE_H   = 140;
 
+// Skyline-panorama label geometry — each label rides its own short leader
+// tick off its peak (not a shared ceiling every tick has to reach), so the
+// lines stay snug to the profile instead of stretching further for earlier,
+// lower peaks. Length is tunable per peak via PEAK_DEFS' `tick` field.
+const LABEL_ROTATION = -62;
+
 function elevToY(e: number): number {
   return BASELINE_Y - ((e - ELEV_MIN) / (ELEV_MAX - ELEV_MIN)) * USABLE_H;
 }
@@ -47,12 +64,14 @@ function indexToX(i: number): number {
 }
 
 // ─── Career milestones pinned to real track positions ─────────────────────────
+// `tick` = leader line length in SVG units, tuned per peak so labels sit
+// snug to the profile rather than all reaching one shared height.
 const PEAK_DEFS = [
-  { idx: 27,  label: "SF Public Press", expIdx: 4 },
-  { idx: 51,  label: "MapQuest",        expIdx: 3 },
-  { idx: 84,  label: "OuterSpatial",    expIdx: 2 },
-  { idx: 114, label: "FATMAP",          expIdx: 1 },
-  { idx: 139, label: "Strava",          expIdx: 0 },
+  { idx: 27,  label: "SF Public Press", expIdx: 4, tick: 22 },
+  { idx: 51,  label: "MapQuest",        expIdx: 3, tick: 26 },
+  { idx: 84,  label: "OuterSpatial",    expIdx: 2, tick: 20 },
+  { idx: 114, label: "FATMAP",          expIdx: 1, tick: 24 },
+  { idx: 139, label: "Strava",          expIdx: 0, tick: 18 },
 ] as const;
 
 const PEAKS = PEAK_DEFS.map((p) => ({
@@ -60,6 +79,19 @@ const PEAKS = PEAK_DEFS.map((p) => ({
   x: indexToX(p.idx),
   y: elevToY(ELEV_RAW[p.idx]),
 }));
+
+// ─── "What's next" — a 6th, hidden step past Strava ────────────────────────
+// Sits at the real final point of the (already-plotted, real) descent line
+// rather than invented coordinates, so it reads as "the trail keeps going"
+// instead of a disconnected shape bolted onto the chart.
+const CTA_IDX = ELEV_RAW.length - 1;
+const CTA_MARKER = {
+  x: indexToX(CTA_IDX),
+  y: elevToY(ELEV_RAW[CTA_IDX]),
+  tick: 20, // leader length — same short/snug convention as PEAK_DEFS.tick
+};
+const CTA_STEP    = PEAKS.length; // 5 — one past the real peaks
+const TOTAL_STEPS = PEAKS.length + 1; // 6
 
 // ─── Catmull-Rom → cubic-Bézier path ─────────────────────────────────────────
 function catmullRomPath(pts: { x: number; y: number }[]): string {
@@ -179,8 +211,50 @@ export default function ExperienceSection() {
   const [selectedPeak, setSelectedPeak] = useState(4);
   const svgRef     = useRef<SVGSVGElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const trackRef   = useRef<HTMLDivElement>(null);
   const dragging   = useRef(false);
   const reduced    = useReducedMotion();
+
+  // Desktop gets the pinned scrollytelling treatment (same pattern as
+  // AboutSection's DesktopPinned); narrow screens keep the plain tap/drag
+  // interaction as-is — pinning tends to be janky on mobile browsers.
+  const [isWide, setIsWide] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth > 860 : true
+  );
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 861px)");
+    const handler = (e: MediaQueryListEvent) => setIsWide(e.matches);
+    mq.addEventListener("change", handler);
+    setIsWide(mq.matches);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  // Track height = (TOTAL_STEPS + 1) × 100vh, same formula as About's
+  // scrollytelling — one full viewport-height of scroll per step, including
+  // the hidden 6th "What's next" step — PLUS a dedicated settle buffer at
+  // the end. Without it, the pin releases at the exact instant "What's
+  // next" finishes its window, so the Footer (which follows immediately in
+  // the DOM) snaps into view with no transition — the "weird jump." This
+  // buffer adds dwell time where the CTA panel just sits there, still
+  // pinned, before the page hands off to the Footer.
+  const SETTLE_VH = 100;
+  const trackHeight = `${(TOTAL_STEPS + 1) * 100 + SETTLE_VH}vh`;
+  const { scrollYProgress } = useScroll({
+    target: trackRef,
+    offset: ["start start", "end end"],
+  });
+  // Steps still advance across exactly TOTAL_STEPS × 100vh of scroll (same
+  // pacing as before) — settleStart is the fraction of the *new*, longer
+  // scrollable range where that finishes; useTransform clamps past it by
+  // default, so rawStep just holds at TOTAL_STEPS for the remaining
+  // SETTLE_VH with nothing changing.
+  const settleStart = (TOTAL_STEPS * 100) / (TOTAL_STEPS * 100 + SETTLE_VH);
+  const rawStep = useTransform(scrollYProgress, [0, settleStart], [0, TOTAL_STEPS]);
+  useMotionValueEvent(rawStep, "change", (val) => {
+    if (!isWide) return; // ignore on narrow — track isn't tall/pinned there
+    const next = Math.max(0, Math.min(Math.floor(val), TOTAL_STEPS - 1));
+    setSelectedPeak(next);
+  });
 
   // Lock the detail panel height to the tallest item seen so far so
   // AnimatePresence's mode="wait" gap never collapses the section.
@@ -204,17 +278,19 @@ export default function ExperienceSection() {
     setFired(true);
   }, [inView, fired]);
 
-  const exp        = EXPERIENCES[PEAKS[selectedPeak].expIdx];
-  const otherPeaks = [0, 1, 2, 3, 4].filter((i) => i !== selectedPeak);
-  const isCurrent  = exp.date.includes("Present");
+  const isCTA      = selectedPeak === CTA_STEP;
+  const exp        = isCTA ? null : EXPERIENCES[PEAKS[selectedPeak].expIdx];
+  const isCurrent  = !isCTA && exp!.date.includes("Present");
 
+  // Nearest-x lookup spans the real peaks *and* the CTA marker, so
+  // dragging all the way to the end lands on "What's next" too.
   const nearestPeak = useCallback((clientX: number) => {
     if (!svgRef.current) return 0;
     const rect = svgRef.current.getBoundingClientRect();
     const svgX = ((clientX - rect.left) / rect.width) * VB_W;
-    return PEAKS.reduce(
-      (best, p, i) =>
-        Math.abs(p.x - svgX) < Math.abs(PEAKS[best].x - svgX) ? i : best,
+    const allX = [...PEAKS.map((p) => p.x), CTA_MARKER.x];
+    return allX.reduce(
+      (best, x, i) => (Math.abs(x - svgX) < Math.abs(allX[best] - svgX) ? i : best),
       0
     );
   }, []);
@@ -234,14 +310,34 @@ export default function ExperienceSection() {
   const detailDelay = reduced ? 0 : 2.2;
 
   return (
-    <section
-      ref={sectionRef}
-      className="px-8 pt-32 pb-20 max-w-7xl mx-auto"
-      id="experience"
-    >
+    <section ref={sectionRef} id="experience">
+      {/* Track — tall + scroll-linked on desktop so scrolling steps through
+          each peak, same mechanic as About's photo/text scrollytelling.
+          On narrow screens this is just a plain, auto-height wrapper: no
+          pinning, tap/drag on the chart remains the only way to navigate. */}
+      <div
+        ref={trackRef}
+        style={isWide ? { height: trackHeight, position: "relative" } : { position: "relative" }}
+      >
+        {/* Invisible scroll target for the nav bar's "Contact" item — sits at
+            the scroll offset for the CTA step so scrollIntoView lands there.
+            Only meaningful (and only needs a real offset) when the track is
+            actually tall/pinned; on narrow screens it just sits inline. */}
+        <div
+          id="contact"
+          aria-hidden
+          style={isWide ? { position: "absolute", top: `${(CTA_STEP + 0.5) * 100}vh`, left: 0, width: 1, height: 1 } : undefined}
+        />
+        <div
+          className={`px-8 pt-32 pb-20 max-w-7xl mx-auto${isWide ? " sticky top-0 overflow-y-auto" : ""}`}
+          style={isWide ? { height: "100vh" } : undefined}
+        >
       {/* ── Elevation profile ────────────────────────────────────── */}
+      {/* pt-10 gives the angled labels (which render above the SVG's own
+          box via overflow-visible) clearance from whatever section precedes
+          this one — on top of the section's own pt-32. */}
       <motion.div
-        className="mb-14 select-none"
+        className="pt-10 mb-14 select-none"
         initial={reduced ? false : { opacity: 0, y: 24 }}
         animate={inView || fired ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -416,9 +512,9 @@ export default function ExperienceSection() {
           {PEAKS.map((peak, i) => {
             const isSelected = i === selectedPeak;
             const isStrava   = i === 4;
-            const startYear  = EXPERIENCES[peak.expIdx].date.split("–")[0];
             const delay      = isStrava ? 1.0 : dotDelay(peak.x);
             const labelDelay = delay + 0.28;
+            const labelY     = peak.y - 6 - peak.tick;
 
             return (
               <g
@@ -471,15 +567,28 @@ export default function ExperienceSection() {
                   }}
                 />
 
-                {/* Company label — fades in after dot */}
+                {/* Leader tick — short, snug to this peak (length set per-peak via PEAK_DEFS.tick) */}
+                <motion.line
+                  x1={peak.x} y1={peak.y - 6}
+                  x2={peak.x} y2={labelY}
+                  stroke={isSelected ? AMBER : "rgba(0,0,0,0.22)"}
+                  strokeWidth="1"
+                  style={{ transition: "stroke 0.25s ease" }}
+                  initial={reduced ? false : { opacity: 0 }}
+                  animate={inView || fired ? { opacity: 1 } : {}}
+                  transition={reduced ? undefined : { duration: 0.35, delay: labelDelay }}
+                />
+
+                {/* Company label — angled skyline-panorama style, fades in after dot */}
                 <motion.text
                   x={peak.x}
-                  y={peak.y - 17}
-                  textAnchor="middle"
+                  y={labelY}
+                  textAnchor="start"
                   fontSize="9"
                   fontWeight={isSelected ? "600" : "400"}
                   fill={isSelected ? AMBER : "rgba(0,0,0,0.28)"}
                   fontFamily="ui-sans-serif, system-ui, -apple-system, sans-serif"
+                  transform={`rotate(${LABEL_ROTATION} ${peak.x} ${labelY})`}
                   style={{ textTransform: "uppercase", letterSpacing: "0.14em", transition: "fill 0.25s ease" }}
                   initial={reduced ? false : { opacity: 0 }}
                   animate={inView || fired ? { opacity: 1 } : {}}
@@ -487,25 +596,67 @@ export default function ExperienceSection() {
                 >
                   {peak.label}
                 </motion.text>
-
-                {/* Year below baseline — fades in with label */}
-                <motion.text
-                  x={peak.x}
-                  y={BASELINE_Y + 14}
-                  textAnchor="middle"
-                  fontSize="8"
-                  fill={isSelected ? "rgba(0,0,0,0.42)" : "rgba(0,0,0,0.18)"}
-                  fontFamily="ui-sans-serif, system-ui, -apple-system, sans-serif"
-                  style={{ transition: "fill 0.25s ease" }}
-                  initial={reduced ? false : { opacity: 0 }}
-                  animate={inView || fired ? { opacity: 1 } : {}}
-                  transition={reduced ? undefined : { duration: 0.35, delay: labelDelay }}
-                >
-                  {startYear}
-                </motion.text>
               </g>
             );
           })}
+
+          {/* ── "What's next" — hidden 6th marker at the real end of the
+              descent line. Same leader-tick + rotated skyline-panorama label
+              as every other summit, mirrored (rotate +62° instead of -62°,
+              textAnchor="end" instead of "start") since this one sits at the
+              chart's right edge — growing up-and-left instead of up-and-right
+              keeps it clear of the "Mount Eva Ski Tour" attribution and off
+              the edge of the chart entirely. Outlined dot (not filled) is the
+              one deliberate difference, reading as open-ended rather than a
+              completed milestone. ── */}
+          <g
+            onClick={() => setSelectedPeak(CTA_STEP)}
+            style={{ cursor: "pointer" }}
+          >
+            <circle cx={CTA_MARKER.x} cy={CTA_MARKER.y} r={18} fill="transparent" />
+            <motion.circle
+              cx={CTA_MARKER.x}
+              cy={CTA_MARKER.y}
+              r={isCTA ? 4.5 : 3}
+              fill="none"
+              stroke={isCTA ? AMBER : "rgba(0,0,0,0.25)"}
+              strokeWidth="1.5"
+              initial={reduced ? false : { scale: 0, opacity: 0 }}
+              animate={inView || fired ? { scale: 1, opacity: 1 } : {}}
+              transition={reduced ? undefined : { duration: 0.32, delay: 1.9, ease: [0.25, 0.1, 0.25, 1] }}
+              style={{ transformBox: "fill-box", transformOrigin: "50% 50%", transition: "stroke 0.25s ease, r 0.25s ease" }}
+            />
+
+            {/* Leader tick — same short/snug style as the real peaks */}
+            <motion.line
+              x1={CTA_MARKER.x} y1={CTA_MARKER.y - 6}
+              x2={CTA_MARKER.x} y2={CTA_MARKER.y - 6 - CTA_MARKER.tick}
+              stroke={isCTA ? AMBER : "rgba(0,0,0,0.22)"}
+              strokeWidth="1"
+              style={{ transition: "stroke 0.25s ease" }}
+              initial={reduced ? false : { opacity: 0 }}
+              animate={inView || fired ? { opacity: 1 } : {}}
+              transition={reduced ? undefined : { duration: 0.35, delay: 2.15 }}
+            />
+
+            {/* Label — mirrored rotation/anchor so it rises up-and-left */}
+            <motion.text
+              x={CTA_MARKER.x}
+              y={CTA_MARKER.y - 6 - CTA_MARKER.tick}
+              textAnchor="end"
+              fontSize="9"
+              fontWeight={isCTA ? "600" : "400"}
+              fill={isCTA ? AMBER : "rgba(0,0,0,0.28)"}
+              fontFamily="ui-sans-serif, system-ui, -apple-system, sans-serif"
+              transform={`rotate(${-LABEL_ROTATION} ${CTA_MARKER.x} ${CTA_MARKER.y - 6 - CTA_MARKER.tick})`}
+              style={{ textTransform: "uppercase", letterSpacing: "0.14em", transition: "fill 0.25s ease" }}
+              initial={reduced ? false : { opacity: 0 }}
+              animate={inView || fired ? { opacity: 1 } : {}}
+              transition={reduced ? undefined : { duration: 0.35, delay: 2.15 }}
+            >
+              What's next
+            </motion.text>
+          </g>
         </svg>
       </motion.div>
 
@@ -524,75 +675,128 @@ export default function ExperienceSection() {
             animate={{ opacity: 1, y: 0 }}
             exit={reduced ? undefined : { opacity: 0, y: -10 }}
             transition={{ duration: 0.32, ease: [0.25, 0.1, 0.25, 1] }}
-            className="pb-12 mb-10"
           >
-            {/* Pills */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {isCurrent && (
-                <span
-                  className={`inline-block px-3 py-[5px] rounded-full text-white ${LABEL_CLASS}`}
-                  style={{ background: AMBER }}
-                >
-                  Current
-                </span>
-              )}
-              {exp.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className={`inline-block px-3 py-[5px] rounded-full border border-black/20 text-black/50 ${LABEL_CLASS}`}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+            {isCTA ? (
+              <>
+                {/* Pill */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  <span
+                    className={`inline-block px-3 py-[5px] rounded-full text-white ${LABEL_CLASS}`}
+                    style={{ background: AMBER }}
+                  >
+                    Let's connect
+                  </span>
+                </div>
 
-            {/* Company + meta */}
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_180px] gap-6 md:gap-12 items-start">
-              <div>
-                <h3
-                  className="font-bold tracking-tight"
-                  style={{ fontSize: TYPE.bigStatement, lineHeight: 1.0, color: "#1A1A1A" }}
-                >
-                  {exp.company}
-                </h3>
-                <p className="mt-2 text-lg font-medium text-black/40">{exp.role}</p>
-                <p className="mt-6 text-[17px] leading-[1.7] text-black/55 max-w-2xl">
-                  {exp.description}
-                </p>
-              </div>
-              <div className="md:text-right pt-1">
-                <p className="text-sm font-semibold text-black/55">{exp.date}</p>
-                <p className="mt-1 text-sm text-black/40">{exp.location}</p>
-              </div>
-            </div>
+                {/* Heading + invite + contact row */}
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_180px] gap-6 md:gap-12 items-start">
+                  <div>
+                    <h3
+                      className="font-bold tracking-tight"
+                      style={{ fontSize: TYPE.bigStatement, lineHeight: 1.0, color: "#1A1A1A" }}
+                    >
+                      What's next?
+                    </h3>
+                    <p className="mt-6 text-[17px] leading-[1.7] text-black/55 max-w-2xl">
+                      I'm always up for meeting new collaborators, talking maps,
+                      or hearing about an interesting problem. Reach out — I'd
+                      love to hear from you.
+                    </p>
+                    <div className="flex items-center flex-wrap gap-6 mt-8">
+                      <a
+                        href="mailto:marcea.irene@gmail.com"
+                        className={`text-black/55 hover:text-black transition-colors duration-200 ${LABEL_CLASS}`}
+                      >
+                        marcea.irene@gmail.com
+                      </a>
+                      <a
+                        href={resumePdf}
+                        download
+                        aria-label="Download resume"
+                        className="text-black/35 hover:text-black transition-colors duration-200"
+                      >
+                        <Download className="w-5 h-5" />
+                      </a>
+                      <a
+                        href="https://www.linkedin.com/in/marceaennamorato"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LinkedIn"
+                        className="text-black/35 hover:text-black transition-colors duration-200"
+                      >
+                        <Linkedin className="w-5 h-5" />
+                      </a>
+                      <a
+                        href="https://www.instagram.com/marcea___irene"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Instagram"
+                        className="text-black/35 hover:text-black transition-colors duration-200"
+                      >
+                        <Instagram className="w-5 h-5" />
+                      </a>
+                      <a
+                        href="https://www.strava.com/athletes/23923315"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Strava"
+                        className="text-black/35 hover:text-black transition-colors duration-200"
+                      >
+                        <StravaIcon className="w-5 h-5" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Pills */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {isCurrent && (
+                    <span
+                      className={`inline-block px-3 py-[5px] rounded-full text-white ${LABEL_CLASS}`}
+                      style={{ background: AMBER }}
+                    >
+                      Current
+                    </span>
+                  )}
+                  {exp!.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className={`inline-block px-3 py-[5px] rounded-full border border-black/20 text-black/50 ${LABEL_CLASS}`}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Company + meta */}
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_180px] gap-6 md:gap-12 items-start">
+                  <div>
+                    <h3
+                      className="font-bold tracking-tight"
+                      style={{ fontSize: TYPE.bigStatement, lineHeight: 1.0, color: "#1A1A1A" }}
+                    >
+                      {exp!.company}
+                    </h3>
+                    <p className="mt-2 text-lg font-medium text-black/40">{exp!.role}</p>
+                    <p className="mt-6 text-[17px] leading-[1.7] text-black/55 max-w-2xl">
+                      {exp!.description}
+                    </p>
+                  </div>
+                  <div className="md:text-right pt-1">
+                    <p className="text-sm font-semibold text-black/55">{exp!.date}</p>
+                    <p className="mt-1 text-sm text-black/40">{exp!.location}</p>
+                  </div>
+                </div>
+              </>
+            )}
           </motion.div>
         </AnimatePresence>
         </div>
-
-        {/* ── Compact row ──────────────────────────────────────────── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {otherPeaks.map((peakIdx) => {
-            const other = EXPERIENCES[PEAKS[peakIdx].expIdx];
-            return (
-              <motion.button
-                key={peakIdx}
-                onClick={() => setSelectedPeak(peakIdx)}
-                className="text-left px-4 py-3 rounded-xl border border-black/[0.14] bg-black/[0.02] hover:border-black/25 hover:bg-black/[0.05] transition-all duration-200 group cursor-pointer"
-                whileHover={reduced ? undefined : { y: -1 }}
-                transition={{ duration: 0.15 }}
-              >
-                <p className={`text-black/40 mb-1.5 ${LABEL_CLASS}`}>
-                  {other.date.split("–")[0]}
-                </p>
-                <p className="text-sm font-semibold text-black/55 group-hover:text-black/75 transition-colors leading-tight">
-                  {other.company}
-                </p>
-                <p className="text-xs text-black/25 mt-0.5 leading-tight">{other.role}</p>
-              </motion.button>
-            );
-          })}
-        </div>
       </motion.div>
+        </div>
+      </div>
     </section>
   );
 }

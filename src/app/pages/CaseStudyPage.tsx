@@ -3,6 +3,7 @@ import MobileRecordCaseStudy from "./MobileRecordCaseStudy";
 import ADPCaseStudy from "./ADPCaseStudy";
 import LiveSegmentsCaseStudy from "./LiveSegmentsCaseStudy";
 import AppleWatchRedesignCaseStudy from "./AppleWatchRedesignCaseStudy";
+import CaseStudyInProgress from "./CaseStudyInProgress";
 import { LABEL_CLASS } from "../components/caseStudyKit";
 
 export default function CaseStudyPage() {
@@ -22,6 +23,14 @@ export default function CaseStudyPage() {
 
   if (slug === "apple-watch-redesign") {
     return <AppleWatchRedesignCaseStudy />;
+  }
+
+  if (slug === "heatmaps") {
+    return <CaseStudyInProgress title="Heatmaps & Map Settings" />;
+  }
+
+  if (slug === "apple-watch-maps") {
+    return <CaseStudyInProgress title="Maps on Apple Watch" />;
   }
 
   return (

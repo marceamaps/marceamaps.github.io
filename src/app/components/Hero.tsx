@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import meLogo from "../../assets/me-logo.svg";
 
 // ─── SVG path data from contours.svg (794×445 viewBox) ───────────────────────
 const RAW_PATHS = [
@@ -143,16 +142,6 @@ export default function Hero() {
   // (initialised false; sync effect below corrects it before meaningful use)
   const reducedRef  = useRef(false);
 
-  const [inHero, setInHero] = useState(true);
-  const [cursorScreen, setCursorScreen] = useState({ x: -999, y: -999 });
-  const [cursorVisible, setCursorVisible] = useState(false);
-
-  // Hide system cursor over hero
-  useEffect(() => {
-    document.body.style.cursor = inHero ? "none" : "auto";
-    return () => { document.body.style.cursor = "auto"; };
-  }, [inHero]);
-
   // Mouse tracking
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
@@ -167,41 +156,25 @@ export default function Hero() {
         y: (e.clientY - rect.top)  * scaleY,
         active: true,
       };
-      setCursorScreen({ x: e.clientX, y: e.clientY });
-      setCursorVisible(true);
     };
     const onLeave  = () => {
-      setCursorVisible(false);
       cursorSvg.current.active = false;
       // Sync phantom to where the real cursor was so there's no visual jump
       phantomCursor.current.x = smoothCursor.current.x;
       phantomCursor.current.y = smoothCursor.current.y;
     };
-    const onEnter  = () => setCursorVisible(true);
     const onClick = () => {
       // Trigger a fresh burst from wherever the cursor currently is
       burst.current = { active: true, progress: 0 };
     };
     window.addEventListener("mousemove", onMove);
     window.addEventListener("mouseleave", onLeave);
-    window.addEventListener("mouseenter", onEnter);
     window.addEventListener("click", onClick);
     return () => {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseleave", onLeave);
-      window.removeEventListener("mouseenter", onEnter);
       window.removeEventListener("click", onClick);
     };
-  }, []);
-
-  // IntersectionObserver for hero visibility
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([entry]) => setInHero(entry.isIntersecting),
-      { threshold: 0.1 }
-    );
-    if (sectionRef.current) obs.observe(sectionRef.current);
-    return () => obs.disconnect();
   }, []);
 
   // Keep reducedRef in sync with the OS reduced-motion preference
@@ -460,9 +433,9 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      {/* Coordinates — quiet top-left label */}
+      {/* Coordinates — quiet top-left label, vertically centered with nav */}
       <motion.p
-        className="absolute top-16 left-7 text-[11px] tracking-[0.25em] text-black/30 pointer-events-none"
+        className="absolute top-[50px] left-7 text-[11px] tracking-[0.25em] text-black/30 pointer-events-none"
         initial={reduced ? undefined : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={reduced ? undefined : { duration: 1.2, delay: 1.4, ease: [0.25, 0.1, 0.25, 1] }}
@@ -470,56 +443,42 @@ export default function Hero() {
         45.9237° N &nbsp; 6.8694° E &nbsp;—&nbsp; Chamonix, France
       </motion.p>
 
-      {/* me. mark — centered */}
-      <motion.div
+      {/* me. mark — centered, hand-drawn stroke left to right */}
+      <div
         className="absolute pointer-events-none"
-        style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
-        initial={reduced ? undefined : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={reduced ? undefined : { duration: 1.6, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+        style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "clamp(200px, 36vw, 480px)" }}
+        aria-label="me."
       >
-        <img
-          src={meLogo}
-          alt="me."
-          style={{ width: "clamp(180px, 28vw, 340px)", height: "auto", display: "block" }}
-          draggable={false}
-        />
-      </motion.div>
+        <svg viewBox="0 0 698 326" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", height: "auto", display: "block" }}>
+          <motion.path
+            d="M161 184.191C191 149.191 229 108.191 256 105.191C276 103.191 283 117.191 275 135.191C266 155.191 257 172.191 269 178.191C284 186.191 305 151.191 333 142.191C358 134.191 371 148.191 369 167.191C366 197.191 476 183.691 470 162.191C464 140.691 417 151.691 413 178.191C409 204.69 429.5 221.191 458 221.191C486.5 221.191 526.9 199.091 536.5 184.691"
+            stroke="#232323"
+            strokeWidth="17"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            initial={reduced ? undefined : { pathLength: 0, opacity: 0 }}
+            animate={{ pathLength: 1, opacity: 1 }}
+            transition={reduced ? undefined : {
+              pathLength: { duration: 1.8, delay: 0.3, ease: [0.4, 0, 0.2, 1] },
+              opacity: { duration: 0.01, delay: 0.3 },
+            }}
+          />
+        </svg>
+      </div>
 
-      {/* Scroll indicator — bottom-right */}
+      {/* Scroll indicator — bottom-center, bounces after hero settles */}
       <motion.p
-        className="absolute bottom-8 right-7 text-[10px] font-medium uppercase tracking-[0.14em] text-black/30"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[10px] font-medium uppercase tracking-[0.14em] text-black/30"
         initial={reduced ? undefined : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={reduced ? undefined : { duration: 1.2, delay: 1.8, ease: [0.25, 0.1, 0.25, 1] }}
+        animate={reduced ? { opacity: 1 } : { opacity: 1, y: [0, 5, 0] }}
+        transition={reduced ? undefined : {
+          opacity: { duration: 1.2, delay: 1.8, ease: [0.25, 0.1, 0.25, 1] },
+          y: { duration: 1.0, repeat: Infinity, repeatDelay: 1.5, delay: 3.5, ease: "easeInOut" },
+        }}
       >
         scroll ↓
       </motion.p>
 
-      {/* GPS cursor */}
-      <div
-        className="fixed pointer-events-none z-50"
-        style={{
-          left: cursorScreen.x,
-          top: cursorScreen.y,
-          transform: "translate(-50%, -50%)",
-          opacity: cursorScreen.x === -999 || !inHero || !cursorVisible ? 0 : 1,
-          transition: "opacity 0.3s ease",
-        }}
-      >
-        <div className="absolute rounded-full" style={{ width: 48, height: 48, top: "50%", left: "50%", transform: "translate(-50%, -50%)", background: "conic-gradient(from 200deg, transparent 0deg, rgba(100, 80, 50, 0.12) 60deg, transparent 120deg)", animation: "fan-pulse 3.5s ease-out infinite" }} />
-        <div className="absolute rounded-full" style={{ width: 48, height: 48, top: "50%", left: "50%", transform: "translate(-50%, -50%)", background: "conic-gradient(from 200deg, transparent 0deg, rgba(100, 80, 50, 0.07) 60deg, transparent 120deg)", animation: "fan-pulse 3.5s ease-out infinite 1.2s" }} />
-        <div className="absolute rounded-full" style={{ width: 20, height: 20, top: "50%", left: "50%", transform: "translate(-50%, -50%)", background: "rgba(100, 80, 50, 0.06)", border: "1px solid rgba(100, 80, 50, 0.18)" }} />
-        <div className="absolute rounded-full" style={{ width: 9, height: 9, top: "50%", left: "50%", transform: "translate(-50%, -50%)", background: "radial-gradient(circle at 35% 35%, #6B9FD4, #2E6DB4)", boxShadow: "0 0 0 1.5px rgba(255,255,255,0.8), 0 1px 4px rgba(46,109,180,0.4)" }} />
-      </div>
-
-      <style>{`
-        @keyframes fan-pulse {
-          0%   { transform: translate(-50%, -50%) scale(0.6); opacity: 0.9; }
-          60%  { opacity: 0.4; }
-          100% { transform: translate(-50%, -50%) scale(2.8); opacity: 0; }
-        }
-      `}</style>
     </section>
   );
 }
